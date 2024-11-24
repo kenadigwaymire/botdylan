@@ -30,10 +30,10 @@ def generate_launch_description():
     # LOCATE FILES
 
     # Locate the RVIZ configuration file.
-    rvizcfg = os.path.join(pkgdir('hw5code'), 'rviz/viewurdfplus.rviz')
+    rvizcfg = os.path.join(pkgdir('me133a-guitar-robot'), 'rviz/viewbotdylan.rviz')
 
     # Locate the URDF file.
-    urdf = os.path.join(pkgdir('hw6code'), 'urdf/sixDOF_Obstacle.urdf')
+    urdf = os.path.join(pkgdir('me133a-guitar-robot'), 'hand/robots/sr_hand_bimanual.urdf')
 
     # Load the robot's URDF file (XML).
     with open(urdf, 'r') as file:
@@ -64,7 +64,7 @@ def generate_launch_description():
     node_trajectory = Node(
         name       = 'trajectory', 
         package    = 'code',
-        executable = 'hw6p5',
+        executable = 'trajectory',
         output     = 'screen')
 
 
@@ -76,3 +76,4 @@ def generate_launch_description():
         node_rviz,
         node_trajectory,
     ])
+
