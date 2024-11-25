@@ -11,6 +11,9 @@ from TrajectoryUtils    import *
 # Grab the general fkin
 from KinematicChain     import KinematicChain
 
+NUM_STRINGS = 6
+STRING_NOTES = {'e_high' : 0, 'b' : 1, 'g' : 2, 'd' : 3, 'a' : 4, 'e_low' : 5}
+
 # TODO: Flesh out a function to read the song that gets initialized when the tajectory
 # gets initialized.
 def song_info(song):
@@ -20,6 +23,13 @@ def song_info(song):
     strumming_pattern = []
     return [T, chords, strumming_pattern]
 
+# TODO: draw fretboard for guitar and map positions to chords
+def initialize_fretboard(num_frets, dx, dy):
+    neck_width = NUM_STRINGS * dy
+    neck_length = num_frets * dx
+    fretboard = [[(i, s for s in range(NUM_STRINGS))] for i in range(num_frets)]
+    return fretboard
+    
 #
 #   Trajectory Class
 #
@@ -51,6 +61,11 @@ class Trajectory(song):
         self.lh_thumb = KinematicChain(node, 'world', 'tip',
                             self.jointnames()[24:26]+self.jointnames()[43:48])
         
+        # Other params
+        self.lam = 20
+        # self.pdlast = np.copy(self.p0)
+        # self.Rdlast = np.copy(self.R0)
+        
         
     # Declare the joint names.
     def jointnames(self):
@@ -76,12 +91,40 @@ class Trajectory(song):
     
     # Evaluate at the given time.  This was last called (dt) ago.
     def evaluate(self, t, dt):
-        #(pd, vd) = goto(t, T, nextChord, prevChord)
+        # (pd, vd) = goto(t, T, nextChord, prevChord)
+        # xddot = vd
 
-        self.rh_pointer.fkin(self.qd)
+        [ptips, Rtips, Jv, Jw] = np.vstack((
+            self.rh_pointer.fkin(self.qd), 
+            self.rh_middle.fkin(self.qd), 
+            self.rh_ring.fkin(self.qd), 
+            self.rh_pinky.fkin(self.qd), 
+            self.rh_thumb.fkin(self.qd), 
+
+            self.lh_pointer.fkin(self.qd), 
+            self.lh_middle.fkin(self.qd), 
+            self.lh_ring.fkin(self.qd), 
+            self.lh_pinky.fkin(self.qd), 
+            self.lh_thumb.fkin(self.qd), 
+            ))
+        J = np.vstack((Jv, Jw))
+        
+        # errp = ep(self.pdlast, ptips)
+        # # errR = eR(self.Rdlast, Rtips)
+        # # err = np.concatenate((errp, errR))
+        
+        # qdlast = self.qd
+        # qddot = Jpinv @ (xddot + self.lam * errp)
+
+        # self.qd += qddot * dt
+        # qd = self.qd
+        # pdlast = pd
+        # Rdlast = Rd
+
         z_vec = np.zeros(len(self.jointnames()))
 
-        return [z_vec, z_vec, , ]
+        # return (qd, qddot, pd, vd, Rd, wd)
+        return [z_vec, z_vec, np.zeros(3), np.zeros(3), Reye(), np.zeros(3)]
 
 #
 #  Main Code
@@ -92,6 +135,9 @@ def main(args=None):
 
     # Choose the song you want to play:
     song = "song_name"
+
+    # Initialize fretboard
+    initialize_fretboard(5, 0.5, 0.5)
 
     # Initialize the generator node for 100Hz udpates, using the above
     # Trajectory class.
