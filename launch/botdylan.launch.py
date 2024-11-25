@@ -1,5 +1,5 @@
 """
-ros2 launch botdylan
+ros2 launch botdylan botdylan.launch.py
 
 This should start
   1) RVIZ, ready to view the robot
@@ -33,7 +33,7 @@ def generate_launch_description():
     rvizcfg = os.path.join(pkgdir('botdylan'), 'rviz/urdf.rviz')
 
     # Locate the URDF file.
-    urdf = os.path.join(pkgdir('botdylan'), 'urdf/sr_hand_bimanual.urdf')
+    urdf = os.path.join(pkgdir('botdylan'), 'urdf/sr_hand_bimanual.urdf.xacro')
 
     # Load the robot's URDF file (XML).
     with open(urdf, 'r') as file:
@@ -62,7 +62,7 @@ def generate_launch_description():
     
     # Configure a node for the joint trajectory
     node_trajectory = Node(
-        name       = 'trajectory', 
+        name       = 'kinematics', 
         package    = 'botdylan',
         executable = 'trajectory',
         output     = 'screen')
