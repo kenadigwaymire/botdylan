@@ -1,0 +1,52 @@
+import rclpy
+import numpy as np
+
+from math import pi, sin, cos, acos, atan2, sqrt, fmod, exp
+
+# Grab the general fkin
+from KinematicChain     import KinematicChain
+
+# TODO: Add a function to read the song that gets initialized when the tajectory
+# gets initialized.
+
+#
+#   Trajectory Class
+#
+class Trajectory():
+    # Initialization.
+    def __init__(self, node):
+        # Set up the kinematic chain object.
+        self.chain = KinematicChain(node, 'world', 'tip', self.jointnames())
+    
+    # Declare the joint names.
+    def jointnames(self):
+        # Return a list of joint names FOR THE EXPECTED URDF!
+        return []
+    
+    # Evaluate at the given time.  This was last called (dt) ago.
+    def evaluate(self, t, dt):
+        return []
+
+#
+#  Main Code
+#
+def main(args=None):
+    # Initialize ROS.
+    rclpy.init(args=args)
+
+
+
+    # Initialize the generator node for 100Hz udpates, using the above
+    # Trajectory class.
+    generator = GeneratorNode('generator', 100, Trajectory)
+
+    # Spin, meaning keep running (taking care of the timer callbacks
+    # and message passing), until interrupted or the trajectory ends.
+    generator.spin()
+
+    # Shutdown the node and ROS.
+    generator.shutdown()
+    rclpy.shutdown()
+
+if __name__ == "__main__":
+    main()
