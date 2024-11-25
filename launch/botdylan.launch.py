@@ -64,7 +64,7 @@ def generate_launch_description():
     node_trajectory = Node(
         name       = 'kintest', 
         package    = 'botdylan',
-        executable = 'test',
+        executable = 'trajectory',
         output     = 'screen')
 
 
