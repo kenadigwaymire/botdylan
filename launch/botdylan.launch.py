@@ -63,7 +63,7 @@ def generate_launch_description():
     # Configure a node for the joint trajectory
     node_trajectory = Node(
         name       = 'trajectory', 
-        package    = 'botdylan',
+        package    = 'code',
         executable = 'test',
         output     = 'screen')
 
