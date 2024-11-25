@@ -6,7 +6,7 @@ package_name = 'botdylan'
 setup(
     name=package_name,
     version='0.0.0',
-    packages=find_packages(),  # Include all submodules in botdylan
+    packages=find_packages(exclude=['test']),  # Include all submodules in botdylan
     data_files=[
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
