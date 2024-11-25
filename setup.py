@@ -1,7 +1,7 @@
 from setuptools import find_packages, setup
 from glob import glob
 
-package_name = 'me133a-guitar-bot'
+package_name = 'botdylan'
 
 setup(
     name=package_name,
