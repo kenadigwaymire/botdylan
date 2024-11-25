@@ -6,7 +6,7 @@ package_name = 'botdylan'
 setup(
     name=package_name,
     version='0.0.0',
-    packages=find_packages(exclude=['test']),  # Include all submodules in botdylan
+    packages=find_packages(include=['botdylan', 'botdylan.*'], exclude=['test']),  # Include all submodules in botdylan
     data_files=[
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
@@ -25,7 +25,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'trajectory = botdylan.botdylan.trajectory:main'  # Add trajectory executable
+            'trajectory = botdylan.trajectory:main'  # Add trajectory executable
         ],
     },
 )
