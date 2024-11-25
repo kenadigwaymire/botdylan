@@ -12,7 +12,7 @@ from TrajectoryUtils    import *
 from KinematicChain     import KinematicChain
 
 NUM_STRINGS = 6
-STRING_NOTES = {'e_high' : 0, 'b' : 1, 'g' : 2, 'd' : 3, 'a' : 4, 'e_low' : 5}
+STRING_NOTES = {0 : 'e_high', 1 : 'b', 2 : 'g', 3 : 'd', 4 : 'a', 5 : 'e_low'}
 
 # TODO: Flesh out a function to read the song that gets initialized when the tajectory
 # gets initialized.
@@ -35,6 +35,10 @@ class Fretboard():
 
     def get_pos_desired(self, string_des, fret_des):
         return (string_des * self.dy, (fret_des * self.dx) + self.dx / 2)
+    
+    def get_coord_from_pos(self, curr_pos):
+        return (curr_pos[0] / self.dy, (curr_pos[1] - (self.dx / 2)) / self.dx)
+        
 #
 #   Trajectory Class
 #
