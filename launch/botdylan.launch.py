@@ -1,79 +1,75 @@
-"""
-ros2 launch code botdylan.launch.py
+from ament_index_python.packages import get_package_share_path
 
-This should start
-  1) RVIZ, ready to view the robot
-  2) The robot_state_publisher to broadcast the robot model
-  3) The HW6 P5 code to move the joints
+from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument
+from launch.conditions import IfCondition, UnlessCondition
+from launch.substitutions import Command, LaunchConfiguration
 
-"""
+from launch_ros.actions import Node
+from launch_ros.parameter_descriptions import ParameterValue
 
-import os
-import xacro
-
-from ament_index_python.packages import get_package_share_directory as pkgdir
-
-from launch                            import LaunchDescription
-from launch.actions                    import DeclareLaunchArgument
-from launch.actions                    import OpaqueFunction
-from launch.actions                    import Shutdown
-from launch.substitutions              import LaunchConfiguration
-from launch_ros.actions                import Node
-
-
-#
-# Generate the Launch Description
-#
 def generate_launch_description():
+    # Define paths to the resources
+    descr_path = get_package_share_path('me133a-guitar-bot')
+    default_model_path = descr_path / 'hand/robots/sr_hand_bimanual.urdf'
+    default_rviz_config_path = descr_path / 'rviz/urdf.rviz'
+    default_trajectory_path = descr_path / 'code/trajectory.py'
 
-    ######################################################################
-    # LOCATE FILES
+    # Launch arguments
+    gui_arg = DeclareLaunchArgument(name='gui', default_value='true', choices=['true', 'false'],
+                                    description='Flag to enable joint_state_publisher_gui')
+    model_arg = DeclareLaunchArgument(name='model', default_value=str(default_model_path),
+                                      description='Absolute path to robot URDF file')
+    rviz_arg = DeclareLaunchArgument(name='rvizconfig', default_value=str(default_rviz_config_path),
+                                     description='Absolute path to RViz config file')
 
-    # Locate the RVIZ configuration file.
-    rvizcfg = os.path.join(pkgdir('me133a-guitar-robot'), 'rviz/viewbotdylan.rviz')
+    robot_description = ParameterValue(Command(['xacro ', LaunchConfiguration('model')]),
+                                       value_type=str)
 
-    # Locate the URDF file.
-    urdf = os.path.join(pkgdir('me133a-guitar-robot'), 'hand/robots/sr_hand_bimanual.urdf')
+    # Nodes
+    robot_state_publisher_node = Node(
+        package='robot_state_publisher',
+        executable='robot_state_publisher',
+        parameters=[{'robot_description': robot_description}]
+    )
 
-    # Load the robot's URDF file (XML).
-    with open(urdf, 'r') as file:
-        robot_description = file.read()
+    # Joint state publisher nodes (with or without GUI)
+    joint_state_publisher_node = Node(
+        package='joint_state_publisher',
+        executable='joint_state_publisher',
+        condition=UnlessCondition(LaunchConfiguration('gui'))
+    )
 
+    joint_state_publisher_gui_node = Node(
+        package='joint_state_publisher_gui',
+        executable='joint_state_publisher_gui',
+        condition=IfCondition(LaunchConfiguration('gui'))
+    )
 
-    ######################################################################
-    # PREPARE THE LAUNCH ELEMENTS
+    # RViz node
+    rviz_node = Node(
+        package='rviz2',
+        executable='rviz2',
+        name='rviz2',
+        output='screen',
+        arguments=['-d', LaunchConfiguration('rvizconfig')],
+    )
 
-    # Configure a node for the robot_state_publisher.
-    node_robot_state_publisher = Node(
-        name       = 'robot_state_publisher', 
-        package    = 'robot_state_publisher',
-        executable = 'robot_state_publisher',
-        output     = 'screen',
-        parameters = [{'robot_description': robot_description}])
+    # Custom trajectory script node (if required)
+    trajectory_node = Node(
+        package='dexhandv2_description',
+        executable='trajectory.py',
+        name='trajectory',
+        output='screen'
+    )
 
-    # Configure a node for RVIZ
-    node_rviz = Node(
-        name       = 'rviz', 
-        package    = 'rviz2',
-        executable = 'rviz2',
-        output     = 'screen',
-        arguments  = ['-d', rvizcfg],
-        on_exit    = Shutdown())
-    
-    # Configure a node for the joint trajectory
-    node_trajectory = Node(
-        name       = 'trajectory', 
-        package    = 'code',
-        executable = 'trajectory',
-        output     = 'screen')
-
-
-    ######################################################################
-    # RETURN THE ELEMENTS IN ONE LIST
     return LaunchDescription([
-        # Start the robot_state_publisher, RVIZ, and the trajectory.
-        node_robot_state_publisher,
-        node_rviz,
-        node_trajectory,
+        gui_arg,
+        model_arg,
+        rviz_arg,
+        joint_state_publisher_node,
+        joint_state_publisher_gui_node,
+        robot_state_publisher_node,
+        rviz_node,
+        trajectory_node
     ])
-

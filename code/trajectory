@@ -26,10 +26,19 @@ def song_info(song):
 class Trajectory(song):
     # Initialization.
     def __init__(self, node):
-        # Set up the kinematic chain object.
-        self.chain = KinematicChain(node, 'world', 'tip', self.jointnames())
-
-        #
+        # Set up the kinematic chain objects.
+        self.rh_pointer = KinematicChain(node, 'world', 'tip',
+                            self.jointnames()[0:6])
+        self.rh_middle = KinematicChain(node, 'world', 'tip',
+                            self.jointnames()[0:2]+self.jointnames()[6:10])
+        self.rh_ring = KinematicChain(node, 'world', 'tip', 
+                            self.jointnames()[0:2]+self.jointnames()[10:14])
+        self.rh_pinky = KinematicChain(node, 'world', 'tip',
+                            self.jointnames()[0:2]+self.jointnames()[14:18])
+        self.rh_thumb = KinematicChain(node, 'world', 'tip',
+                            self.jointnames()[0:2]+self.jointnames()[18:23])
+        
+        
     
     # Declare the joint names.
     def jointnames(self):
@@ -43,7 +52,6 @@ class Trajectory(song):
             "rh_RFJ4", "rh_RFJ3", "rh_RFJ2", "rh_RFJ1",
             "rh_LFJ5", "rh_LFJ4", "rh_LFJ3", "rh_LFJ2", "rh_LFJ1",
             "rh_THJ5", "rh_THJ4", "rh_THJ3", "rh_THJ2", "rh_THJ1",
-            
             # -------------------- Left Hand ---------------------
             # wrist
             "lh_WRJ2", "lh_WRJ1",
@@ -57,7 +65,6 @@ class Trajectory(song):
     # Evaluate at the given time.  This was last called (dt) ago.
     def evaluate(self, t, dt):
         (pd, vd) = goto(t, T, nextChord, prevChord)
-        (wd, )
 
         return []
 
