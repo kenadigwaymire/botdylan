@@ -63,7 +63,7 @@ def generate_launch_description():
     # Configure a node for the joint trajectory
     node_trajectory = Node(
         name       = 'trajectory', 
-        package    = 'code',
+        package    = 'me133a-guitar-robot',
         executable = 'test',
         output     = 'screen')
 
