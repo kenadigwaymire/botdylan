@@ -3,28 +3,61 @@ import numpy as np
 
 from math import pi, sin, cos, acos, atan2, sqrt, fmod, exp
 
+# Grab the utilities
+from GeneratorNode      import GeneratorNode
+from TransformHelpers   import *
+from TrajectoryUtils    import *
+
 # Grab the general fkin
 from KinematicChain     import KinematicChain
 
-# TODO: Add a function to read the song that gets initialized when the tajectory
+# TODO: Flesh out a function to read the song that gets initialized when the tajectory
 # gets initialized.
+def song_info(song):
+    # Eventually change these to be pulled or calculated from a song file
+    T = 3
+    chords = []
+    strumming_pattern = []
+    return [T, chords, strumming_pattern]
 
 #
 #   Trajectory Class
 #
-class Trajectory():
+class Trajectory(song):
     # Initialization.
     def __init__(self, node):
         # Set up the kinematic chain object.
         self.chain = KinematicChain(node, 'world', 'tip', self.jointnames())
+
+        #
     
     # Declare the joint names.
     def jointnames(self):
         # Return a list of joint names FOR THE EXPECTED URDF!
-        return []
+        return [
+            # -------------------- Right Hand --------------------
+            # wrist
+            "rh_WRJ2", "rh_WRJ1",
+            "rh_FFJ4", "rh_FFJ3", "rh_FFJ2", "rh_FFJ1",
+            "rh_MFJ4", "rh_MFJ3", "rh_MFJ2", "rh_MFJ1",
+            "rh_RFJ4", "rh_RFJ3", "rh_RFJ2", "rh_RFJ1",
+            "rh_LFJ5", "rh_LFJ4", "rh_LFJ3", "rh_LFJ2", "rh_LFJ1",
+            "rh_THJ5", "rh_THJ4", "rh_THJ3", "rh_THJ2", "rh_THJ1",
+            
+            # -------------------- Left Hand ---------------------
+            # wrist
+            "lh_WRJ2", "lh_WRJ1",
+            "lh_FFJ4", "lh_FFJ3", "lh_FFJ2", "lh_FFJ1",
+            "lh_MFJ4", "lh_MFJ3", "lh_MFJ2", "lh_MFJ1",
+            "lh_RFJ4", "lh_RFJ3", "lh_RFJ2", "lh_RFJ1",
+            "lh_LFJ5", "lh_LFJ4", "lh_LFJ3", "lh_LFJ2", "lh_LFJ1",
+            "lh_THJ5", "lh_THJ4", "lh_THJ3", "lh_THJ2", "lh_THJ1"
+            ]
     
     # Evaluate at the given time.  This was last called (dt) ago.
     def evaluate(self, t, dt):
+        (pd, vd) = goto(t, T, nextChord, prevChord)
+
         return []
 
 #
@@ -34,11 +67,12 @@ def main(args=None):
     # Initialize ROS.
     rclpy.init(args=args)
 
-
+    # Choose the song you want to play:
+    song = "song_name"
 
     # Initialize the generator node for 100Hz udpates, using the above
     # Trajectory class.
-    generator = GeneratorNode('generator', 100, Trajectory)
+    generator = GeneratorNode('generator', 100, Trajectory(song))
 
     # Spin, meaning keep running (taking care of the timer callbacks
     # and message passing), until interrupted or the trajectory ends.
