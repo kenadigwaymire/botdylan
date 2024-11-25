@@ -1,14 +1,51 @@
 import rclpy
-from math import pi
-from GeneratorNode import GeneratorNode
-from KinematicChain import KinematicChain
+import numpy as np
+
+from math import pi, sin, cos, acos, atan2, sqrt, fmod, exp
+
+# Grab the utilities
+from GeneratorNode      import GeneratorNode
+from TransformHelpers   import *
+from TrajectoryUtils    import *
+
+# Grab the general fkin
+from KinematicChain     import KinematicChain
+
+NUM_STRINGS = 6
+STRING_NOTES = {0 : 'e_high', 1 : 'b', 2 : 'g', 3 : 'd', 4 : 'a', 5 : 'e_low'}
+
+# TODO: Flesh out a function to read the song that gets initialized when the trajectory
+# gets initialized.
+def song_info(song):
+    # Eventually change these to be pulled or calculated from a song file
+    T = 3
+    chords = []
+    strumming_pattern = []
+    return [T, chords, strumming_pattern]
+
+# TODO: draw fretboard for guitar and map positions to chords
+
+class Fretboard():
+    def __init__(self, num_frets, dx, dy):
+        self.dx = dx
+        self.dy = dy
+        self.width = NUM_STRINGS * dy
+        self.length = num_frets * dx
+        self.fretboard = [[(i, j) for j in range(num_frets)] for i in range(NUM_STRINGS)]
+
+    def get_pos_desired(self, string_des, fret_des):
+        return (string_des * self.dy, (fret_des * self.dx) + self.dx / 2)
+    
+    def get_coord_from_pos(self, curr_pos):
+        return (curr_pos[0] / self.dy, (curr_pos[1] - (self.dx / 2)) / self.dx)
+
 
 #
 #   Trajectory Class
 #
 class Trajectory:
     # Initialization.
-    def __init__(self, node):
+    def __init__(self, song, node):
         # Set up the kinematic chain objects.
         # RIGHT HAND
         self.rh_pointer = KinematicChain(node, 'world', 'tip', self.jointnames()[0:6])
@@ -24,15 +61,15 @@ class Trajectory:
         self.lh_pinky = KinematicChain(node, 'world', 'tip', self.jointnames()[24:26] + self.jointnames()[38:43])
         self.lh_thumb = KinematicChain(node, 'world', 'tip', self.jointnames()[24:26] + self.jointnames()[43:48])
         
-        # Initialize joint positions
-        self.joint_positions = {name: 0.0 for name in self.jointnames()}
-    
+        # Other params
+        self.lam = 20
+        self.song = song
+
     # Declare the joint names.
     def jointnames(self):
         # Return a list of joint names FOR THE EXPECTED URDF!
         return [
             # -------------------- Right Hand --------------------
-            # wrist
             "rh_WRJ2", "rh_WRJ1",
             "rh_FFJ4", "rh_FFJ3", "rh_FFJ2", "rh_FFJ1",
             "rh_MFJ4", "rh_MFJ3", "rh_MFJ2", "rh_MFJ1",
@@ -40,7 +77,6 @@ class Trajectory:
             "rh_LFJ5", "rh_LFJ4", "rh_LFJ3", "rh_LFJ2", "rh_LFJ1",
             "rh_THJ5", "rh_THJ4", "rh_THJ3", "rh_THJ2", "rh_THJ1",
             # -------------------- Left Hand ---------------------
-            # wrist
             "lh_WRJ2", "lh_WRJ1",
             "lh_FFJ4", "lh_FFJ3", "lh_FFJ2", "lh_FFJ1",
             "lh_MFJ4", "lh_MFJ3", "lh_MFJ2", "lh_MFJ1",
@@ -51,9 +87,25 @@ class Trajectory:
     
     # Evaluate at the given time.  This was last called (dt) ago.
     def evaluate(self, t, dt):
-        # No movement: return the initial joint positions as-is
-        qd = [self.joint_positions[joint] for joint in self.jointnames()]
-        return qd
+        [ptips, Rtips, Jv, Jw] = np.vstack((
+            self.rh_pointer.fkin(self.qd), 
+            self.rh_middle.fkin(self.qd), 
+            self.rh_ring.fkin(self.qd), 
+            self.rh_pinky.fkin(self.qd), 
+            self.rh_thumb.fkin(self.qd), 
+
+            self.lh_pointer.fkin(self.qd), 
+            self.lh_middle.fkin(self.qd), 
+            self.lh_ring.fkin(self.qd), 
+            self.lh_pinky.fkin(self.qd), 
+            self.lh_thumb.fkin(self.qd), 
+        ))
+        
+        J = np.vstack((Jv, Jw))
+
+        z_vec = np.zeros(len(self.jointnames()))
+        return [z_vec, z_vec, np.zeros(3), np.zeros(3), Reye(), np.zeros(3)]
+
 
 #
 #  Main Code
@@ -62,12 +114,15 @@ def main(args=None):
     # Initialize ROS.
     rclpy.init(args=args)
 
+    # Choose the song you want to play:
+    song = "song_name"
+
     # Initialize the generator node for 100Hz updates, using the above
     # Trajectory class.
-    generator = GeneratorNode('generator', 100, Trajectory)
+    generator = GeneratorNode('generator', 100, Trajectory(song, None))  # Pass in song and node
 
     # Spin, meaning keep running (taking care of the timer callbacks
-    # and message passing), until interrupted.
+    # and message passing), until interrupted or the trajectory ends.
     generator.spin()
 
     # Shutdown the node and ROS.
