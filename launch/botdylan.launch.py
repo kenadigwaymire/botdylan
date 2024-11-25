@@ -33,7 +33,7 @@ def generate_launch_description():
     rvizcfg = os.path.join(pkgdir('botdylan'), 'rviz/urdf.rviz')
 
     # Locate the URDF file.
-    urdf = os.path.join(pkgdir('botdylan'), 'urdf/sr_hand_bimanual.urdf.xacro')
+    urdf = os.path.join(pkgdir('botdylan'), 'urdf/sr_hand_bimanual.urdf')
 
     # Load the robot's URDF file (XML).
     with open(urdf, 'r') as file:
@@ -62,7 +62,7 @@ def generate_launch_description():
     
     # Configure a node for the joint trajectory
     node_trajectory = Node(
-        name       = 'kinematics', 
+        name       = 'kintest', 
         package    = 'botdylan',
         executable = 'trajectory',
         output     = 'screen')
