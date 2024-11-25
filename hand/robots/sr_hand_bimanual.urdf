@@ -61,11 +61,11 @@
     <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
   </joint>
   <link name="rh_forearm">
-    <inertial>
+    <!-- <inertial>
       <origin rpy="0 0 0" xyz="0 0 0.09"/>
       <mass value="3.0"/>
       <inertia ixx="0.0138" ixy="0.0" ixz="0.0" iyy="0.0138" iyz="0.0" izz="0.00744"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0.0"/>
       <geometry name="rh_forearm_visual">
@@ -100,11 +100,11 @@
     <selfCollide>false</selfCollide>
   </gazebo>
   <link name="rh_wrist">
-    <inertial>
+    <!-- <inertial>
       <origin rpy="0 0 0" xyz="0 0 0.029"/>
       <mass value="0.1"/>
       <inertia ixx="0.000035" ixy="0.0" ixz="0.0" iyy="0.000064" iyz="0.0" izz="0.0000438"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="rh_wrist_visual">
@@ -170,11 +170,11 @@
     </joint>
   </transmission>
   <link name="rh_palm">
-    <inertial>
+    <!-- <inertial>
       <origin rpy="0 0 0" xyz="0 0 0.035"/>
       <mass value="0.3"/>
       <inertia ixx="0.0003581" ixy="0.0" ixz="0.0" iyy="0.0005287" iyz="0.0" izz="0.000191"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="rh_palm_visual">
@@ -273,11 +273,11 @@
   <gazebo reference="rh_palm">
   </gazebo>
   <link name="rh_ffknuckle">
-    <inertial>
+    <!-- <inertial>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <mass value="0.008"/>
       <inertia ixx="0.00000026" ixy="0.0" ixz="0.0" iyy="0.00000026" iyz="0.0" izz="0.00000032"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0.0005"/>
       <geometry name="rh_ffknuckle_visual">
@@ -320,11 +320,11 @@
     <material>Gazebo/Grey</material>
   </gazebo>
   <link name="rh_ffproximal">
-    <inertial>
+    <!-- <inertial>
       <mass value="0.030"/>
       <origin xyz="0 0 0.0225"/>
       <inertia ixx="0.0000098" ixy="0.0" ixz="0.0" iyy="0.00001" iyz="0.0" izz="0.0000018"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="rh_ffproximal_visual">
@@ -365,11 +365,11 @@
     <selfCollide>true</selfCollide>
   </gazebo>
   <link name="rh_ffmiddle">
-    <inertial>
+    <!-- <inertial>
       <origin rpy="0 0 0" xyz="0 0 0.0125"/>
       <mass value="0.017"/>
       <inertia ixx="0.0000026" ixy="0.0" ixz="0.0" iyy="0.0000027" iyz="0.0" izz="0.00000087"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="rh_ffmiddle_visual">
@@ -422,11 +422,11 @@
     <selfCollide>true</selfCollide>
   </gazebo>
   <link name="rh_ffdistal">
-    <inertial>
+    <!-- <inertial>
       <mass value="0.012"/>
       <origin xyz="0 0 0.012"/>
       <inertia ixx="0.00000094" ixy="0.0" ixz="0.0" iyy="0.0000011" iyz="0.0" izz="0.00000053"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="rh_ffdistal_visual">
@@ -454,10 +454,10 @@
     <implicitSpringDamper>1</implicitSpringDamper>
   </gazebo>
   <link name="rh_fftip">
-    <inertial>
+    <!-- <inertial>
       <mass value="0.001"/>
       <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
-    </inertial>
+    </inertial> -->
   </link>
   <joint name="rh_FFtip" type="fixed">
     <parent link="rh_ffdistal"/>
@@ -486,11 +486,11 @@
     <selfCollide>true</selfCollide>
   </gazebo>
   <link name="rh_mfknuckle">
-    <inertial>
+    <!-- <inertial>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <mass value="0.008"/>
       <inertia ixx="0.00000026" ixy="0.0" ixz="0.0" iyy="0.00000026" iyz="0.0" izz="0.00000032"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0.0005"/>
       <geometry name="rh_mfknuckle_visual">
@@ -533,11 +533,11 @@
     <material>Gazebo/Grey</material>
   </gazebo>
   <link name="rh_mfproximal">
-    <inertial>
+    <!-- <inertial>
       <mass value="0.030"/>
       <origin xyz="0 0 0.0225"/>
       <inertia ixx="0.0000098" ixy="0.0" ixz="0.0" iyy="0.00001" iyz="0.0" izz="0.0000018"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="rh_mfproximal_visual">
@@ -578,11 +578,11 @@
     <selfCollide>true</selfCollide>
   </gazebo>
   <link name="rh_mfmiddle">
-    <inertial>
+    <!-- <inertial>
       <origin rpy="0 0 0" xyz="0 0 0.0125"/>
       <mass value="0.017"/>
       <inertia ixx="0.0000026" ixy="0.0" ixz="0.0" iyy="0.0000027" iyz="0.0" izz="0.00000087"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="rh_mfmiddle_visual">
@@ -635,11 +635,11 @@
     <selfCollide>true</selfCollide>
   </gazebo>
   <link name="rh_mfdistal">
-    <inertial>
+    <!-- <inertial>
       <mass value="0.012"/>
       <origin xyz="0 0 0.012"/>
       <inertia ixx="0.00000094" ixy="0.0" ixz="0.0" iyy="0.0000011" iyz="0.0" izz="0.00000053"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="rh_mfdistal_visual">
@@ -667,10 +667,10 @@
     <implicitSpringDamper>1</implicitSpringDamper>
   </gazebo>
   <link name="rh_mftip">
-    <inertial>
+    <!-- <inertial>
       <mass value="0.001"/>
       <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
-    </inertial>
+    </inertial> -->
   </link>
   <joint name="rh_MFtip" type="fixed">
     <parent link="rh_mfdistal"/>
@@ -699,11 +699,11 @@
     <selfCollide>true</selfCollide>
   </gazebo>
   <link name="rh_rfknuckle">
-    <inertial>
+    <!-- <inertial>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <mass value="0.008"/>
       <inertia ixx="0.00000026" ixy="0.0" ixz="0.0" iyy="0.00000026" iyz="0.0" izz="0.00000032"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0.0005"/>
       <geometry name="rh_rfknuckle_visual">
@@ -746,11 +746,11 @@
     <material>Gazebo/Grey</material>
   </gazebo>
   <link name="rh_rfproximal">
-    <inertial>
+    <!-- <inertial>
       <mass value="0.030"/>
       <origin xyz="0 0 0.0225"/>
       <inertia ixx="0.0000098" ixy="0.0" ixz="0.0" iyy="0.00001" iyz="0.0" izz="0.0000018"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="rh_rfproximal_visual">
@@ -791,11 +791,11 @@
     <selfCollide>true</selfCollide>
   </gazebo>
   <link name="rh_rfmiddle">
-    <inertial>
+    <!-- <inertial>
       <origin rpy="0 0 0" xyz="0 0 0.0125"/>
       <mass value="0.017"/>
       <inertia ixx="0.0000026" ixy="0.0" ixz="0.0" iyy="0.0000027" iyz="0.0" izz="0.00000087"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="rh_rfmiddle_visual">
@@ -848,11 +848,11 @@
     <selfCollide>true</selfCollide>
   </gazebo>
   <link name="rh_rfdistal">
-    <inertial>
+    <!-- <inertial>
       <mass value="0.012"/>
       <origin xyz="0 0 0.012"/>
       <inertia ixx="0.00000094" ixy="0.0" ixz="0.0" iyy="0.0000011" iyz="0.0" izz="0.00000053"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="rh_rfdistal_visual">
@@ -880,10 +880,10 @@
     <implicitSpringDamper>1</implicitSpringDamper>
   </gazebo>
   <link name="rh_rftip">
-    <inertial>
+    <!-- <inertial>
       <mass value="0.001"/>
       <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
-    </inertial>
+    </inertial> -->
   </link>
   <joint name="rh_RFtip" type="fixed">
     <parent link="rh_rfdistal"/>
@@ -912,11 +912,11 @@
     <selfCollide>true</selfCollide>
   </gazebo>
   <link name="rh_lfmetacarpal">
-    <inertial>
+    <!-- <inertial>
       <origin rpy="0 0 0" xyz="0 0 0.04"/>
       <mass value="0.030"/>
       <inertia ixx="0.0000145" ixy="0.0" ixz="0.0" iyy="0.00001638" iyz="0.0" izz="0.000004272"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0.9599 0" xyz="0 0 0"/>
       <axis xyz="0.573576436 0 0.819152044"/>
@@ -958,11 +958,11 @@
     <selfCollide>true</selfCollide>
   </gazebo>
   <link name="rh_lfknuckle">
-    <inertial>
+    <!-- <inertial>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <mass value="0.008"/>
       <inertia ixx="0.00000026" ixy="0.0" ixz="0.0" iyy="0.00000026" iyz="0.0" izz="0.00000032"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0.0005"/>
       <geometry name="rh_lfknuckle_visual">
@@ -1005,11 +1005,11 @@
     <material>Gazebo/Grey</material>
   </gazebo>
   <link name="rh_lfproximal">
-    <inertial>
+    <!-- <inertial>
       <mass value="0.030"/>
       <origin xyz="0 0 0.0225"/>
       <inertia ixx="0.0000098" ixy="0.0" ixz="0.0" iyy="0.00001" iyz="0.0" izz="0.0000018"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="rh_lfproximal_visual">
@@ -1050,11 +1050,11 @@
     <selfCollide>true</selfCollide>
   </gazebo>
   <link name="rh_lfmiddle">
-    <inertial>
+    <!-- <inertial>
       <origin rpy="0 0 0" xyz="0 0 0.0125"/>
       <mass value="0.017"/>
       <inertia ixx="0.0000026" ixy="0.0" ixz="0.0" iyy="0.0000027" iyz="0.0" izz="0.00000087"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="rh_lfmiddle_visual">
@@ -1107,11 +1107,11 @@
     <selfCollide>true</selfCollide>
   </gazebo>
   <link name="rh_lfdistal">
-    <inertial>
+    <!-- <inertial>
       <mass value="0.012"/>
       <origin xyz="0 0 0.012"/>
       <inertia ixx="0.00000094" ixy="0.0" ixz="0.0" iyy="0.0000011" iyz="0.0" izz="0.00000053"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="rh_lfdistal_visual">
@@ -1139,10 +1139,10 @@
     <implicitSpringDamper>1</implicitSpringDamper>
   </gazebo>
   <link name="rh_lftip">
-    <inertial>
+    <!-- <inertial>
       <mass value="0.001"/>
       <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
-    </inertial>
+    </inertial> -->
   </link>
   <joint name="rh_LFtip" type="fixed">
     <parent link="rh_lfdistal"/>
@@ -1171,11 +1171,11 @@
     <selfCollide>true</selfCollide>
   </gazebo>
   <link name="rh_thbase">
-    <inertial>
+    <!-- <inertial>
       <mass value="0.010"/>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <inertia ixx="0.00000016" ixy="0.0" ixz="0.0" iyy="0.00000016" iyz="0.0" izz="0.00000016"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="rh_thbase_visual">
@@ -1219,11 +1219,11 @@
     <selfCollide>false</selfCollide>
   </gazebo>
   <link name="rh_thproximal">
-    <inertial>
+    <!-- <inertial>
       <mass value="0.040"/>
       <origin rpy="0 0 0" xyz="0 0 0.019"/>
       <inertia ixx="0.0000136" ixy="0.0" ixz="0.0" iyy="0.0000136" iyz="0.0" izz="0.00000313"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="rh_thproximal_visual">
@@ -1266,11 +1266,11 @@
     <selfCollide>false</selfCollide>
   </gazebo>
   <link name="rh_thhub">
-    <inertial>
+    <!-- <inertial>
       <mass value="0.005"/>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <inertia ixx="0.000001" ixy="0.0" ixz="0.0" iyy="0.000001" iyz="0.0" izz="0.0000003"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="rh_thhub_visual">
@@ -1314,11 +1314,11 @@
     <selfCollide>false</selfCollide>
   </gazebo>
   <link name="rh_thmiddle">
-    <inertial>
+    <!-- <inertial>
       <mass value="0.020"/>
       <origin rpy="0 0 0" xyz="0 0 0.016"/>
       <inertia ixx="0.0000051" ixy="0.0" ixz="0.0" iyy="0.0000051" iyz="0.0" izz="0.00000121"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="rh_thmiddle_visual">
@@ -1367,11 +1367,11 @@
   </gazebo>
   <!-- common -->
   <link name="rh_thdistal">
-    <inertial>
+    <!-- <inertial>
       <mass value="0.016"/>
       <origin rpy="0 0 0" xyz="0 0 0.01375"/>
       <inertia ixx="0.0000021" ixy="0.0" ixz="0.0" iyy="0.0000022" iyz="0.0" izz="0.000001"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="rh_thdistal_visual">
@@ -1401,10 +1401,10 @@
     <implicitSpringDamper>1</implicitSpringDamper>
   </gazebo>
   <link name="rh_thtip">
-    <inertial>
+    <!-- <inertial>
       <mass value="0.001"/>
       <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
-    </inertial>
+    </inertial> -->
   </link>
   <joint name="rh_thtip" type="fixed">
     <parent link="rh_thdistal"/>
@@ -1443,11 +1443,11 @@
     </joint>
   </transmission>
   <link name="lh_forearm">
-    <inertial>
+    <!-- <inertial>
       <origin rpy="0 0 0" xyz="0 0 0.09"/>
       <mass value="3.0"/>
       <inertia ixx="0.0138" ixy="0.0" ixz="0.0" iyy="0.0138" iyz="0.0" izz="0.00744"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0.0"/>
       <geometry name="lh_forearm_visual">
@@ -1482,11 +1482,11 @@
     <selfCollide>false</selfCollide>
   </gazebo>
   <link name="lh_wrist">
-    <inertial>
+    <!-- <inertial>
       <origin rpy="0 0 0" xyz="0 0 0.029"/>
       <mass value="0.1"/>
       <inertia ixx="0.000035" ixy="0.0" ixz="0.0" iyy="0.000064" iyz="0.0" izz="0.0000438"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="lh_wrist_visual">
@@ -1552,11 +1552,11 @@
     </joint>
   </transmission>
   <link name="lh_palm">
-    <inertial>
+    <!-- <inertial>
       <origin rpy="0 0 0" xyz="0 0 0.035"/>
       <mass value="0.3"/>
       <inertia ixx="0.0003581" ixy="0.0" ixz="0.0" iyy="0.0005287" iyz="0.0" izz="0.000191"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="lh_palm_visual">
@@ -1655,11 +1655,11 @@
   <gazebo reference="lh_palm">
   </gazebo>
   <link name="lh_ffknuckle">
-    <inertial>
+    <!-- <inertial>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <mass value="0.008"/>
       <inertia ixx="0.00000026" ixy="0.0" ixz="0.0" iyy="0.00000026" iyz="0.0" izz="0.00000032"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0.0005"/>
       <geometry name="lh_ffknuckle_visual">
@@ -1702,11 +1702,11 @@
     <material>Gazebo/Grey</material>
   </gazebo>
   <link name="lh_ffproximal">
-    <inertial>
+    <!-- <inertial>
       <mass value="0.030"/>
       <origin xyz="0 0 0.0225"/>
       <inertia ixx="0.0000098" ixy="0.0" ixz="0.0" iyy="0.00001" iyz="0.0" izz="0.0000018"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="lh_ffproximal_visual">
@@ -1747,11 +1747,11 @@
     <selfCollide>true</selfCollide>
   </gazebo>
   <link name="lh_ffmiddle">
-    <inertial>
+    <!-- <inertial>
       <origin rpy="0 0 0" xyz="0 0 0.0125"/>
       <mass value="0.017"/>
       <inertia ixx="0.0000026" ixy="0.0" ixz="0.0" iyy="0.0000027" iyz="0.0" izz="0.00000087"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="lh_ffmiddle_visual">
@@ -1804,11 +1804,11 @@
     <selfCollide>true</selfCollide>
   </gazebo>
   <link name="lh_ffdistal">
-    <inertial>
+    <!-- <inertial>
       <mass value="0.012"/>
       <origin xyz="0 0 0.012"/>
       <inertia ixx="0.00000094" ixy="0.0" ixz="0.0" iyy="0.0000011" iyz="0.0" izz="0.00000053"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="lh_ffdistal_visual">
@@ -1836,10 +1836,10 @@
     <implicitSpringDamper>1</implicitSpringDamper>
   </gazebo>
   <link name="lh_fftip">
-    <inertial>
+    <!-- <inertial>
       <mass value="0.001"/>
       <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
-    </inertial>
+    </inertial> -->
   </link>
   <joint name="lh_FFtip" type="fixed">
     <parent link="lh_ffdistal"/>
@@ -1868,11 +1868,11 @@
     <selfCollide>true</selfCollide>
   </gazebo>
   <link name="lh_mfknuckle">
-    <inertial>
+    <!-- <inertial>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <mass value="0.008"/>
       <inertia ixx="0.00000026" ixy="0.0" ixz="0.0" iyy="0.00000026" iyz="0.0" izz="0.00000032"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0.0005"/>
       <geometry name="lh_mfknuckle_visual">
@@ -1915,11 +1915,11 @@
     <material>Gazebo/Grey</material>
   </gazebo>
   <link name="lh_mfproximal">
-    <inertial>
+    <!-- <inertial>
       <mass value="0.030"/>
       <origin xyz="0 0 0.0225"/>
       <inertia ixx="0.0000098" ixy="0.0" ixz="0.0" iyy="0.00001" iyz="0.0" izz="0.0000018"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="lh_mfproximal_visual">
@@ -1960,11 +1960,11 @@
     <selfCollide>true</selfCollide>
   </gazebo>
   <link name="lh_mfmiddle">
-    <inertial>
+    <!-- <inertial>
       <origin rpy="0 0 0" xyz="0 0 0.0125"/>
       <mass value="0.017"/>
       <inertia ixx="0.0000026" ixy="0.0" ixz="0.0" iyy="0.0000027" iyz="0.0" izz="0.00000087"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="lh_mfmiddle_visual">
@@ -2017,11 +2017,11 @@
     <selfCollide>true</selfCollide>
   </gazebo>
   <link name="lh_mfdistal">
-    <inertial>
+    <!-- <inertial>
       <mass value="0.012"/>
       <origin xyz="0 0 0.012"/>
       <inertia ixx="0.00000094" ixy="0.0" ixz="0.0" iyy="0.0000011" iyz="0.0" izz="0.00000053"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="lh_mfdistal_visual">
@@ -2049,10 +2049,10 @@
     <implicitSpringDamper>1</implicitSpringDamper>
   </gazebo>
   <link name="lh_mftip">
-    <inertial>
+    <!-- <inertial>
       <mass value="0.001"/>
       <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
-    </inertial>
+    </inertial> -->
   </link>
   <joint name="lh_MFtip" type="fixed">
     <parent link="lh_mfdistal"/>
@@ -2081,11 +2081,11 @@
     <selfCollide>true</selfCollide>
   </gazebo>
   <link name="lh_rfknuckle">
-    <inertial>
+    <!-- <inertial>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <mass value="0.008"/>
       <inertia ixx="0.00000026" ixy="0.0" ixz="0.0" iyy="0.00000026" iyz="0.0" izz="0.00000032"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0.0005"/>
       <geometry name="lh_rfknuckle_visual">
@@ -2128,11 +2128,11 @@
     <material>Gazebo/Grey</material>
   </gazebo>
   <link name="lh_rfproximal">
-    <inertial>
+    <!-- <inertial>
       <mass value="0.030"/>
       <origin xyz="0 0 0.0225"/>
       <inertia ixx="0.0000098" ixy="0.0" ixz="0.0" iyy="0.00001" iyz="0.0" izz="0.0000018"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="lh_rfproximal_visual">
@@ -2173,11 +2173,11 @@
     <selfCollide>true</selfCollide>
   </gazebo>
   <link name="lh_rfmiddle">
-    <inertial>
+    <!-- <inertial>
       <origin rpy="0 0 0" xyz="0 0 0.0125"/>
       <mass value="0.017"/>
       <inertia ixx="0.0000026" ixy="0.0" ixz="0.0" iyy="0.0000027" iyz="0.0" izz="0.00000087"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="lh_rfmiddle_visual">
@@ -2230,11 +2230,11 @@
     <selfCollide>true</selfCollide>
   </gazebo>
   <link name="lh_rfdistal">
-    <inertial>
+    <!-- <inertial>
       <mass value="0.012"/>
       <origin xyz="0 0 0.012"/>
       <inertia ixx="0.00000094" ixy="0.0" ixz="0.0" iyy="0.0000011" iyz="0.0" izz="0.00000053"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="lh_rfdistal_visual">
@@ -2262,10 +2262,10 @@
     <implicitSpringDamper>1</implicitSpringDamper>
   </gazebo>
   <link name="lh_rftip">
-    <inertial>
+    <!-- <inertial>
       <mass value="0.001"/>
       <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
-    </inertial>
+    </inertial> -->
   </link>
   <joint name="lh_RFtip" type="fixed">
     <parent link="lh_rfdistal"/>
@@ -2294,11 +2294,11 @@
     <selfCollide>true</selfCollide>
   </gazebo>
   <link name="lh_lfmetacarpal">
-    <inertial>
+    <!-- <inertial>
       <origin rpy="0 0 0" xyz="0 0 0.04"/>
       <mass value="0.030"/>
       <inertia ixx="0.0000145" ixy="0.0" ixz="0.0" iyy="0.00001638" iyz="0.0" izz="0.000004272"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 -0.9599 0" xyz="0 0 0"/>
       <axis xyz="0.573576436 0 -0.819152044"/>
@@ -2340,11 +2340,11 @@
     <selfCollide>true</selfCollide>
   </gazebo>
   <link name="lh_lfknuckle">
-    <inertial>
+    <!-- <inertial>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <mass value="0.008"/>
       <inertia ixx="0.00000026" ixy="0.0" ixz="0.0" iyy="0.00000026" iyz="0.0" izz="0.00000032"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0.0005"/>
       <geometry name="lh_lfknuckle_visual">
@@ -2387,11 +2387,11 @@
     <material>Gazebo/Grey</material>
   </gazebo>
   <link name="lh_lfproximal">
-    <inertial>
+    <!-- <inertial>
       <mass value="0.030"/>
       <origin xyz="0 0 0.0225"/>
       <inertia ixx="0.0000098" ixy="0.0" ixz="0.0" iyy="0.00001" iyz="0.0" izz="0.0000018"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="lh_lfproximal_visual">
@@ -2432,11 +2432,11 @@
     <selfCollide>true</selfCollide>
   </gazebo>
   <link name="lh_lfmiddle">
-    <inertial>
+    <!-- <inertial>
       <origin rpy="0 0 0" xyz="0 0 0.0125"/>
       <mass value="0.017"/>
       <inertia ixx="0.0000026" ixy="0.0" ixz="0.0" iyy="0.0000027" iyz="0.0" izz="0.00000087"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="lh_lfmiddle_visual">
@@ -2489,11 +2489,11 @@
     <selfCollide>true</selfCollide>
   </gazebo>
   <link name="lh_lfdistal">
-    <inertial>
+    <!-- <inertial>
       <mass value="0.012"/>
       <origin xyz="0 0 0.012"/>
       <inertia ixx="0.00000094" ixy="0.0" ixz="0.0" iyy="0.0000011" iyz="0.0" izz="0.00000053"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="lh_lfdistal_visual">
@@ -2521,10 +2521,10 @@
     <implicitSpringDamper>1</implicitSpringDamper>
   </gazebo>
   <link name="lh_lftip">
-    <inertial>
+    <!-- <inertial>
       <mass value="0.001"/>
       <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
-    </inertial>
+    </inertial> -->
   </link>
   <joint name="lh_LFtip" type="fixed">
     <parent link="lh_lfdistal"/>
@@ -2553,11 +2553,11 @@
     <selfCollide>true</selfCollide>
   </gazebo>
   <link name="lh_thbase">
-    <inertial>
+    <!-- <inertial>
       <mass value="0.010"/>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <inertia ixx="0.00000016" ixy="0.0" ixz="0.0" iyy="0.00000016" iyz="0.0" izz="0.00000016"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="lh_thbase_visual">
@@ -2601,11 +2601,11 @@
     <selfCollide>false</selfCollide>
   </gazebo>
   <link name="lh_thproximal">
-    <inertial>
+    <!-- <inertial>
       <mass value="0.040"/>
       <origin rpy="0 0 0" xyz="0 0 0.019"/>
       <inertia ixx="0.0000136" ixy="0.0" ixz="0.0" iyy="0.0000136" iyz="0.0" izz="0.00000313"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="lh_thproximal_visual">
@@ -2648,11 +2648,11 @@
     <selfCollide>false</selfCollide>
   </gazebo>
   <link name="lh_thhub">
-    <inertial>
+    <!-- <inertial>
       <mass value="0.005"/>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <inertia ixx="0.000001" ixy="0.0" ixz="0.0" iyy="0.000001" iyz="0.0" izz="0.0000003"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="lh_thhub_visual">
@@ -2696,11 +2696,11 @@
     <selfCollide>false</selfCollide>
   </gazebo>
   <link name="lh_thmiddle">
-    <inertial>
+    <!-- <inertial>
       <mass value="0.020"/>
       <origin rpy="0 0 0" xyz="0 0 0.016"/>
       <inertia ixx="0.0000051" ixy="0.0" ixz="0.0" iyy="0.0000051" iyz="0.0" izz="0.00000121"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="lh_thmiddle_visual">
@@ -2749,11 +2749,11 @@
   </gazebo>
   <!-- common -->
   <link name="lh_thdistal">
-    <inertial>
+    <!-- <inertial>
       <mass value="0.016"/>
       <origin rpy="0 0 0" xyz="0 0 0.01375"/>
       <inertia ixx="0.0000021" ixy="0.0" ixz="0.0" iyy="0.0000022" iyz="0.0" izz="0.000001"/>
-    </inertial>
+    </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="lh_thdistal_visual">
@@ -2783,10 +2783,10 @@
     <implicitSpringDamper>1</implicitSpringDamper>
   </gazebo>
   <link name="lh_thtip">
-    <inertial>
+    <!-- <inertial>
       <mass value="0.001"/>
       <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
-    </inertial>
+    </inertial> -->
   </link>
   <joint name="lh_thtip" type="fixed">
     <parent link="lh_thdistal"/>

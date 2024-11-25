@@ -57,6 +57,7 @@ class Trajectory(song):
     # Evaluate at the given time.  This was last called (dt) ago.
     def evaluate(self, t, dt):
         (pd, vd) = goto(t, T, nextChord, prevChord)
+        (wd, )
 
         return []
 
