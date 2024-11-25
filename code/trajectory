@@ -27,6 +27,7 @@ class Trajectory(song):
     # Initialization.
     def __init__(self, node):
         # Set up the kinematic chain objects.
+        # RIGHT HAND
         self.rh_pointer = KinematicChain(node, 'world', 'tip',
                             self.jointnames()[0:6])
         self.rh_middle = KinematicChain(node, 'world', 'tip',
@@ -34,12 +35,23 @@ class Trajectory(song):
         self.rh_ring = KinematicChain(node, 'world', 'tip', 
                             self.jointnames()[0:2]+self.jointnames()[10:14])
         self.rh_pinky = KinematicChain(node, 'world', 'tip',
-                            self.jointnames()[0:2]+self.jointnames()[14:18])
+                            self.jointnames()[0:2]+self.jointnames()[14:19])
         self.rh_thumb = KinematicChain(node, 'world', 'tip',
-                            self.jointnames()[0:2]+self.jointnames()[18:23])
+                            self.jointnames()[0:2]+self.jointnames()[19:24])
+        
+        # LEFT HAND
+        self.lh_pointer = KinematicChain(node, 'world', 'tip',
+                            self.jointnames()[24:30])
+        self.lh_middle = KinematicChain(node, 'world', 'tip',
+                            self.jointnames()[24:26]+self.jointnames()[30:34])
+        self.lh_ring = KinematicChain(node, 'world', 'tip', 
+                            self.jointnames()[24:26]+self.jointnames()[34:38])
+        self.lh_pinky = KinematicChain(node, 'world', 'tip',
+                            self.jointnames()[24:26]+self.jointnames()[38:43])
+        self.lh_thumb = KinematicChain(node, 'world', 'tip',
+                            self.jointnames()[24:26]+self.jointnames()[43:48])
         
         
-    
     # Declare the joint names.
     def jointnames(self):
         # Return a list of joint names FOR THE EXPECTED URDF!
@@ -64,9 +76,12 @@ class Trajectory(song):
     
     # Evaluate at the given time.  This was last called (dt) ago.
     def evaluate(self, t, dt):
-        (pd, vd) = goto(t, T, nextChord, prevChord)
+        #(pd, vd) = goto(t, T, nextChord, prevChord)
 
-        return []
+        self.rh_pointer.fkin(self.qd)
+        z_vec = np.zeros(len(self.jointnames()))
+
+        return [z_vec, z_vec, , ]
 
 #
 #  Main Code
