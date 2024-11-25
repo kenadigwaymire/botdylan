@@ -24,12 +24,17 @@ def song_info(song):
     return [T, chords, strumming_pattern]
 
 # TODO: draw fretboard for guitar and map positions to chords
-def initialize_fretboard(num_frets, dx, dy):
-    neck_width = NUM_STRINGS * dy
-    neck_length = num_frets * dx
-    fretboard = [[(i, s for s in range(NUM_STRINGS))] for i in range(num_frets)]
-    return fretboard
-    
+
+class Fretboard():
+    def __init__(self, num_frets, dx, dy):
+        self.dx = dx
+        self.dy = dy
+        self.width = NUM_STRINGS * dy
+        self.length = num_frets * dx
+        self.fretboard = [[(i, j) for j in range(num_frets)] for i in range(NUM_STRINGS)]
+
+    def get_pos_desired(self, string_des, fret_des):
+        return (string_des * self.dy, (fret_des * self.dx) + self.dx / 2)
 #
 #   Trajectory Class
 #
@@ -135,9 +140,6 @@ def main(args=None):
 
     # Choose the song you want to play:
     song = "song_name"
-
-    # Initialize fretboard
-    initialize_fretboard(5, 0.5, 0.5)
 
     # Initialize the generator node for 100Hz udpates, using the above
     # Trajectory class.
