@@ -30,10 +30,10 @@ def generate_launch_description():
     # LOCATE FILES
 
     # Locate the RVIZ configuration file.
-    rvizcfg = os.path.join(pkgdir('rviz'), 'urdf.rviz')
+    rvizcfg = os.path.join(pkgdir('botdylan'), 'rviz/urdf.rviz')
 
     # Locate the URDF file.
-    urdf = os.path.join(pkgdir('urdf'), 'sr_hand_bimanual.urdf')
+    urdf = os.path.join(pkgdir('botdylan'), 'urdf/sr_hand_bimanual.urdf')
 
     # Load the robot's URDF file (XML).
     with open(urdf, 'r') as file:
@@ -64,7 +64,7 @@ def generate_launch_description():
     node_trajectory = Node(
         name       = 'trajectory', 
         package    = 'botdylan',
-        executable = 'test',
+        executable = 'trajectory',
         output     = 'screen')
 
 
