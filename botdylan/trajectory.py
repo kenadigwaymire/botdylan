@@ -77,7 +77,7 @@ class Trajectory():
                             self.jointnames()[24:26]+self.jointnames()[43:48])
         
         # Init joint values
-        self.qd = np.zeros(len(self.jointnames)) # which is declared first?
+        self.qd = np.zeros(len(self.jointnames())) # which is declared first?
 
         # Other params
         self.lam = 20
