@@ -2851,8 +2851,8 @@
       <inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01"/>
     </inertial>
   </link>
-  <joint name="neck_to_lh_lftip" type="fixed">
-    <parent link="lh_lftip"/>
+  <joint name="neck_to_world" type="fixed">
+    <parent link="world"/>
     <child link="neck"/>
     <origin xyz="0 0 0" rpy="0 0 0"/>
   </joint>
