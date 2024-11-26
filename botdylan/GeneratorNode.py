@@ -50,7 +50,7 @@ from geometry_msgs.msg  import PoseStamped, TwistStamped
 from geometry_msgs.msg  import TransformStamped
 from sensor_msgs.msg    import JointState
 
-from TransformHelpers   import quat_from_R
+from botdylan.TransformHelpers   import quat_from_R
 
 
 #
