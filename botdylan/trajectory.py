@@ -1,12 +1,12 @@
-import rclpy
+import rclpy # type: ignore
 import numpy as np
 
 from math import pi, sin, cos, acos, atan2, sqrt, fmod, exp
 
 # Grab the utilities
 from .GeneratorNode      import GeneratorNode
-from .TransformHelpers   import *
-from .TrajectoryUtils    import *
+from botdylan.TransformHelpers   import *
+from TrajectoryUtils    import *
 
 # Grab the general fkin
 from .KinematicChain     import KinematicChain
@@ -45,7 +45,7 @@ class Fretboard():
 #
 #   Trajectory Class
 #
-class Trajectory(song):
+class Trajectory():
     # Initialization.
     def __init__(self, node):
         # Set up the kinematic chain objects.

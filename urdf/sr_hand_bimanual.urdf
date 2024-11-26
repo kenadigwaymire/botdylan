@@ -2829,4 +2829,23 @@
     <child link="lh_forearm"/>
     <origin rpy="0.0 0.0 0.0" xyz="-0.4 0.0 0.0"/>
   </joint>
+
+  <!-- Guitar Neck -->
+
+  <joint name="attach-guitar-neck" type="fixed">
+    <parent link="world"/>
+    <child  link="guitar"/>
+    <origin xyz="0.00 1.0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="guitar-neck">
+    <visual>
+      <origin          xyz="0.00 0.00 0.15" rpy="0 0 0"/>
+      <geometry> <box size="0.02 0.60 0.30"/> </geometry>
+      <material name="orange"/>
+    </visual>
+    <collision>
+      <origin          xyz="0.00 0.00 0.15" rpy="0 0 0"/>
+      <geometry> <box size="0.02 0.60 0.30"/> </geometry>
+    </collision>
+  </link>
 </robot>
