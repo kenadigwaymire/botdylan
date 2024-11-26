@@ -76,7 +76,7 @@ class Trajectory():
         self.lh_thumb = KinematicChain(node, 'world', 'lh_thtip',
                             self.jointnames()[24:26]+self.jointnames()[43:48])
         
-        # Init joint values
+        # Init joint values (doesnt work rn cause chain is <6 and len(jointnames) = 48)
         self.qd = np.zeros(len(self.jointnames())) # which is declared first?
 
         # Other params
@@ -113,17 +113,17 @@ class Trajectory():
         # xddot = vd
 
         [ptips, Rtips, Jv, Jw] = np.vstack((
-            self.rh_pointer.fkin(self.qd), 
-            self.rh_middle.fkin(self.qd), 
-            self.rh_ring.fkin(self.qd), 
-            self.rh_pinky.fkin(self.qd), 
-            self.rh_thumb.fkin(self.qd), 
+            self.rh_pointer.fkin(self.qd[0:6]), 
+            self.rh_middle.fkin(np.concatenate((self.qd[0:2],self.qd[6:10]))), 
+            self.rh_ring.fkin(np.concatenate((self.qd[0:2],self.qd[10:14]))), 
+            self.rh_pinky.fkin(np.concatenate((self.qd[0:2],self.qd[14:19]))), 
+            self.rh_thumb.fkin(np.concatenate((self.qd[0:2],self.qd[19:24]))), 
 
-            self.lh_pointer.fkin(self.qd), 
-            self.lh_middle.fkin(self.qd), 
-            self.lh_ring.fkin(self.qd), 
-            self.lh_pinky.fkin(self.qd), 
-            self.lh_thumb.fkin(self.qd), 
+            self.lh_pointer.fkin(self.qd[24:30]), 
+            self.lh_middle.fkin(np.concatenate((self.qd[24:26],self.qd[30:34]))), 
+            self.lh_ring.fkin(np.concatenate((self.qd[24:26],self.qd[34:38]))), 
+            self.lh_pinky.fkin(np.concatenate((self.qd[24:26],self.qd[38:43]))), 
+            self.lh_thumb.fkin(np.concatenate((self.qd[24:26],self.qd[43:48]))), 
             ))
         J = np.vstack((Jv, Jw))
         
