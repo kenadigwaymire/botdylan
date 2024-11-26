@@ -7,12 +7,12 @@ import sys
 print(sys.path) # To debug pathing
 
 # Grab the utilities
-from .GeneratorNode      import GeneratorNode
-from TransformHelpers   import *
-from TrajectoryUtils    import *
+from botdylan.GeneratorNode      import GeneratorNode
+from botdylan.TransformHelpers   import *
+from botdylan.TrajectoryUtils    import *
 
 # Grab the general fkin
-from .KinematicChain     import KinematicChain
+from botdylan.KinematicChain     import KinematicChain
 
 NUM_STRINGS = 6
 STRING_NOTES = {0 : 'e_high', 1 : 'b', 2 : 'g', 3 : 'd', 4 : 'a', 5 : 'e_low'}
