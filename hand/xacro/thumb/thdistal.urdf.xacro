@@ -67,14 +67,14 @@
         <visual>
           <origin xyz="0 0 0" rpy="0 0 0" />
           <geometry name="${prefix}th_distal_visual">
-            <mesh filename="package://sr_description/meshes/components/th_distal/bt_2p/th_distal_bt_2p.dae"
+            <mesh filename="package://botdylan/meshes/components/th_distal/bt_2p/th_distal_bt_2p.dae"
             scale="0.0254 0.0254 0.0254" />
           </geometry>
           <material name="BiotacGreen" />
         </visual>
         <collision>
           <geometry name="${prefix}th_distal_collision_geom">
-            <mesh filename="package://sr_description/meshes/components/th_distal/bt_2p/th_distal_bt_2p.dae"
+            <mesh filename="package://botdylan/meshes/components/th_distal/bt_2p/th_distal_bt_2p.dae"
             scale="0.0254 0.0254 0.0254" />
           </geometry>
         </collision>
@@ -132,15 +132,15 @@
           <origin xyz="0 0 0" rpy="0 0 0" />
           <geometry name="${prefix}thdistal_visual">
             <xacro:if value="${tip_sensor == 'pst'}">
-              <mesh filename="package://sr_description/meshes/components/th_distal/pst/th_distal_pst.dae"
+              <mesh filename="package://botdylan/meshes/components/th_distal/pst/th_distal_pst.dae"
                     scale="0.001 0.001 0.001" />
             </xacro:if>
             <xacro:if value="${tip_sensor == 'bt_sp'}">
-              <mesh filename="package://sr_description/meshes/components/th_distal/bt_sp/th_distal_bt_sp.dae"
+              <mesh filename="package://botdylan/meshes/components/th_distal/bt_sp/th_distal_bt_sp.dae"
                     scale="0.001 0.001 0.001" />
             </xacro:if>
             <xacro:if value="${tip_sensor == 'bt_2p'}">
-              <mesh filename="package://sr_description/meshes/components/th_distal/bt_2p/th_distal_bt_2p.dae"
+              <mesh filename="package://botdylan/meshes/components/th_distal/bt_2p/th_distal_bt_2p.dae"
                     scale="0.001 0.001 0.001" />
             </xacro:if>
           </geometry>
@@ -152,15 +152,15 @@
           <origin xyz="0 0 0" rpy="0 0 0" />
           <geometry name="${prefix}thmiddle_collision_geom">
             <xacro:if value="${tip_sensor == 'pst'}">
-              <mesh filename="package://sr_description/meshes/components/th_distal/pst/th_distal_pst.dae"
+              <mesh filename="package://botdylan/meshes/components/th_distal/pst/th_distal_pst.dae"
                     scale="0.001 0.001 0.001" />
             </xacro:if>
             <xacro:if value="${tip_sensor == 'bt_sp'}">
-              <mesh filename="package://sr_description/meshes/components/th_distal/bt_sp/th_distal_bt_sp.dae"
+              <mesh filename="package://botdylan/meshes/components/th_distal/bt_sp/th_distal_bt_sp.dae"
                     scale="0.001 0.001 0.001" />
             </xacro:if>
             <xacro:if value="${tip_sensor == 'bt_2p'}">
-              <mesh filename="package://sr_description/meshes/components/th_distal/bt_2p/th_distal_bt_2p.dae"
+              <mesh filename="package://botdylan/meshes/components/th_distal/bt_2p/th_distal_bt_2p.dae"
                     scale="0.001 0.001 0.001" />
             </xacro:if>
           </geometry>

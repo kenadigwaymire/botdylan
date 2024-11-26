@@ -47,13 +47,13 @@
         <origin xyz="0 0 0" rpy="0 0 0" />
         <xacro:if value="${mid_sensor == 'bt_2p'}">
           <geometry name="${prefix}thmiddle_visual">
-            <mesh filename="package://sr_description/meshes/components/th_distal/bt_2p/th_distal_bt_2p_adapter.dae"
+            <mesh filename="package://botdylan/meshes/components/th_distal/bt_2p/th_distal_bt_2p_adapter.dae"
             scale="0.001 0.001 0.001" />
           </geometry>
         </xacro:if>
         <xacro:unless value="${mid_sensor == 'bt_2p'}">
           <geometry name="${prefix}thmiddle_visual">
-            <mesh filename="package://sr_description/meshes/components/th_middle/th_middle_${hand_version}.dae"
+            <mesh filename="package://botdylan/meshes/components/th_middle/th_middle_${hand_version}.dae"
             scale="0.001 0.001 0.001" />
           </geometry>
           <material name="shadow_thmiddle_material">
