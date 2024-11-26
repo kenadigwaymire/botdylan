@@ -3,9 +3,12 @@ import numpy as np
 
 from math import pi, sin, cos, acos, atan2, sqrt, fmod, exp
 
+import sys
+print(sys.path) # To debug pathing
+
 # Grab the utilities
 from .GeneratorNode      import GeneratorNode
-from botdylan.TransformHelpers   import *
+from TransformHelpers   import *
 from TrajectoryUtils    import *
 
 # Grab the general fkin
