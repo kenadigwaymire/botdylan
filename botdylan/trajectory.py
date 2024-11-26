@@ -126,7 +126,7 @@ class Trajectory():
             ))
         print(f'\ntest self.qd[0:6]:\n {self.qd[0:6]}')
         print(f'\ntest self.rh_pointer.fkin(self.qd[0:6]):\n {self.rh_pointer.fkin(self.qd[0:6])}')
-        print(f'\nqd_vstack_test:\ {qd_vstack_test}')
+        print(f'\nqd_vstack_test:\n {qd_vstack_test}')
 
         # [ptips, Rtips, Jv, Jw] = np.vstack((
         #     self.rh_pointer.fkin(self.qd[0:6]), 
