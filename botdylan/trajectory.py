@@ -111,22 +111,24 @@ class Trajectory():
     def evaluate(self, t, dt):
         # (pd, vd) = goto(t, T, nextChord, prevChord)
         # xddot = vd
-        qd_vstack_test = np.vstack((
-            self.rh_pointer.fkin(self.qd[0:6]), 
-            self.rh_middle.fkin(np.concatenate((self.qd[0:2],self.qd[6:10]))), 
-            self.rh_ring.fkin(np.concatenate((self.qd[0:2],self.qd[10:14]))), 
-            self.rh_pinky.fkin(np.concatenate((self.qd[0:2],self.qd[14:19]))), 
-            self.rh_thumb.fkin(np.concatenate((self.qd[0:2],self.qd[19:24]))), 
-
-            self.lh_pointer.fkin(self.qd[24:30]), 
-            self.lh_middle.fkin(np.concatenate((self.qd[24:26],self.qd[30:34]))), 
-            self.lh_ring.fkin(np.concatenate((self.qd[24:26],self.qd[34:38]))), 
-            self.lh_pinky.fkin(np.concatenate((self.qd[24:26],self.qd[38:43]))), 
-            self.lh_thumb.fkin(np.concatenate((self.qd[24:26],self.qd[43:48]))), 
-            ))
+        
         print(f'\ntest self.qd[0:6]:\n {self.qd[0:6]}')
         print(f'\ntest self.rh_pointer.fkin(self.qd[0:6]):\n {self.rh_pointer.fkin(self.qd[0:6])}')
-        print(f'\nqd_vstack_test:\n {qd_vstack_test}')
+
+        # qd_vstack_test = np.vstack((
+        #     self.rh_pointer.fkin(self.qd[0:6]), 
+        #     self.rh_middle.fkin(np.concatenate((self.qd[0:2],self.qd[6:10]))), 
+        #     self.rh_ring.fkin(np.concatenate((self.qd[0:2],self.qd[10:14]))), 
+        #     self.rh_pinky.fkin(np.concatenate((self.qd[0:2],self.qd[14:19]))), 
+        #     self.rh_thumb.fkin(np.concatenate((self.qd[0:2],self.qd[19:24]))), 
+
+        #     self.lh_pointer.fkin(self.qd[24:30]), 
+        #     self.lh_middle.fkin(np.concatenate((self.qd[24:26],self.qd[30:34]))), 
+        #     self.lh_ring.fkin(np.concatenate((self.qd[24:26],self.qd[34:38]))), 
+        #     self.lh_pinky.fkin(np.concatenate((self.qd[24:26],self.qd[38:43]))), 
+        #     self.lh_thumb.fkin(np.concatenate((self.qd[24:26],self.qd[43:48]))), 
+        #     ))
+        # print(f'\nqd_vstack_test:\n {qd_vstack_test}')
 
         # [ptips, Rtips, Jv, Jw] = np.vstack((
         #     self.rh_pointer.fkin(self.qd[0:6]), 
