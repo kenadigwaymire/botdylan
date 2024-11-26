@@ -5,11 +5,11 @@ from math import pi, sin, cos, acos, atan2, sqrt, fmod, exp
 
 # Grab the utilities
 from .GeneratorNode      import GeneratorNode
-from TransformHelpers   import *
-from TrajectoryUtils    import *
+from .TransformHelpers   import *
+from .TrajectoryUtils    import *
 
 # Grab the general fkin
-from KinematicChain     import KinematicChain
+from .KinematicChain     import KinematicChain
 
 NUM_STRINGS = 6
 STRING_NOTES = {0 : 'e_high', 1 : 'b', 2 : 'g', 3 : 'd', 4 : 'a', 5 : 'e_low'}
