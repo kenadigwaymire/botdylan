@@ -35,7 +35,7 @@ class Fretboard():
         self.width = NUM_STRINGS * dy
         self.length = num_frets * dx
         self.fretboard = [[(i, j) for j in range(num_frets)] for i in range(NUM_STRINGS)]
-    def get_pos_desired(self, chord):
+    def pd_from_chord(self, chord):
         chord_position = np.copy(chord)
         chord_position = chord_position * np.array([self.dy, self.dx])
         chord_position[:, 1] += self.dx / 2
@@ -121,10 +121,16 @@ class Trajectory():
     
     # Evaluate at the given time.  This was last called (dt) ago.
     def evaluate(self, t, dt):
+        # Initializae a guitar with: 21 frets, spaced 1 inch apart, and 
+        # 6 strings spaced 0.5 inches apart 
+        fretboard = Fretboard(21, 1, 0.5)
+
+        # Get the beat (T seconds), chords, and strumming pattern
         [T, chords, strumming_pattern] = song_info('some_song')
-        nextChord = chords[0]
+
+        nextChord = fretboard.pd_from_chord(chords[0].get('G'))
         prevChord = self.p0
-        (pd, vd) = goto(t, T, nextChord, prevChord)
+        (pd, vd) = goto(t, T, prevChord, np.hstack(nextChord, self.p0[12:29])
         xddot = vd
 
         [rh_ff_ptip, rh_ff_Rtip, rh_ff_Jv, rh_ff_Jw] = self.rh_pointer.fkin(self.qd[0:6])
