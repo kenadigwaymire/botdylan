@@ -39,7 +39,8 @@ class Fretboard():
     def get_coord_from_pos(self, curr_pos):
         return (curr_pos[0] / self.dy, (curr_pos[1] - (self.dx / 2)) / self.dx)
     
-    def get_val_range_of_fret(self)
+    def get_val_range_of_fret(self):
+        return None # temporary for debugging
         
 #
 #   Trajectory Class
