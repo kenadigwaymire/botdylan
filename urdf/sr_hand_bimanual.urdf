@@ -69,7 +69,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0.0"/>
       <geometry name="rh_forearm_visual">
-        <mesh filename="package://botdylan/meshes/components/forearm/forearm_E3M5.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/forearm_E3M5.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="light_grey">
         <color rgba="0.90000 0.90000 0.90000 1.0"/>
@@ -78,7 +78,7 @@
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0.0"/>
       <geometry name="rh_forearm_collision">
-        <mesh filename="package://botdylan/meshes/components/forearm/forearm_collision_E3M5.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/forearm_collision_E3M5.dae" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
     <!-- wrist mount -->
@@ -92,7 +92,7 @@
     <!--visual>
         <origin rpy="0 -1.57 -1.57" xyz="0.0 0.067 0.0045"/>
         <geometry name="${prefix}cable_extr_visualisation">
-          <mesh filename="package://botdylan/meshes/components/cable_connector/cable_connector_base_${hand_version}.dae" scale="0.001 0.001 0.001" />
+          <mesh filename="file://$(find botdylan)/meshes/cable_connector_base_${hand_version}.dae" scale="0.001 0.001 0.001" />
         </geometry>
       </visual-->
   </link>
@@ -108,7 +108,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="rh_wrist_visual">
-        <mesh filename="package://botdylan/meshes/components/wrist/wrist_E3M5.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/wrist_E3M5.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="LightGrey"/>
     </visual>
@@ -178,7 +178,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="rh_palm_visual">
-        <mesh filename="package://botdylan/meshes/components/palm/palm_E3M5.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/palm_E3M5.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="Grey"/>
     </visual>
@@ -281,7 +281,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0.0005"/>
       <geometry name="rh_ffknuckle_visual">
-        <mesh filename="package://botdylan/meshes/components/f_knuckle/f_knuckle_E3M5.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/f_knuckle_E3M5.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="LightGrey"/>
     </visual>
@@ -328,7 +328,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="rh_ffproximal_visual">
-        <mesh filename="package://botdylan/meshes/components/f_proximal/f_proximal_E3M5.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/f_proximal_E3M5.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="Grey"/>
     </visual>
@@ -373,7 +373,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="rh_ffmiddle_visual">
-        <mesh filename="package://botdylan/meshes/components/f_middle/f_middle_E3M5.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/f_middle_E3M5.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="Grey"/>
     </visual>
@@ -430,13 +430,13 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="rh_ffdistal_visual">
-        <mesh filename="package://botdylan/meshes/components/f_distal/pst/f_distal_pst.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/f_distal_pst.dae" scale="0.001 0.001 0.001"/>
       </geometry>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="rh_ffdistal_collision_geom">
-        <mesh filename="package://botdylan/meshes/components/f_distal/pst/f_distal_pst.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/f_distal_pst.dae" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
   </link>
@@ -494,7 +494,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0.0005"/>
       <geometry name="rh_mfknuckle_visual">
-        <mesh filename="package://botdylan/meshes/components/f_knuckle/f_knuckle_E3M5.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/f_knuckle_E3M5.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="LightGrey"/>
     </visual>
@@ -541,7 +541,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="rh_mfproximal_visual">
-        <mesh filename="package://botdylan/meshes/components/f_proximal/f_proximal_E3M5.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/f_proximal_E3M5.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="Grey"/>
     </visual>
@@ -586,7 +586,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="rh_mfmiddle_visual">
-        <mesh filename="package://botdylan/meshes/components/f_middle/f_middle_E3M5.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/f_middle_E3M5.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="Grey"/>
     </visual>
@@ -643,13 +643,13 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="rh_mfdistal_visual">
-        <mesh filename="package://botdylan/meshes/components/f_distal/pst/f_distal_pst.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/f_distal_pst.dae" scale="0.001 0.001 0.001"/>
       </geometry>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="rh_mfdistal_collision_geom">
-        <mesh filename="package://botdylan/meshes/components/f_distal/pst/f_distal_pst.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/f_distal_pst.dae" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
   </link>
@@ -707,7 +707,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0.0005"/>
       <geometry name="rh_rfknuckle_visual">
-        <mesh filename="package://botdylan/meshes/components/f_knuckle/f_knuckle_E3M5.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/f_knuckle_E3M5.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="LightGrey"/>
     </visual>
@@ -754,7 +754,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="rh_rfproximal_visual">
-        <mesh filename="package://botdylan/meshes/components/f_proximal/f_proximal_E3M5.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/f_proximal_E3M5.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="Grey"/>
     </visual>
@@ -799,7 +799,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="rh_rfmiddle_visual">
-        <mesh filename="package://botdylan/meshes/components/f_middle/f_middle_E3M5.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/f_middle/f_middle_E3M5.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="Grey"/>
     </visual>
@@ -856,13 +856,13 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="rh_rfdistal_visual">
-        <mesh filename="package://botdylan/meshes/components/f_distal/pst/f_distal_pst.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/f_distal_pst.dae" scale="0.001 0.001 0.001"/>
       </geometry>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="rh_rfdistal_collision_geom">
-        <mesh filename="package://botdylan/meshes/components/f_distal/pst/f_distal_pst.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/f_distal_pst.dae" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
   </link>
@@ -921,7 +921,7 @@
       <origin rpy="0 0.9599 0" xyz="0 0 0"/>
       <axis xyz="0.573576436 0 0.819152044"/>
       <geometry name="rh_lfmetacarpal_visual">
-        <mesh filename="package://botdylan/meshes/components/lf_metacarpal/lf_metacarpal_E3M5.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/lf_metacarpal_E3M5.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="Grey"/>
     </visual>
@@ -966,7 +966,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0.0005"/>
       <geometry name="rh_lfknuckle_visual">
-        <mesh filename="package://botdylan/meshes/components/f_knuckle/f_knuckle_E3M5.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/f_knuckle_E3M5.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="LightGrey"/>
     </visual>
@@ -1013,7 +1013,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="rh_lfproximal_visual">
-        <mesh filename="package://botdylan/meshes/components/f_proximal/f_proximal_E3M5.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/f_proximal_E3M5.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="Grey"/>
     </visual>
@@ -1058,7 +1058,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="rh_lfmiddle_visual">
-        <mesh filename="package://botdylan/meshes/components/f_middle/f_middle_E3M5.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/f_middle_E3M5.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="Grey"/>
     </visual>
@@ -1115,13 +1115,13 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="rh_lfdistal_visual">
-        <mesh filename="package://botdylan/meshes/components/f_distal/pst/f_distal_pst.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/f_distal_pst.dae" scale="0.001 0.001 0.001"/>
       </geometry>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="rh_lfdistal_collision_geom">
-        <mesh filename="package://botdylan/meshes/components/f_distal/pst/f_distal_pst.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/f_distal_pst.dae" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
   </link>
@@ -1227,7 +1227,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="rh_thproximal_visual">
-        <mesh filename="package://botdylan/meshes/components/th_proximal/th_proximal_E3M5.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/th_proximal_E3M5.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="shadow_thproximal_material">
         <color rgba="0.2 0.2 0.2 1.0"/>
@@ -1322,7 +1322,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="rh_thmiddle_visual">
-        <mesh filename="package://botdylan/meshes/components/th_middle/th_middle_E3M5.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/th_middle_E3M5.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="shadow_thmiddle_material">
         <color rgba="0.2 0.2 0.2 1.0"/>
@@ -1375,7 +1375,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="rh_thdistal_visual">
-        <mesh filename="package://botdylan/meshes/components/th_distal/pst/th_distal_pst.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/th_distal_pst.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="shadow_thmiddle_material">
         <color rgba="0.2 0.2 0.2 1.0"/>
@@ -1384,7 +1384,7 @@
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="rh_thmiddle_collision_geom">
-        <mesh filename="package://botdylan/meshes/components/th_distal/pst/th_distal_pst.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/th_distal_pst.dae" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
   </link>
@@ -1451,7 +1451,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0.0"/>
       <geometry name="lh_forearm_visual">
-        <mesh filename="package://botdylan/meshes/components/forearm/forearm_E3M5.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/forearm_E3M5.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="light_grey">
         <color rgba="0.90000 0.90000 0.90000 1.0"/>
@@ -1460,7 +1460,7 @@
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0.0"/>
       <geometry name="lh_forearm_collision">
-        <mesh filename="package://botdylan/meshes/components/forearm/forearm_collision_E3M5.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/forearm_collision_E3M5.dae" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
     <!-- wrist mount -->
@@ -1474,7 +1474,7 @@
     <!--visual>
         <origin rpy="0 -1.57 -1.57" xyz="0.0 0.067 0.0045"/>
         <geometry name="${prefix}cable_extr_visualisation">
-          <mesh filename="package://botdylan/meshes/components/cable_connector/cable_connector_base_${hand_version}.dae" scale="0.001 0.001 0.001" />
+          <mesh filename="file://$(find botdylan)/meshes/cable_connector_base_${hand_version}.dae" scale="0.001 0.001 0.001" />
         </geometry>
       </visual-->
   </link>
@@ -1490,7 +1490,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="lh_wrist_visual">
-        <mesh filename="package://botdylan/meshes/components/wrist/wrist_E3M5.dae" scale="-0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/wrist_E3M5.dae" scale="-0.001 0.001 0.001"/>
       </geometry>
       <material name="LightGrey"/>
     </visual>
@@ -1560,7 +1560,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="lh_palm_visual">
-        <mesh filename="package://botdylan/meshes/components/palm/palm_E3M5.dae" scale="-0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/palm_E3M5.dae" scale="-0.001 0.001 0.001"/>
       </geometry>
       <material name="Grey"/>
     </visual>
@@ -1663,7 +1663,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0.0005"/>
       <geometry name="lh_ffknuckle_visual">
-        <mesh filename="package://botdylan/meshes/components/f_knuckle/f_knuckle_E3M5.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/f_knuckle_E3M5.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="LightGrey"/>
     </visual>
@@ -1710,7 +1710,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="lh_ffproximal_visual">
-        <mesh filename="package://botdylan/meshes/components/f_proximal/f_proximal_E3M5.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/f_proximal_E3M5.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="Grey"/>
     </visual>
@@ -1755,7 +1755,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="lh_ffmiddle_visual">
-        <mesh filename="package://botdylan/meshes/components/f_middle/f_middle_E3M5.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/f_middle_E3M5.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="Grey"/>
     </visual>
@@ -1812,13 +1812,13 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="lh_ffdistal_visual">
-        <mesh filename="package://botdylan/meshes/components/f_distal/pst/f_distal_pst.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/pst/f_distal_pst.dae" scale="0.001 0.001 0.001"/>
       </geometry>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="lh_ffdistal_collision_geom">
-        <mesh filename="package://botdylan/meshes/components/f_distal/pst/f_distal_pst.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/f_distal_pst.dae" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
   </link>
@@ -1876,7 +1876,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0.0005"/>
       <geometry name="lh_mfknuckle_visual">
-        <mesh filename="package://botdylan/meshes/components/f_knuckle/f_knuckle_E3M5.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/f_knuckle_E3M5.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="LightGrey"/>
     </visual>
@@ -1923,7 +1923,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="lh_mfproximal_visual">
-        <mesh filename="package://botdylan/meshes/components/f_proximal/f_proximal_E3M5.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/f_proximal_E3M5.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="Grey"/>
     </visual>
@@ -1968,7 +1968,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="lh_mfmiddle_visual">
-        <mesh filename="package://botdylan/meshes/components/f_middle/f_middle_E3M5.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/f_middle_E3M5.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="Grey"/>
     </visual>
@@ -2025,13 +2025,13 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="lh_mfdistal_visual">
-        <mesh filename="package://botdylan/meshes/components/f_distal/pst/f_distal_pst.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/f_distal_pst.dae" scale="0.001 0.001 0.001"/>
       </geometry>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="lh_mfdistal_collision_geom">
-        <mesh filename="package://botdylan/meshes/components/f_distal/pst/f_distal_pst.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/f_distal_pst.dae" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
   </link>
@@ -2089,7 +2089,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0.0005"/>
       <geometry name="lh_rfknuckle_visual">
-        <mesh filename="package://botdylan/meshes/components/f_knuckle/f_knuckle_E3M5.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/f_knuckle_E3M5.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="LightGrey"/>
     </visual>
@@ -2136,7 +2136,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="lh_rfproximal_visual">
-        <mesh filename="package://botdylan/meshes/components/f_proximal/f_proximal_E3M5.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/f_proximal_E3M5.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="Grey"/>
     </visual>
@@ -2181,7 +2181,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="lh_rfmiddle_visual">
-        <mesh filename="package://botdylan/meshes/components/f_middle/f_middle_E3M5.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/f_middle_E3M5.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="Grey"/>
     </visual>
@@ -2238,13 +2238,13 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="lh_rfdistal_visual">
-        <mesh filename="package://botdylan/meshes/components/f_distal/pst/f_distal_pst.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/f_distal_pst.dae" scale="0.001 0.001 0.001"/>
       </geometry>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="lh_rfdistal_collision_geom">
-        <mesh filename="package://botdylan/meshes/components/f_distal/pst/f_distal_pst.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/f_distal_pst.dae" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
   </link>
@@ -2303,7 +2303,7 @@
       <origin rpy="0 -0.9599 0" xyz="0 0 0"/>
       <axis xyz="0.573576436 0 -0.819152044"/>
       <geometry name="lh_lfmetacarpal_visual">
-        <mesh filename="package://botdylan/meshes/components/lf_metacarpal/lf_metacarpal_E3M5.dae" scale="-0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/lf_metacarpal_E3M5.dae" scale="-0.001 0.001 0.001"/>
       </geometry>
       <material name="Grey"/>
     </visual>
@@ -2348,7 +2348,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0.0005"/>
       <geometry name="lh_lfknuckle_visual">
-        <mesh filename="package://botdylan/meshes/components/f_knuckle/f_knuckle_E3M5.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/f_knuckle_E3M5.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="LightGrey"/>
     </visual>
@@ -2395,7 +2395,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="lh_lfproximal_visual">
-        <mesh filename="package://botdylan/meshes/components/f_proximal/f_proximal_E3M5.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/f_proximal_E3M5.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="Grey"/>
     </visual>
@@ -2440,7 +2440,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="lh_lfmiddle_visual">
-        <mesh filename="package://botdylan/meshes/components/f_middle/f_middle_E3M5.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/f_middle_E3M5.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="Grey"/>
     </visual>
@@ -2497,13 +2497,13 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="lh_lfdistal_visual">
-        <mesh filename="package://botdylan/meshes/components/f_distal/pst/f_distal_pst.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/f_distal_pst.dae" scale="0.001 0.001 0.001"/>
       </geometry>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="lh_lfdistal_collision_geom">
-        <mesh filename="package://botdylan/meshes/components/f_distal/pst/f_distal_pst.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/f_distal_pst.dae" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
   </link>
@@ -2609,7 +2609,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="lh_thproximal_visual">
-        <mesh filename="package://botdylan/meshes/components/th_proximal/th_proximal_E3M5.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/th_proximal_E3M5.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="shadow_thproximal_material">
         <color rgba="0.2 0.2 0.2 1.0"/>
@@ -2704,7 +2704,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="lh_thmiddle_visual">
-        <mesh filename="package://botdylan/meshes/components/th_middle/th_middle_E3M5.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/th_middle_E3M5.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="shadow_thmiddle_material">
         <color rgba="0.2 0.2 0.2 1.0"/>
@@ -2757,7 +2757,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="lh_thdistal_visual">
-        <mesh filename="package://botdylan/meshes/components/th_distal/pst/th_distal_pst.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/th_distal_pst.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="shadow_thmiddle_material">
         <color rgba="0.2 0.2 0.2 1.0"/>
@@ -2766,7 +2766,7 @@
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="lh_thmiddle_collision_geom">
-        <mesh filename="package://botdylan/meshes/components/th_distal/pst/th_distal_pst.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="file://$(find botdylan)/meshes/th_distal_pst.dae" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
   </link>
