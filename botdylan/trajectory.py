@@ -4,7 +4,7 @@ import numpy as np
 from math import pi, sin, cos, acos, atan2, sqrt, fmod, exp
 
 # Grab the utilities
-from GeneratorNode      import GeneratorNode
+from .GeneratorNode      import GeneratorNode
 from TransformHelpers   import *
 from TrajectoryUtils    import *
 
@@ -38,6 +38,8 @@ class Fretboard():
     
     def get_coord_from_pos(self, curr_pos):
         return (curr_pos[0] / self.dy, (curr_pos[1] - (self.dx / 2)) / self.dx)
+    
+    def get_val_range_of_fret(self)
         
 #
 #   Trajectory Class

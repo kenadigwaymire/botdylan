@@ -25,7 +25,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'trajectory = botdylan.trajectory:main'  # Add trajectory executable
+            'trajectory = botdylan.trajectory:main'1  # Add trajectory executable
         ],
     },
 )
