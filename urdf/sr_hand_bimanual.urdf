@@ -1805,9 +1805,9 @@
   </gazebo>
   <link name="lh_ffdistal">
     <!-- <inertial>
-      <mass value="0.012"/>
+      <mass value="0.012"/> -->
       <origin xyz="0 0 0.012"/>
-      <inertia ixx="0.00000094" ixy="0.0" ixz="0.0" iyy="0.0000011" iyz="0.0" izz="0.00000053"/>
+    <!--  <inertia ixx="0.00000094" ixy="0.0" ixz="0.0" iyy="0.0000011" iyz="0.0" izz="0.00000053"/>
     </inertial> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
