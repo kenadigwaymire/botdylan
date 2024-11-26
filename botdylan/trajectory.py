@@ -53,7 +53,7 @@ class Trajectory():
     def __init__(self, node):
         # Set up the kinematic chain objects.
         # RIGHT HAND
-        self.rh_pointer = KinematicChain(self, 'world', 'tip',
+        self.rh_pointer = KinematicChain(node, 'world', 'tip',
                             self.jointnames()[0:6])
         self.rh_middle = KinematicChain(node, 'world', 'tip',
                             self.jointnames()[0:2]+self.jointnames()[6:10])
