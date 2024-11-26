@@ -2832,7 +2832,7 @@
 
   <!-- Guitar Neck -->
 
-  <!-- <link name="neck">
+  <link name="neck">
     <visual>
       <geometry>
         <box size="0.8 0.05 0.02"/> 
@@ -2853,7 +2853,8 @@
   </link>
   <joint name="neck_to_world">
     <parent link="world"/>
-    <
+    <child link="neck"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
   </joint>
 
   <link name="string_1">
@@ -3004,5 +3005,5 @@
     <parent link="neck"/>
     <child link="string_6"/>
     <origin xyz="0 0.02 0.01" rpy="0 0 0"/>
-  </joint> -->
+  </joint>
 </robot>
