@@ -76,6 +76,9 @@ class Trajectory():
         self.lh_thumb = KinematicChain(node, 'world', 'lh_thtip',
                             self.jointnames()[24:26]+self.jointnames()[43:48])
         
+        # Init joint values
+        self.qd = np.zeros(len(self.jointnames)) # which is declared first?
+
         # Other params
         self.lam = 20
         # self.pdlast = np.copy(self.p0)
