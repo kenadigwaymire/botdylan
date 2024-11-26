@@ -78,12 +78,24 @@ class Trajectory():
         
         # Init joint values (doesnt work rn cause chain is <6 and len(jointnames) = 48)
         self.qd = np.zeros(len(self.jointnames())) # which is declared first?
+        self.p0 = np.array([0.0, 0.0, 0.0,
+                            0.1, 0.0, 0.0,
+                            0.2, 0.0, 0.0,
+                            0.3, 0.0, 0.0,
+                            0.4, 0.0, 0.0,
+
+                            12.0, 0.0, 0.0,
+                            12.1, 0.0, 0.0,
+                            12.2, 0.0, 0.0,
+                            12.3, 0.0, 0.0,
+                            12.4, 0.0, 0.0])
+        self.R0 = np.hstack((Reye(), Reye(), Reye(), Reye(), Reye(), 
+                             Reye(), Reye(), Reye(), Reye(), Reye()))
 
         # Other params
         self.lam = 20
-        # self.pdlast = np.copy(self.p0)
-        # self.Rdlast = np.copy(self.R0)
-        
+        self.pdlast = np.copy(self.p0)
+        self.Rdlast = np.copy(self.R0)
         
     # Declare the joint names.
     def jointnames(self):
@@ -109,8 +121,11 @@ class Trajectory():
     
     # Evaluate at the given time.  This was last called (dt) ago.
     def evaluate(self, t, dt):
-        # (pd, vd) = goto(t, T, nextChord, prevChord)
-        # xddot = vd
+        [T, chords, strumming_pattern] = song_info('some_song')
+        nextChord = chords[0]
+        prevChord = self.p0
+        (pd, vd) = goto(t, T, nextChord, prevChord)
+        xddot = vd
 
         [rh_ff_ptip, rh_ff_Rtip, rh_ff_Jv, rh_ff_Jw] = self.rh_pointer.fkin(self.qd[0:6])
         [rh_mf_ptip, rh_mf_Rtip, rh_mf_Jv, rh_mf_Jw] = self.rh_middle.fkin(np.concatenate((self.qd[0:2],self.qd[6:10])))
