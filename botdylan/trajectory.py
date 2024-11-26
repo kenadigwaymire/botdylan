@@ -135,11 +135,11 @@ class Trajectory():
                                     rh_rf_Rtip, rh_lf_Rtip, rh_th_Rtip, 
                                     lh_ff_Rtip, lh_mf_Rtip, lh_rf_Rtip, 
                                     lh_lf_Rtip, lh_th_Rtip)),
-                                 np.vstack((rh_ff_Jv, rh_mf_Jv, rh_rf_Jv, 
+                                 np.hstack((rh_ff_Jv, rh_mf_Jv, rh_rf_Jv, 
                                     rh_lf_Jv, rh_th_Jv, 
                                     lh_ff_Jv, lh_mf_Jv, lh_rf_Jv, lh_lf_Jv, 
                                     lh_th_Jv)),
-                                 np.vstack((rh_ff_Jw, rh_mf_Jw, rh_rf_Jw, 
+                                 np.hstack((rh_ff_Jw, rh_mf_Jw, rh_rf_Jw, 
                                     rh_lf_Jw, rh_th_Jw, 
                                     lh_ff_Jw, lh_mf_Jw, lh_rf_Jw, lh_lf_Jw, 
                                     lh_th_Jw))]
