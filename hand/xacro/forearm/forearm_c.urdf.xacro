@@ -45,7 +45,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry name="${prefix}forearm_visual">
-          <mesh filename="package://sr_description/meshes/components/forearm/forearm_${hand_version}.dae"/>
+          <mesh filename="package://botdylan/meshes/components/forearm/forearm_${hand_version}.dae"/>
         </geometry>
         <material name="Grey" />
       </visual>

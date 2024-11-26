@@ -46,15 +46,15 @@
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry name="${prefix}${link_prefix}distal_visual">
           <xacro:if value="${tip_sensor == 'pst'}">
-            <mesh filename="package://sr_description/meshes/components/f_distal/pst/f_distal_pst.dae"
+            <mesh filename="package://botdylan/meshes/components/f_distal/pst/f_distal_pst.dae"
                   scale="0.001 0.001 0.001" />
           </xacro:if>
           <xacro:if value="${tip_sensor == 'bt_sp'}">
-            <mesh filename="package://sr_description/meshes/components/f_distal/bt_sp/f_distal_bt_sp.dae"
+            <mesh filename="package://botdylan/meshes/components/f_distal/bt_sp/f_distal_bt_sp.dae"
                   scale="0.001 0.001 0.001" />
           </xacro:if>
           <xacro:if value="${tip_sensor == 'bt_2p'}">
-            <mesh filename="package://sr_description/meshes/components/f_distal/bt_2p/f_distal_bt_2p.dae" />
+            <mesh filename="package://botdylan/meshes/components/f_distal/bt_2p/f_distal_bt_2p.dae" />
           </xacro:if>
         </geometry>
       </visual>
@@ -62,15 +62,15 @@
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry name="${prefix}${link_prefix}distal_collision_geom">
           <xacro:if value="${tip_sensor == 'pst'}">
-            <mesh filename="package://sr_description/meshes/components/f_distal/pst/f_distal_pst.dae"
+            <mesh filename="package://botdylan/meshes/components/f_distal/pst/f_distal_pst.dae"
                   scale="0.001 0.001 0.001" />
           </xacro:if>
           <xacro:if value="${tip_sensor == 'bt_sp'}">
-            <mesh filename="package://sr_description/meshes/components/f_distal/bt_sp/f_distal_bt_sp.dae"
+            <mesh filename="package://botdylan/meshes/components/f_distal/bt_sp/f_distal_bt_sp.dae"
                   scale="0.001 0.001 0.001" />
           </xacro:if>
           <xacro:if value="${tip_sensor == 'bt_2p'}">
-            <mesh filename="package://sr_description/meshes/components/f_distal/bt_2p/f_distal_bt_2p.dae" />
+            <mesh filename="package://botdylan/meshes/components/f_distal/bt_2p/f_distal_bt_2p.dae" />
           </xacro:if>
         </geometry>
       </collision>

@@ -51,14 +51,14 @@
       <visual>
         <origin xyz="0 0 ${mounting_plate_offset}" rpy="0 0 0" />
         <geometry name="${prefix}forearm_visual">
-          <mesh filename="package://sr_description/meshes/components/forearm/forearm_${hand_version}.dae" scale="0.001 0.001 0.001" />
+          <mesh filename="package://botdylan/meshes/components/forearm/forearm_${hand_version}.dae" scale="0.001 0.001 0.001" />
         </geometry>
         <xacro:light_grey/>
       </visual>
       <collision>
         <origin xyz="0 0 ${mounting_plate_offset}" rpy="0 0 0" />
         <geometry name="${prefix}forearm_collision">
-          <mesh filename="package://sr_description/meshes/components/forearm/forearm_collision_${hand_version}.dae" scale="0.001 0.001 0.001" />
+          <mesh filename="package://botdylan/meshes/components/forearm/forearm_collision_${hand_version}.dae" scale="0.001 0.001 0.001" />
         </geometry>
       </collision>
       <!-- wrist mount -->
@@ -73,7 +73,7 @@
         <visual>
           <origin xyz="0 0 0" rpy="0 0 0" />
           <geometry name="${prefix}mounting_plate">
-            <mesh filename="package://sr_description/meshes/components/mounting_plate/mounting_plate_${hand_version}.dae" scale="0.001 0.001 0.001" />
+            <mesh filename="package://botdylan/meshes/components/mounting_plate/mounting_plate_${hand_version}.dae" scale="0.001 0.001 0.001" />
           </geometry>
         </visual>
         <collision>

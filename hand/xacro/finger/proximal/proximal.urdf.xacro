@@ -45,7 +45,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry name="${prefix}${link_prefix}proximal_visual">
-          <mesh filename="package://sr_description/meshes/components/f_proximal/f_proximal_${hand_version}.dae"
+          <mesh filename="package://botdylan/meshes/components/f_proximal/f_proximal_${hand_version}.dae"
                 scale="0.001 0.001 0.001" />
         </geometry>
         <material name="Grey" />
