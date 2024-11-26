@@ -1,0 +1,5 @@
+cd ~/robotws/src/botdylan/rviz
+ros2 run rviz2 rviz2 -d urdf.rviz
+
+cd ~/robotws/src/botdylan/urdf
+ros2 run robot_state_publisher robot_state_publisher sr_hand_bimanual.urdf

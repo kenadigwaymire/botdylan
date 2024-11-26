@@ -53,27 +53,27 @@ class Trajectory():
     def __init__(self, node):
         # Set up the kinematic chain objects.
         # RIGHT HAND
-        self.rh_pointer = KinematicChain(node, 'world', 'rh_FFJ4',
+        self.rh_pointer = KinematicChain(node, 'world', 'rh_fftip',
                             self.jointnames()[0:6])
-        self.rh_middle = KinematicChain(node, 'world', 'tip',
+        self.rh_middle = KinematicChain(node, 'world', 'rh_mftip',
                             self.jointnames()[0:2]+self.jointnames()[6:10])
-        self.rh_ring = KinematicChain(node, 'world', 'tip', 
+        self.rh_ring = KinematicChain(node, 'world', 'rh_rftip', 
                             self.jointnames()[0:2]+self.jointnames()[10:14])
-        self.rh_pinky = KinematicChain(node, 'world', 'tip',
+        self.rh_pinky = KinematicChain(node, 'world', 'rh_lftip',
                             self.jointnames()[0:2]+self.jointnames()[14:19])
-        self.rh_thumb = KinematicChain(node, 'world', 'tip',
+        self.rh_thumb = KinematicChain(node, 'world', 'rh_thtip',
                             self.jointnames()[0:2]+self.jointnames()[19:24])
         
         # LEFT HAND
-        self.lh_pointer = KinematicChain(node, 'world', 'tip',
+        self.lh_pointer = KinematicChain(node, 'world', 'lh_fftip',
                             self.jointnames()[24:30])
-        self.lh_middle = KinematicChain(node, 'world', 'rh_mftip',
+        self.lh_middle = KinematicChain(node, 'world', 'lh_mftip',
                             self.jointnames()[24:26]+self.jointnames()[30:34])
-        self.lh_ring = KinematicChain(node, 'world', 'tip', 
+        self.lh_ring = KinematicChain(node, 'world', 'lh_rftip', 
                             self.jointnames()[24:26]+self.jointnames()[34:38])
-        self.lh_pinky = KinematicChain(node, 'world', 'tip',
+        self.lh_pinky = KinematicChain(node, 'world', 'lh_lftip',
                             self.jointnames()[24:26]+self.jointnames()[38:43])
-        self.lh_thumb = KinematicChain(node, 'world', 'rh_thtip',
+        self.lh_thumb = KinematicChain(node, 'world', 'lh_thtip',
                             self.jointnames()[24:26]+self.jointnames()[43:48])
         
         # Other params
