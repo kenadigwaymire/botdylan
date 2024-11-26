@@ -3,8 +3,8 @@ import numpy as np
 
 from math import pi, sin, cos, acos, atan2, sqrt, fmod, exp
 
-import sys
-print(sys.path) # To debug pathing
+# import sys
+# print(sys.path) # To debug pathing
 
 # Grab the utilities
 from botdylan.GeneratorNode      import GeneratorNode
@@ -153,7 +153,7 @@ def main(args=None):
 
     # Initialize the generator node for 100Hz udpates, using the above
     # Trajectory class.
-    generator = GeneratorNode('generator', 100, Trajectory(song))
+    generator = GeneratorNode('generator', 100, Trajectory)
 
     # Spin, meaning keep running (taking care of the timer callbacks
     # and message passing), until interrupted or the trajectory ends.
