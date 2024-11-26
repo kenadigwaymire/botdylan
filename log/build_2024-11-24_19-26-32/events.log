@@ -1,0 +1,43 @@
+[0.000000] (-) TimerEvent: {}
+[0.000500] (botdylan) JobQueued: {'identifier': 'botdylan', 'dependencies': OrderedDict()}
+[0.005631] (botdylan) JobStarted: {'identifier': 'botdylan'}
+[0.091478] (-) TimerEvent: {}
+[0.202683] (-) TimerEvent: {}
+[0.311837] (-) TimerEvent: {}
+[0.415801] (-) TimerEvent: {}
+[0.537666] (-) TimerEvent: {}
+[0.639920] (-) TimerEvent: {}
+[0.745223] (-) TimerEvent: {}
+[0.846205] (-) TimerEvent: {}
+[0.948054] (-) TimerEvent: {}
+[1.073460] (-) TimerEvent: {}
+[1.177323] (-) TimerEvent: {}
+[1.281308] (-) TimerEvent: {}
+[1.384836] (-) TimerEvent: {}
+[1.512567] (-) TimerEvent: {}
+[1.615458] (-) TimerEvent: {}
+[1.725784] (-) TimerEvent: {}
+[1.835094] (-) TimerEvent: {}
+[1.936641] (-) TimerEvent: {}
+[2.040119] (-) TimerEvent: {}
+[2.145145] (-) TimerEvent: {}
+[2.247283] (-) TimerEvent: {}
+[2.348991] (-) TimerEvent: {}
+[2.454318] (-) TimerEvent: {}
+[2.561192] (-) TimerEvent: {}
+[2.670911] (-) TimerEvent: {}
+[2.773947] (-) TimerEvent: {}
+[2.884360] (-) TimerEvent: {}
+[2.990930] (-) TimerEvent: {}
+[3.094184] (-) TimerEvent: {}
+[3.199845] (-) TimerEvent: {}
+[3.322964] (-) TimerEvent: {}
+[3.440860] (-) TimerEvent: {}
+[3.545420] (-) TimerEvent: {}
+[3.677220] (-) TimerEvent: {}
+[3.787744] (-) TimerEvent: {}
+[3.889126] (-) TimerEvent: {}
+[3.976560] (botdylan) StderrLine: {'line': b'Traceback (most recent call last):\n  File "/usr/lib/python3/dist-packages/colcon_core/executor/__init__.py", line 91, in __call__\n    rc = await self.task(*args, **kwargs)\n  File "/usr/lib/python3/dist-packages/colcon_core/task/__init__.py", line 93, in __call__\n    return await task_method(*args, **kwargs)\n  File "/usr/lib/python3/dist-packages/colcon_ros/task/ament_python/build.py", line 102, in build\n    return await extension.build(additional_hooks=additional_hooks)\n  File "/usr/lib/python3/dist-packages/colcon_core/task/python/build.py", line 143, in build\n    temp_symlinks = self._symlinks_in_build(args, setup_py_data)\n  File "/usr/lib/python3/dist-packages/colcon_core/task/python/build.py", line 358, in _symlinks_in_build\n    os.symlink(src, dst)\nPermissionError: [Errno 1] Operation not permitted: \'/media/sf_ME_133a/packages/botdylan/setup.py\' -> \'/media/sf_ME_133a/packages/botdylan/build/botdylan/setup.py\'\n'}
+[3.987110] (botdylan) JobEnded: {'identifier': 'botdylan', 'rc': 1}
+[3.994914] (-) TimerEvent: {}
+[3.998680] (-) EventReactorShutdown: {}

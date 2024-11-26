@@ -1,0 +1,90 @@
+[0.329s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'build']
+[0.329s] DEBUG:colcon:Parsed command line arguments: Namespace(log_base=None, log_level=None, verb_name='build', build_base='build', install_base='install', merge_install=False, symlink_install=False, test_result_base=None, continue_on_error=False, executor='parallel', parallel_workers=8, event_handlers=None, ignore_user_meta=False, metas=['./colcon.meta'], base_paths=['.'], packages_ignore=None, packages_ignore_regex=None, paths=None, packages_up_to=None, packages_up_to_regex=None, packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_select_by_dep=None, packages_skip_by_dep=None, packages_skip_up_to=None, packages_select_build_failed=False, packages_skip_build_finished=False, packages_select_test_failures=False, packages_skip_test_passed=False, packages_select=None, packages_skip=None, packages_select_regex=None, packages_skip_regex=None, packages_start=None, packages_end=None, allow_overriding=[], cmake_args=None, cmake_target=None, cmake_target_skip_unavailable=False, cmake_clean_cache=False, cmake_clean_first=False, cmake_force_configure=False, ament_cmake_args=None, catkin_cmake_args=None, catkin_skip_building_tests=False, mixin_files=None, mixin=None, verb_parser=<colcon_mixin.mixin.mixin_argument.MixinArgumentDecorator object at 0x707c6803ef80>, verb_extension=<colcon_core.verb.build.BuildVerb object at 0x707c68163670>, main=<bound method BuildVerb.main of <colcon_core.verb.build.BuildVerb object at 0x707c68163670>>, mixin_verb=('build',))
+[0.971s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[0.971s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[0.972s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[0.974s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[0.981s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) discover
+[0.981s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[0.982s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/media/sf_ME_133a/packages/botdylan'
+[0.984s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ignore', 'ignore_ament_install']
+[0.985s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore'
+[0.986s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore_ament_install'
+[0.989s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_pkg']
+[0.989s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_pkg'
+[0.989s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_meta']
+[0.990s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_meta'
+[0.990s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ros']
+[0.990s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ros'
+[1.038s] DEBUG:colcon.colcon_core.package_identification:Package '.' with type 'ros.ament_python' and name 'botdylan'
+[1.038s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) using defaults
+[1.038s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) discover
+[1.038s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) using defaults
+[1.039s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) discover
+[1.040s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) using defaults
+[1.214s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) check parameters
+[1.223s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) discover
+[1.533s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 1 installed packages in /home/robotics/robotws/src/packages/botdylan/install
+[1.535s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 406 installed packages in /opt/ros/humble
+[1.537s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) using defaults
+[1.579s] Level 5:colcon.colcon_core.verb:set package 'botdylan' build argument 'cmake_args' from command line to 'None'
+[1.579s] Level 5:colcon.colcon_core.verb:set package 'botdylan' build argument 'cmake_target' from command line to 'None'
+[1.579s] Level 5:colcon.colcon_core.verb:set package 'botdylan' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[1.580s] Level 5:colcon.colcon_core.verb:set package 'botdylan' build argument 'cmake_clean_cache' from command line to 'False'
+[1.580s] Level 5:colcon.colcon_core.verb:set package 'botdylan' build argument 'cmake_clean_first' from command line to 'False'
+[1.580s] Level 5:colcon.colcon_core.verb:set package 'botdylan' build argument 'cmake_force_configure' from command line to 'False'
+[1.581s] Level 5:colcon.colcon_core.verb:set package 'botdylan' build argument 'ament_cmake_args' from command line to 'None'
+[1.581s] Level 5:colcon.colcon_core.verb:set package 'botdylan' build argument 'catkin_cmake_args' from command line to 'None'
+[1.582s] Level 5:colcon.colcon_core.verb:set package 'botdylan' build argument 'catkin_skip_building_tests' from command line to 'False'
+[1.582s] DEBUG:colcon.colcon_core.verb:Building package 'botdylan' with the following arguments: {'ament_cmake_args': None, 'build_base': '/media/sf_ME_133a/packages/botdylan/build/botdylan', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/media/sf_ME_133a/packages/botdylan/install/botdylan', 'merge_install': False, 'path': '/media/sf_ME_133a/packages/botdylan', 'symlink_install': False, 'test_result_base': None}
+[1.582s] INFO:colcon.colcon_core.executor:Executing jobs using 'parallel' executor
+[1.584s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete
+[1.587s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/media/sf_ME_133a/packages/botdylan' with build type 'ament_python'
+[1.587s] Level 1:colcon.colcon_core.shell:create_environment_hook('botdylan', 'ament_prefix_path')
+[1.603s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_core.shell.bat': Not used on non-Windows systems
+[1.604s] INFO:colcon.colcon_core.shell:Creating environment hook '/media/sf_ME_133a/packages/botdylan/install/botdylan/share/botdylan/hook/ament_prefix_path.ps1'
+[1.644s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/media/sf_ME_133a/packages/botdylan/install/botdylan/share/botdylan/hook/ament_prefix_path.dsv'
+[1.665s] INFO:colcon.colcon_core.shell:Creating environment hook '/media/sf_ME_133a/packages/botdylan/install/botdylan/share/botdylan/hook/ament_prefix_path.sh'
+[1.687s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.688s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[3.037s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/media/sf_ME_133a/packages/botdylan'
+[3.037s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[3.038s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[6.337s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/media/sf_ME_133a/packages/botdylan': PYTHONPATH=/media/sf_ME_133a/packages/botdylan/build/botdylan/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/media/sf_ME_133a/packages/botdylan/install/botdylan/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base build/botdylan build --build-base /media/sf_ME_133a/packages/botdylan/build/botdylan/build install --record /media/sf_ME_133a/packages/botdylan/build/botdylan/install.log --single-version-externally-managed install_data
+[9.662s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/media/sf_ME_133a/packages/botdylan' returned '0': PYTHONPATH=/media/sf_ME_133a/packages/botdylan/build/botdylan/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/media/sf_ME_133a/packages/botdylan/install/botdylan/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base build/botdylan build --build-base /media/sf_ME_133a/packages/botdylan/build/botdylan/build install --record /media/sf_ME_133a/packages/botdylan/build/botdylan/install.log --single-version-externally-managed install_data
+[9.672s] Level 1:colcon.colcon_core.environment:checking '/media/sf_ME_133a/packages/botdylan/install/botdylan' for CMake module files
+[9.764s] Level 1:colcon.colcon_core.environment:checking '/media/sf_ME_133a/packages/botdylan/install/botdylan' for CMake config files
+[9.942s] Level 1:colcon.colcon_core.environment:checking '/media/sf_ME_133a/packages/botdylan/install/botdylan/lib'
+[9.947s] Level 1:colcon.colcon_core.environment:checking '/media/sf_ME_133a/packages/botdylan/install/botdylan/bin'
+[9.949s] Level 1:colcon.colcon_core.environment:checking '/media/sf_ME_133a/packages/botdylan/install/botdylan/lib/pkgconfig/botdylan.pc'
+[9.951s] Level 1:colcon.colcon_core.environment:checking '/media/sf_ME_133a/packages/botdylan/install/botdylan/lib/python3.10/site-packages'
+[9.954s] Level 1:colcon.colcon_core.shell:create_environment_hook('botdylan', 'pythonpath')
+[9.954s] INFO:colcon.colcon_core.shell:Creating environment hook '/media/sf_ME_133a/packages/botdylan/install/botdylan/share/botdylan/hook/pythonpath.ps1'
+[9.970s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/media/sf_ME_133a/packages/botdylan/install/botdylan/share/botdylan/hook/pythonpath.dsv'
+[9.987s] INFO:colcon.colcon_core.shell:Creating environment hook '/media/sf_ME_133a/packages/botdylan/install/botdylan/share/botdylan/hook/pythonpath.sh'
+[10.039s] Level 1:colcon.colcon_core.environment:checking '/media/sf_ME_133a/packages/botdylan/install/botdylan/bin'
+[10.042s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(botdylan)
+[10.042s] INFO:colcon.colcon_core.shell:Creating package script '/media/sf_ME_133a/packages/botdylan/install/botdylan/share/botdylan/package.ps1'
+[10.055s] INFO:colcon.colcon_core.shell:Creating package descriptor '/media/sf_ME_133a/packages/botdylan/install/botdylan/share/botdylan/package.dsv'
+[10.067s] INFO:colcon.colcon_core.shell:Creating package script '/media/sf_ME_133a/packages/botdylan/install/botdylan/share/botdylan/package.sh'
+[10.081s] INFO:colcon.colcon_core.shell:Creating package script '/media/sf_ME_133a/packages/botdylan/install/botdylan/share/botdylan/package.bash'
+[10.093s] INFO:colcon.colcon_core.shell:Creating package script '/media/sf_ME_133a/packages/botdylan/install/botdylan/share/botdylan/package.zsh'
+[10.107s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/media/sf_ME_133a/packages/botdylan/install/botdylan/share/colcon-core/packages/botdylan)
+[10.144s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:closing loop
+[10.144s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:loop closed
+[10.145s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete finished with '0'
+[10.146s] DEBUG:colcon.colcon_core.event_reactor:joining thread
+[10.209s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.terminal_notifier': Not used on non-Darwin systems
+[10.216s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.win32': Not used on non-Windows systems
+[10.216s] INFO:colcon.colcon_notification.desktop_notification:Sending desktop notification using 'notify2'
+[10.230s] DEBUG:colcon.colcon_core.event_reactor:joined thread
+[10.232s] INFO:colcon.colcon_core.shell:Creating prefix script '/media/sf_ME_133a/packages/botdylan/install/local_setup.ps1'
+[10.330s] INFO:colcon.colcon_core.shell:Creating prefix util module '/media/sf_ME_133a/packages/botdylan/install/_local_setup_util_ps1.py'
+[10.395s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/media/sf_ME_133a/packages/botdylan/install/setup.ps1'
+[10.550s] INFO:colcon.colcon_core.shell:Creating prefix script '/media/sf_ME_133a/packages/botdylan/install/local_setup.sh'
+[10.611s] INFO:colcon.colcon_core.shell:Creating prefix util module '/media/sf_ME_133a/packages/botdylan/install/_local_setup_util_sh.py'
+[10.672s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/media/sf_ME_133a/packages/botdylan/install/setup.sh'
+[10.697s] INFO:colcon.colcon_core.shell:Creating prefix script '/media/sf_ME_133a/packages/botdylan/install/local_setup.bash'
+[10.707s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/media/sf_ME_133a/packages/botdylan/install/setup.bash'
+[10.731s] INFO:colcon.colcon_core.shell:Creating prefix script '/media/sf_ME_133a/packages/botdylan/install/local_setup.zsh'
+[10.742s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/media/sf_ME_133a/packages/botdylan/install/setup.zsh'
