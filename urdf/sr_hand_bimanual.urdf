@@ -2832,20 +2832,173 @@
 
   <!-- Guitar Neck -->
 
-  <joint name="attach-guitar-neck" type="fixed">
-    <parent link="world"/>
-    <child  link="guitar"/>
-    <origin xyz="0.00 1.0 0" rpy="0 0 0"/>
-  </joint>
-  <link name="guitar-neck">
+  <link name="neck">
     <visual>
-      <origin          xyz="0.00 0.00 0.15" rpy="0 0 0"/>
-      <geometry> <box size="0.02 0.60 0.30"/> </geometry>
-      <material name="orange"/>
+      <geometry>
+        <box size="0.8 0.05 0.02"/> 
+      </geometry>
+      <material name="brown">
+        <color rgba="0.6 0.3 0.1 1.0"/>
+      </material>
     </visual>
     <collision>
-      <origin          xyz="0.00 0.00 0.15" rpy="0 0 0"/>
-      <geometry> <box size="0.02 0.60 0.30"/> </geometry>
+      <geometry>
+        <box size="0.8 0.05 0.02"/>
+      </geometry>
     </collision>
+    <inertial>
+      <mass value="0.5"/>
+      <inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01"/>
+    </inertial>
   </link>
+
+  <link name="string_1">
+    <visual>
+      <geometry>
+        <cylinder length="0.8" radius="0.001"/>
+      </geometry>
+      <material name="silver">
+        <color rgba="0.8 0.8 0.8 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.8" radius="0.001"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.01"/>
+      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001"/>
+    </inertial>
+  </link>
+  <joint name="string_1_to_neck" type="fixed">
+    <parent link="neck"/>
+    <child link="string_1"/>
+    <origin xyz="0 -0.02 0.01" rpy="0 0 0"/>
+  </joint>
+
+  <link name="string_2">
+    <visual>
+      <geometry>
+        <cylinder length="0.8" radius="0.001"/>
+      </geometry>
+      <material name="silver">
+        <color rgba="0.8 0.8 0.8 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.8" radius="0.001"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.01"/>
+      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001"/>
+    </inertial>
+  </link>
+  <joint name="string_2_to_neck" type="fixed">
+    <parent link="neck"/>
+    <child link="string_2"/>
+    <origin xyz="0 -0.012 0.01" rpy="0 0 0"/> 
+  </joint>
+
+  <link name="string_3">
+    <visual>
+      <geometry>
+        <cylinder length="0.8" radius="0.001"/>
+      </geometry>
+      <material name="silver">
+        <color rgba="0.8 0.8 0.8 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.8" radius="0.001"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.01"/>
+      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001"/>
+    </inertial>
+  </link>
+  <joint name="string_3_to_neck" type="fixed">
+    <parent link="neck"/>
+    <child link="string_3"/>
+    <origin xyz="0 -0.004 0.01" rpy="0 0 0"/> 
+  </joint>
+
+  <link name="string_4">
+    <visual>
+      <geometry>
+        <cylinder length="0.8" radius="0.001"/>
+      </geometry>
+      <material name="silver">
+        <color rgba="0.8 0.8 0.8 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.8" radius="0.001"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.01"/>
+      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001"/>
+    </inertial>
+  </link>
+  <joint name="string_4_to_neck" type="fixed">
+    <parent link="neck"/>
+    <child link="string_4"/>
+    <origin xyz="0 0.004 0.01" rpy="0 0 0"/>
+  </joint>
+
+  <link name="string_5">
+    <visual>
+      <geometry>
+        <cylinder length="0.8" radius="0.001"/>
+      </geometry>
+      <material name="silver">
+        <color rgba="0.8 0.8 0.8 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.8" radius="0.001"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.01"/>
+      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001"/>
+    </inertial>
+  </link>
+  <joint name="string_5_to_neck" type="fixed">
+    <parent link="neck"/>
+    <child link="string_5"/>
+    <origin xyz="0 0.012 0.01" rpy="0 0 0"/> 
+  </joint>
+
+  <link name="string_6">
+    <visual>
+      <geometry>
+        <cylinder length="0.8" radius="0.001"/>
+      </geometry>
+      <material name="silver">
+        <color rgba="0.8 0.8 0.8 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.8" radius="0.001"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.01"/>
+      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001"/>
+    </inertial>
+  </link>
+  <joint name="string_6_to_neck" type="fixed">
+    <parent link="neck"/>
+    <child link="string_6"/>
+    <origin xyz="0 0.02 0.01" rpy="0 0 0"/>
+  </joint>
 </robot>
