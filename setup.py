@@ -22,11 +22,7 @@ setup(
         ('share/' + package_name, ['package.xml']),
         ('share/' + package_name + '/launch', glob('launch/*')),
         ('share/' + package_name + '/urdf', glob('urdf/*')),
-<<<<<<< HEAD
         ('share/' + package_name + '/meshes', glob('meshes/**/*.dae', recursive=True)),  # Include meshes if applicable
-=======
-        ('share/' + package_name + '/meshes', recursive_files('meshes')),  
->>>>>>> 7412a33663393eea19b6abb517e04dec829e4b93
         ('share/' + package_name + '/code', glob('code/*'))
     ],
     install_requires=['setuptools'],
