@@ -385,7 +385,6 @@ Visualization Manager:
       Frame Timeout: 15
       Frames:
         All Enabled: true
-
         rh_ffdistal:
           Value: true
         rh_mfdistal:
