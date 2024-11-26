@@ -1,8 +1,6 @@
 '''KinematicChain.py
 
-   This is the skeleton code for Kinematic Chains (HW6 Problem 3).
-
-   PLEASE EDIT/FIX.  See "FIXME" tags!
+   This is the code for Kinematic Chains (developed in HW6 Problem 3).
 
    chain = KinematicChain(node, basefame, tipframe, expectedjointnames)
 
@@ -208,7 +206,6 @@ class KinematicChain():
         # Walk the chain, one URDF step at a time, adjusting T as we
         # go.  This could be a fixed or active joint.
         for step in self.steps:
-            # FIXME
             # Note the step is of type URDFStep and contains:
             #   step.Tshift     Transform w.r.t. the previous frame
             #   step.nlocal     Joint axis in the local frame
@@ -244,7 +241,6 @@ class KinematicChain():
         Jv = np.zeros((3,self.dofs))
         Jw = np.zeros((3,self.dofs))
         for i in range(self.dofs):
-            # FIXME AGAIN
             # After we walked the chain above, we now have:
             # type[i]   Joint type
             # p[i]      Joint position w.r.t. world
