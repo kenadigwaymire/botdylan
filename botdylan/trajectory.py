@@ -127,11 +127,11 @@ class Trajectory():
         [lh_lf_ptip, lh_lf_Rtip, lh_lf_Jv, lh_lf_Jw] = self.lh_pinky.fkin(np.concatenate((self.qd[24:26],self.qd[38:43])))
         [lh_th_ptip, lh_th_Rtip, lh_th_Jv, lh_th_Jw] = self.lh_thumb.fkin(np.concatenate((self.qd[24:26],self.qd[43:48]))) 
 
-        [ptips, Rtips, Jv, Jw] = [np.concatenate((rh_ff_ptip, rh_mf_ptip, 
+        [ptips, Rtips, Jv, Jw] = [np.hstack((rh_ff_ptip, rh_mf_ptip, 
                                     rh_rf_ptip, rh_lf_ptip, rh_th_ptip, 
                                     lh_ff_ptip, lh_mf_ptip, lh_rf_ptip, 
                                     lh_lf_ptip, lh_th_ptip)),
-                                 np.concatenate((rh_ff_Rtip, rh_mf_Rtip, 
+                                 np.hstack((rh_ff_Rtip, rh_mf_Rtip, 
                                     rh_rf_Rtip, rh_lf_Rtip, rh_th_Rtip, 
                                     lh_ff_Rtip, lh_mf_Rtip, lh_rf_Rtip, 
                                     lh_lf_Rtip, lh_th_Rtip)),
