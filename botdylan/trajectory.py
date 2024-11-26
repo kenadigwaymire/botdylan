@@ -127,22 +127,22 @@ class Trajectory():
         [lh_lf_ptip, lh_lf_Rtip, lh_lf_Jv, lh_lf_Jw] = self.lh_pinky.fkin(np.concatenate((self.qd[24:26],self.qd[38:43])))
         [lh_th_ptip, lh_th_Rtip, lh_th_Jv, lh_th_Jw] = self.lh_thumb.fkin(np.concatenate((self.qd[24:26],self.qd[43:48]))) 
 
-        [ptips, Rtips, Jv, Jw] = [np.concatenate(rh_ff_ptip, rh_mf_ptip, 
+        [ptips, Rtips, Jv, Jw] = [np.concatenate((rh_ff_ptip, rh_mf_ptip, 
                                     rh_rf_ptip, rh_lf_ptip, rh_th_ptip, 
                                     lh_ff_ptip, lh_mf_ptip, lh_rf_ptip, 
-                                    lh_lf_ptip, lh_th_ptip),
-                                 np.concatenate(rh_ff_Rtip, rh_mf_Rtip, 
+                                    lh_lf_ptip, lh_th_ptip)),
+                                 np.concatenate((rh_ff_Rtip, rh_mf_Rtip, 
                                     rh_rf_Rtip, rh_lf_Rtip, rh_th_Rtip, 
                                     lh_ff_Rtip, lh_mf_Rtip, lh_rf_Rtip, 
-                                    lh_lf_Rtip, lh_th_Rtip),
-                                 np.vstack(rh_ff_Jv, rh_mf_Jv, rh_rf_Jv, 
+                                    lh_lf_Rtip, lh_th_Rtip)),
+                                 np.vstack((rh_ff_Jv, rh_mf_Jv, rh_rf_Jv, 
                                     rh_lf_Jv, rh_th_Jv, 
                                     lh_ff_Jv, lh_mf_Jv, lh_rf_Jv, lh_lf_Jv, 
-                                    lh_th_Jv),
-                                 np.vstack(rh_ff_Jw, rh_mf_Jw, rh_rf_Jw, 
+                                    lh_th_Jv)),
+                                 np.vstack((rh_ff_Jw, rh_mf_Jw, rh_rf_Jw, 
                                     rh_lf_Jw, rh_th_Jw, 
                                     lh_ff_Jw, lh_mf_Jw, lh_rf_Jw, lh_lf_Jw, 
-                                    lh_th_Jw)]
+                                    lh_th_Jw))]
         
         J = np.vstack((Jv, Jw))
         
