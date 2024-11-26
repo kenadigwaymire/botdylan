@@ -22,7 +22,7 @@ STRING_NOTES = {0 : 'e_high', 1 : 'b', 2 : 'g', 3 : 'd', 4 : 'a', 5 : 'e_low'}
 def song_info(song):
     # Eventually change these to be pulled or calculated from a song file
     T = 3
-    chords = []
+    chords = [{'G' : [(4, 1), (5, 2), (1, 2), (5, 2)]}]
     strumming_pattern = []
     return [T, chords, strumming_pattern]
 
@@ -35,13 +35,13 @@ class Fretboard():
         self.width = NUM_STRINGS * dy
         self.length = num_frets * dx
         self.fretboard = [[(i, j) for j in range(num_frets)] for i in range(NUM_STRINGS)]
-
-    def get_pos_desired(self, string_des, fret_des):
-        return (string_des * self.dy, (fret_des * self.dx) + self.dx / 2)
-    
+    def get_pos_desired(self, chord):
+        chord_position = np.copy(chord)
+        chord_position = chord_position * np.array([self.dy, self.dx])
+        chord_position[:, 1] += self.dx / 2
+        return chord_position
     def get_coord_from_pos(self, curr_pos):
         return (curr_pos[0] / self.dy, (curr_pos[1] - (self.dx / 2)) / self.dx)
-    
     def get_val_range_of_fret(self):
         return None # temporary for debugging
         
