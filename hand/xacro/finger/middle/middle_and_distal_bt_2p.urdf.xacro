@@ -44,7 +44,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 1.571" />
         <geometry name="${prefix}${link_prefix}middle_visual">
-          <mesh filename="package://sr_description/meshes/components/f_distal/bt_2p/f_distal_bt_2p_adapter.dae" />
+          <mesh filename="package://botdylan/meshes/components/f_distal/bt_2p/f_distal_bt_2p_adapter.dae" />
         </geometry>
         <material name="LightGrey" />
       </visual>
@@ -115,13 +115,13 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry name="${prefix}${link_prefix}distal_visual">
-          <mesh filename="package://sr_description/meshes/components/f_distal/bt_2p/f_distal_bt_2p.dae"
+          <mesh filename="package://botdylan/meshes/components/f_distal/bt_2p/f_distal_bt_2p.dae"
                 scale="0.0254 0.0254 0.0254" />
         </geometry>
       </visual>
       <collision>
         <geometry name="${prefix}${link_prefix}distal_collision_geom">
-          <mesh filename="package://sr_description/meshes/components/f_distal/bt_2p/f_distal_bt_2p.dae"
+          <mesh filename="package://botdylan/meshes/components/f_distal/bt_2p/f_distal_bt_2p.dae"
                 scale="0.0254 0.0254 0.0254" />
         </geometry>
       </collision>

@@ -42,7 +42,7 @@
       <visual>
         <origin xyz="0 0 ${mounting_plate_offset}" rpy="0 0 ${pi/2}" />
         <geometry name="${prefix}forearm_visual">
-          <mesh filename="package://sr_description/meshes/components/forearm/forearm_${hand_version}.dae" scale="1.0 1.0 1.0" />
+          <mesh filename="package://botdylan/meshes/components/forearm/forearm_${hand_version}.dae" scale="1.0 1.0 1.0" />
         </geometry>
         <material name="Grey" />
       </visual>
@@ -57,7 +57,7 @@
         <visual>
           <origin xyz="0 0 0" rpy="0 0 0" />
           <geometry name="${prefix}mounting_plate">
-            <mesh filename="package://sr_description/meshes/components/mounting_plate/mounting_plate_${hand_version}.dae" scale="0.001 0.001 0.001" />
+            <mesh filename="package://botdylan/meshes/components/mounting_plate/mounting_plate_${hand_version}.dae" scale="0.001 0.001 0.001" />
           </geometry>
         </visual>
         <collision>

@@ -108,7 +108,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="rh_wrist_visual">
-        <mesh filename="package://botdylan/meshes/wrist_E3M5.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://botdylan/meshes/components/wrist/wrist_E3M5.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="LightGrey"/>
     </visual>
@@ -178,7 +178,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry name="rh_palm_visual">
-        <mesh filename="package://botdylan/meshes/palm_E3M5.dae" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://botdylan/meshes/components/palm/palm_E3M5.dae" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="Grey"/>
     </visual>
