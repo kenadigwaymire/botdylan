@@ -1,5 +1,5 @@
 """
-ros2 launch botdylan botdylan.launch.py
+ros2 launch botdylan nopython.launch.py
 
 This should start
   1) RVIZ, ready to view the robot
