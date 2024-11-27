@@ -83,5 +83,5 @@ def generate_launch_description():
         node_robot_state_publisher,
         node_rviz,
         # node_trajectory,
-        node_joint_state_publisher_gui,  # Add this line to launch the GUI for joint control
+        node_joint_state_publisher_gui,  
     ])
