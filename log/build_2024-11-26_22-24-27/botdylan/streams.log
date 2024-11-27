@@ -1,0 +1,18 @@
+[0.973s] Invoking command in '/home/trey/robotws/src/botdylan/build/botdylan': PYTHONPATH=/home/trey/robotws/src/botdylan/build/botdylan/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/trey/robotws/src/botdylan/install/botdylan/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py develop --editable --build-directory /home/trey/robotws/src/botdylan/build/botdylan/build --no-deps symlink_data
+[1.188s] running develop
+[1.189s] /usr/lib/python3/dist-packages/setuptools/command/easy_install.py:158: EasyInstallDeprecationWarning: easy_install command is deprecated. Use build and pip and other standards-based tools.
+[1.189s]   warnings.warn(
+[1.374s] running egg_info
+[1.374s] writing botdylan.egg-info/PKG-INFO
+[1.374s] writing dependency_links to botdylan.egg-info/dependency_links.txt
+[1.375s] writing entry points to botdylan.egg-info/entry_points.txt
+[1.375s] writing requirements to botdylan.egg-info/requires.txt
+[1.375s] writing top-level names to botdylan.egg-info/top_level.txt
+[1.376s] reading manifest file 'botdylan.egg-info/SOURCES.txt'
+[1.386s] writing manifest file 'botdylan.egg-info/SOURCES.txt'
+[1.387s] running build_ext
+[1.387s] Creating /home/trey/robotws/src/botdylan/install/botdylan/lib/python3.10/site-packages/botdylan.egg-link (link to .)
+[1.387s] 
+[1.387s] Installed /home/trey/robotws/src/botdylan/build/botdylan
+[1.388s] running symlink_data
+[1.403s] Invoked command in '/home/trey/robotws/src/botdylan/build/botdylan' returned '0': PYTHONPATH=/home/trey/robotws/src/botdylan/build/botdylan/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/trey/robotws/src/botdylan/install/botdylan/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py develop --editable --build-directory /home/trey/robotws/src/botdylan/build/botdylan/build --no-deps symlink_data
