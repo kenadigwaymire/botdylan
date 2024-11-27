@@ -152,7 +152,7 @@ class Trajectory():
         [lh_lf_ptip, lh_lf_Rtip, lh_lf_Jv, lh_lf_Jw] = self.lh_pinky.fkin(np.concatenate((self.qd[24:26],self.qd[38:43])))
         [lh_th_ptip, lh_th_Rtip, lh_th_Jv, lh_th_Jw] = self.lh_thumb.fkin(np.concatenate((self.qd[24:26],self.qd[43:48]))) 
 
-        [ptips, Rtips, Jv, Jw] = [np.hstack((rh_ff_ptip, rh_mf_ptip, 
+        [ptips, Rtips, errR, Jv, Jw] = [np.hstack((rh_ff_ptip, rh_mf_ptip, 
                                     rh_rf_ptip, rh_lf_ptip, rh_th_ptip, 
                                     lh_ff_ptip, lh_mf_ptip, lh_rf_ptip, 
                                     lh_lf_ptip, lh_th_ptip)),
@@ -160,6 +160,16 @@ class Trajectory():
                                     rh_rf_Rtip, rh_lf_Rtip, rh_th_Rtip, 
                                     lh_ff_Rtip, lh_mf_Rtip, lh_rf_Rtip, 
                                     lh_lf_Rtip, lh_th_Rtip)),
+                                 np.hstack((eR(self.Rdlast, rh_ff_Rtip),
+                                            eR(self.Rdlast, rh_mf_Rtip), 
+                                            eR(self.Rdlast, rh_rf_Rtip), 
+                                            eR(self.Rdlast, rh_lf_Rtip), 
+                                            eR(self.Rdlast, rh_th_Rtip), 
+                                            eR(self.Rdlast, lh_ff_Rtip), 
+                                            eR(self.Rdlast, lh_mf_Rtip), 
+                                            eR(self.Rdlast, lh_rf_Rtip), 
+                                            eR(self.Rdlast, lh_lf_Rtip), 
+                                            eR(self.Rdlast, lh_th_Rtip))),
                                  np.hstack((rh_ff_Jv, rh_mf_Jv, rh_rf_Jv, 
                                     rh_lf_Jv, rh_th_Jv, 
                                     lh_ff_Jv, lh_mf_Jv, lh_rf_Jv, lh_lf_Jv, 
@@ -173,7 +183,6 @@ class Trajectory():
         Jpinv = np.linalg.pinv(J)
         
         errp = ep(self.pdlast, ptips)
-        errR = eR(self.Rdlast, Rtips)
         err = np.concatenate((errp, errR))
         
         qdlast = self.qd
