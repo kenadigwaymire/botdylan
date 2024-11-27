@@ -136,7 +136,9 @@ class Trajectory():
         nextChord = np.hstack((nextChord, self.p0[12:30]))
         prevChord = self.p0
         (pd, vd) = goto(t, T, prevChord, nextChord)
-        xddot = vd
+        Rd = self.R0
+        wd = np.zeros(30)
+        xddot = np.concatenate((vd, wd))
 
         [rh_ff_ptip, rh_ff_Rtip, rh_ff_Jv, rh_ff_Jw] = self.rh_pointer.fkin(self.qd[0:6])
         [rh_mf_ptip, rh_mf_Rtip, rh_mf_Jv, rh_mf_Jw] = self.rh_middle.fkin(np.concatenate((self.qd[0:2],self.qd[6:10])))
@@ -169,22 +171,20 @@ class Trajectory():
         
         J = np.vstack((Jv, Jw))
         
-        # errp = ep(self.pdlast, ptips)
-        # # errR = eR(self.Rdlast, Rtips)
-        # # err = np.concatenate((errp, errR))
+        errp = ep(self.pdlast, ptips)
+        errR = eR(self.Rdlast, Rtips)
+        err = np.concatenate((errp, errR))
         
-        # qdlast = self.qd
-        # qddot = Jpinv @ (xddot + self.lam * errp)
+        qdlast = self.qd
+        qddot = Jpinv @ (xddot + self.lam * errp)
 
-        # self.qd += qddot * dt
-        # qd = self.qd
-        # pdlast = pd
-        # Rdlast = Rd
-
-        z_vec = np.zeros(len(self.jointnames()))
+        self.qd += qddot * dt
+        qd = self.qd
+        pdlast = pd
+        Rdlast = Rd
 
         # return (qd, qddot, pd, vd, Rd, wd)
-        return [z_vec, z_vec, np.zeros(3), np.zeros(3), Reye(), np.zeros(3)]
+        return [qd, qddot, pd, vd, Rd, wd]
 
 #
 #  Main Code
