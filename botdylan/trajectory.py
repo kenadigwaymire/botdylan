@@ -133,7 +133,7 @@ class Trajectory():
         [T, chords, strumming_pattern] = song_info('some_song')
 
         nextChord = fretboard.pd_from_chord(chords[0].get('G'))
-        nextChord = np.hstack((nextChord, self.p0[12:29]))
+        nextChord = np.hstack((nextChord, self.p0[12:30]))
         prevChord = self.p0
         (pd, vd) = goto(t, T, prevChord, nextChord)
         xddot = vd
