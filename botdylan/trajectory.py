@@ -188,6 +188,8 @@ class Trajectory():
         
         qdlast = self.qd
         qddot = Jpinv @ (xddot + self.lam * err)
+        print(f'\nqddot:\n {qddot}\n')
+        print(f'\nself.qd:\n {self.qd}\n')
 
         self.qd += qddot * dt
         qd = self.qd
