@@ -138,7 +138,7 @@ class Trajectory():
         (pd, vd) = goto(t, T, prevChord, nextChord)
         Rd = self.R0
         wd = np.zeros(30)
-        xddot = np.concatenate((vd, wd))
+        xddot = np.concatenate((vd, np.zeros(2), wd, np.zeros(2)))
 
         [rh_ff_ptip, rh_ff_Rtip, rh_ff_Jv, rh_ff_Jw] = self.rh_pointer.fkin(self.qd[0:6])
         [rh_mf_ptip, rh_mf_Rtip, rh_mf_Jv, rh_mf_Jw] = self.rh_middle.fkin(np.concatenate((self.qd[0:2],self.qd[6:10])))
@@ -179,7 +179,7 @@ class Trajectory():
                                     lh_ff_Jw, lh_mf_Jw, lh_rf_Jw, lh_lf_Jw, 
                                     lh_th_Jw))]
         
-        J = np.transpose(np.vstack((Jv, Jw, np.zeros((6,4)))))
+        J = np.transpose(np.vstack((Jv, Jw)))
         Jpinv = np.linalg.pinv(J)
         print(f'\nJpinv:\n {Jpinv}\n')
         
@@ -195,7 +195,6 @@ class Trajectory():
         self.Rdlast = Rd
 
         return (qd, qddot, pd, vd, Rd, wd)
-        return [qd, qddot, pd, vd, Rd, wd]
 
 #
 #  Main Code
