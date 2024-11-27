@@ -187,15 +187,15 @@ class Trajectory():
         err = np.concatenate((errp, errR))
         
         qdlast = self.qd
-        # qddot = Jpinv @ (xddot + self.lam * err)
+        qddot = Jpinv @ (xddot + self.lam * err)
 
-        # self.qd += qddot * dt
-        # qd = self.qd
-        # self.pdlast = pd
-        # self.Rdlast = Rd
+        self.qd += qddot * dt
+        qd = self.qd
+        self.pdlast = pd
+        self.Rdlast = Rd
 
-        # return (qd, qddot, pd, vd, Rd, wd)
-        # return [qd, qddot, pd, vd, Rd, wd]
+        return (qd, qddot, pd, vd, Rd, wd)
+        return [qd, qddot, pd, vd, Rd, wd]
 
 #
 #  Main Code
