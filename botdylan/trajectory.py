@@ -180,8 +180,8 @@ class Trajectory():
 
         self.qd += qddot * dt
         qd = self.qd
-        pdlast = pd
-        Rdlast = Rd
+        self.pdlast = pd
+        self.Rdlast = Rd
 
         # return (qd, qddot, pd, vd, Rd, wd)
         return [qd, qddot, pd, vd, Rd, wd]
