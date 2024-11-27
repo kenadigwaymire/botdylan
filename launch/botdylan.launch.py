@@ -27,7 +27,7 @@ def generate_launch_description():
     # LOCATE FILES
 
     # Locate the RVIZ configuration file.
-    rvizcfg = os.path.join(pkgdir('botdylan'), 'rviz/urdf.rviz')
+    rvizcfg = os.path.join(pkgdir('botdylan'), 'rviz/viewurdfplus.rviz')
 
     # Locate the URDF file.
     urdf = os.path.join(pkgdir('sr_description'), 'robots/sr_hand_bimanual.urdf')
