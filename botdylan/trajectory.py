@@ -179,7 +179,7 @@ class Trajectory():
                                     lh_ff_Jw, lh_mf_Jw, lh_rf_Jw, lh_lf_Jw, 
                                     lh_th_Jw))]
         
-        J = np.vstack((Jv, Jw))
+        J = np.transpose(np.vstack((Jv, Jw)))
         Jpinv = np.linalg.pinv(J)
         print(f'\nJpinv:\n {Jpinv}\n')
         
