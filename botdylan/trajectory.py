@@ -170,13 +170,14 @@ class Trajectory():
                                     lh_th_Jw))]
         
         J = np.vstack((Jv, Jw))
+        Jpinv = np.linalg.pinv(J)
         
         errp = ep(self.pdlast, ptips)
         errR = eR(self.Rdlast, Rtips)
         err = np.concatenate((errp, errR))
         
         qdlast = self.qd
-        qddot = Jpinv @ (xddot + self.lam * errp)
+        qddot = Jpinv @ (xddot + self.lam * err)
 
         self.qd += qddot * dt
         qd = self.qd
