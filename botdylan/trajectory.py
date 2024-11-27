@@ -186,7 +186,7 @@ class Trajectory():
         err = np.concatenate((errp, errR))
         
         qdlast = self.qd
-        qddot = Jpinv @ (xddot + self.lam * err)
+        qddot = Jpinv @ np.transpose((xddot + self.lam * err))
 
         self.qd += qddot * dt
         qd = self.qd
