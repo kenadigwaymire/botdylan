@@ -184,7 +184,7 @@ class Trajectory():
         print(f'\nJpinv:\n {Jpinv}\n')
         
         errp = ep(self.pdlast, ptips)
-        err = np.concatenate((errp, errR))
+        err = np.concatenate((errp, np.zeros(2), errR, np.zeros(2)))
         
         qdlast = self.qd
         qddot = Jpinv @ (xddot + self.lam * err)
