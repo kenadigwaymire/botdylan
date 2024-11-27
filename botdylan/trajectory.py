@@ -181,7 +181,7 @@ class Trajectory():
         
         J = np.vstack((Jv, Jw))
         Jpinv = np.linalg.pinv(J)
-        print(Jpinv.size)
+        print(f'\nJpinv:\n {Jpinv}\n')
         
         errp = ep(self.pdlast, ptips)
         err = np.concatenate((errp, errR))
