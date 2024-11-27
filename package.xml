@@ -3,8 +3,8 @@
 <package format="3">
   <name>botdylan</name>
   <version>0.0.0</version>
-  <description>Bot Dylan, the guitar playing robot</description>
-  <maintainer email="robot@todo.todo">robot</maintainer>
+  <description>TODO: Package description</description>
+  <maintainer email="firehawk4427@gmail.com">trey</maintainer>
   <license>TODO: License declaration</license>
 
   <depend>rclpy</depend>
