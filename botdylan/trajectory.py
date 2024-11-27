@@ -29,9 +29,10 @@ def song_info(song):
 # TODO: draw fretboard for guitar and map positions to chords
 
 class Fretboard():
-    def __init__(self, num_frets, dx, dy):
+    def __init__(self, num_frets, dx, dy, z):
         self.dx = dx
         self.dy = dy
+        self.z = z # string z height
         self.width = NUM_STRINGS * dy
         self.length = num_frets * dx
         self.fretboard = [[(i, j) for j in range(num_frets)] for i in range(NUM_STRINGS)]
@@ -39,6 +40,9 @@ class Fretboard():
         chord_position = np.copy(chord)
         chord_position = chord_position * np.array([self.dy, self.dx])
         chord_position[:, 1] += self.dx / 2
+        chord_position = np.hstack(np.array(list(zip(chord_position[:,0], 
+                                                     chord_position[:,1],
+                                                     self.z * np.ones(4)))))
         return chord_position
     def get_coord_from_pos(self, curr_pos):
         return (curr_pos[0] / self.dy, (curr_pos[1] - (self.dx / 2)) / self.dx)
@@ -129,9 +133,9 @@ class Trajectory():
         [T, chords, strumming_pattern] = song_info('some_song')
 
         nextChord = fretboard.pd_from_chord(chords[0].get('G'))
-        print(nextChord)
+        nextChord = np.hstack((nextChord, self.p0[12:29]))
         prevChord = self.p0
-        (pd, vd) = goto(t, T, prevChord, np.hstack((nextChord, self.p0[12:29])))
+        (pd, vd) = goto(t, T, prevChord, nextChord)
         xddot = vd
 
         [rh_ff_ptip, rh_ff_Rtip, rh_ff_Jv, rh_ff_Jw] = self.rh_pointer.fkin(self.qd[0:6])
