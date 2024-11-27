@@ -52,7 +52,7 @@ Visualization Manager:
     - Alpha: 1
       Class: rviz_default_plugins/RobotModel
       Collision Enabled: true
-      Description File: /home/trey/robotws/src/sr_description/robots/sr_hand_bimanual.urdf
+      Description File: $(find sr_description)/robots/sr_hand_bimanual.urdf
       Description Source: File
       Description Topic:
         Depth: 5
