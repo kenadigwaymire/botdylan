@@ -57,44 +57,70 @@ class Trajectory():
     def __init__(self, node):
         # Set up the kinematic chain objects.
         # RIGHT HAND
-        self.rh_pointer = KinematicChain(node, 'world', 'rh_fftip',
+        self.rh_ff = KinematicChain(node, 'world', 'rh_fftip',
                             self.jointnames()[0:6])
-        self.rh_middle = KinematicChain(node, 'world', 'rh_mftip',
+        self.rh_mf = KinematicChain(node, 'world', 'rh_mftip',
                             self.jointnames()[0:2]+self.jointnames()[6:10])
-        self.rh_ring = KinematicChain(node, 'world', 'rh_rftip', 
+        self.rh_rf = KinematicChain(node, 'world', 'rh_rftip', 
                             self.jointnames()[0:2]+self.jointnames()[10:14])
-        self.rh_pinky = KinematicChain(node, 'world', 'rh_lftip',
+        self.rh_lf = KinematicChain(node, 'world', 'rh_lftip',
                             self.jointnames()[0:2]+self.jointnames()[14:19])
-        self.rh_thumb = KinematicChain(node, 'world', 'rh_thtip',
-                            self.jointnames()[0:2]+self.jointnames()[19:24])
+        # We don't need the right-hand thumb — we set these to fixed joints
+        # self.rh_thumb = KinematicChain(node, 'world', 'rh_thtip',
+        #                     self.jointnames()[0:2]+self.jointnames()[19:24])
         
         # LEFT HAND
-        self.lh_pointer = KinematicChain(node, 'world', 'lh_fftip',
-                            self.jointnames()[24:30])
-        self.lh_middle = KinematicChain(node, 'world', 'lh_mftip',
-                            self.jointnames()[24:26]+self.jointnames()[30:34])
-        self.lh_ring = KinematicChain(node, 'world', 'lh_rftip', 
-                            self.jointnames()[24:26]+self.jointnames()[34:38])
-        self.lh_pinky = KinematicChain(node, 'world', 'lh_lftip',
-                            self.jointnames()[24:26]+self.jointnames()[38:43])
+        self.lh_ff = KinematicChain(node, 'world', 'lh_fftip',
+                            self.jointnames()[19:26])
+        self.lh_mf = KinematicChain(node, 'world', 'lh_mftip',
+                            self.jointnames()[19:22]+self.jointnames()[26:30])
+        self.lh_rf = KinematicChain(node, 'world', 'lh_rftip', 
+                            self.jointnames()[19:22]+self.jointnames()[30:34])
+        self.lh_lf = KinematicChain(node, 'world', 'lh_lftip',
+                            self.jointnames()[19:22]+self.jointnames()[34:39])
         self.lh_thumb = KinematicChain(node, 'world', 'lh_thtip',
-                            self.jointnames()[24:26]+self.jointnames()[43:48])
+                            self.jointnames()[19:22]+[self.jointnames()[39]])
         
         # Init joint values (doesnt work rn cause chain is <6 and len(jointnames) = 48)
-        self.q0 =  # write the initial joint positions here
-        # self.p0 = np.array([0.0, 0.0, 0.0,
-        #                     0.1, 0.0, 0.0,
-        #                     0.2, 0.0, 0.0,
-        #                     0.3, 0.0, 0.0,
-        #                     0.4, 0.0, 0.0,
+        # Initial joint positions:
+        self.q0 = np.array([0.0, 0.0, 
+                            0.0, 0.0, 0.0, 0.0, 
+                            0.0, 0.0, 0.0, 0.0,
+                            0.0, 0.0, 0.0, 0.0,
+                            0.0, 0.9599, 0.0, 0.0, 0.0,
+                            0.2,
+                            0.0, 0.0,
+                            0.0, 0.0, 0.0, 0.0,
+                            0.0, 0.0, 0.0, 0.0,
+                            0.0, 0.0, 0.0, 0.0,
+                            0.0, 0.9599, 0.0, 0.0, 0.0,
+                            1.5707963267948966])
+        self.qd = np.copy(self.q0)
+        # Initial tip positions:
+        self.p0 = np.hstack([
+            self.rh_ff.fkin(self.q0[0:6])[0],
+            self.rh_mf.fkin(np.concatenate((self.q0[0:2],self.q0[6:10])))[0],
+            self.rh_rf.fkin(np.concatenate((self.q0[0:2],self.q0[10:14])))[0],
+            self.rh_lf.fkin(np.concatenate((self.q0[0:2],self.q0[14:19])))[0],
 
-        #                     12.0, 0.0, 0.0,
-        #                     12.1, 0.0, 0.0,
-        #                     12.2, 0.0, 0.0,
-        #                     12.3, 0.0, 0.0,
-        #                     12.4, 0.0, 0.0])
-        self.R0 = np.hstack((Reye(), Reye(), Reye(), Reye(), Reye(), 
-                             Reye(), Reye(), Reye(), Reye(), Reye()))
+            self.lh_ff.fkin(self.q0[19:26])[0],
+            self.lh_mf.fkin(np.concatenate((self.q0[19:22],self.q0[26:30])))[0],
+            self.lh_rf.fkin(np.concatenate((self.q0[19:22],self.q0[30:34])))[0],
+            self.lh_lf.fkin(np.concatenate((self.q0[19:22],self.q0[34:39])))[0],
+            self.lh_thumb.fkin(np.concatenate((self.q0[19:22],self.q0[39:40])))[0]
+            ])
+        self.R0 = np.hstack([
+            self.rh_ff.fkin(self.q0[0:6])[1],
+            self.rh_mf.fkin(np.concatenate((self.q0[0:2],self.q0[6:10])))[1],
+            self.rh_rf.fkin(np.concatenate((self.q0[0:2],self.q0[10:14])))[1],
+            self.rh_lf.fkin(np.concatenate((self.q0[0:2],self.q0[14:19])))[1],
+
+            self.lh_ff.fkin(self.q0[19:26])[1],
+            self.lh_mf.fkin(np.concatenate((self.q0[19:22],self.q0[26:30])))[1],
+            self.lh_rf.fkin(np.concatenate((self.q0[19:22],self.q0[30:34])))[1],
+            self.lh_lf.fkin(np.concatenate((self.q0[19:22],self.q0[34:39])))[1],
+            self.lh_thumb.fkin(np.concatenate((self.q0[19:22],self.q0[39:40])))[1]
+            ])
 
         # Other params
         self.lam = 20
@@ -138,22 +164,24 @@ class Trajectory():
         nextChord = np.hstack((nextChord, self.p0[12:30]))
         prevChord = self.p0
         (pd, vd) = goto(t, T, prevChord, nextChord)
-        Rd = self.R0
-        wd = np.zeros(30)
+        Rd = self.Rdlast # replace with rotation trajectory
+        wd = np.zeros(27)
         xddot = np.concatenate((vd, np.zeros(2), wd, np.zeros(2)))
 
-        [rh_ff_ptip, rh_ff_Rtip, rh_ff_Jv, rh_ff_Jw] = self.rh_pointer.fkin(self.qd[0:6])
-        [rh_mf_ptip, rh_mf_Rtip, rh_mf_Jv, rh_mf_Jw] = self.rh_middle.fkin(np.concatenate((self.qd[0:2],self.qd[6:10])))
-        [rh_rf_ptip, rh_rf_Rtip, rh_rf_Jv, rh_rf_Jw] = self.rh_ring.fkin(np.concatenate((self.qd[0:2],self.qd[10:14])))
-        [rh_lf_ptip, rh_lf_Rtip, rh_lf_Jv, rh_lf_Jw] = self.rh_pinky.fkin(np.concatenate((self.qd[0:2],self.qd[14:19])))
-        # We don't need the right hand thumb — we set these to fixed joints
-        # [rh_th_ptip, rh_th_Rtip, rh_th_Jv, rh_th_Jw] = self.rh_thumb.fkin(np.concatenate((self.qd[0:2],self.qd[19:24])))
+        qd = self.qd
 
-        [lh_ff_ptip, lh_ff_Rtip, lh_ff_Jv, lh_ff_Jw] = self.lh_pointer.fkin(self.qd[19:26])
-        [lh_mf_ptip, lh_mf_Rtip, lh_mf_Jv, lh_mf_Jw] = self.lh_middle.fkin(np.concatenate((self.qd[19:22],self.qd[26:30])))
-        [lh_rf_ptip, lh_rf_Rtip, lh_rf_Jv, lh_rf_Jw] = self.lh_ring.fkin(np.concatenate((self.qd[19:22],self.qd[30:34])))
-        [lh_lf_ptip, lh_lf_Rtip, lh_lf_Jv, lh_lf_Jw] = self.lh_pinky.fkin(np.concatenate((self.qd[19:22],self.qd[34:39])))
-        [lh_th_ptip, lh_th_Rtip, lh_th_Jv, lh_th_Jw] = self.lh_thumb.fkin(np.concatenate((self.qd[19:22],self.qd[39]))) 
+        [rh_ff_ptip, rh_ff_Rtip, rh_ff_Jv, rh_ff_Jw] = self.rh_ff.fkin(qd[0:6])
+        [rh_mf_ptip, rh_mf_Rtip, rh_mf_Jv, rh_mf_Jw] = self.rh_mf.fkin(np.concatenate((qd[0:2],qd[6:10])))
+        [rh_rf_ptip, rh_rf_Rtip, rh_rf_Jv, rh_rf_Jw] = self.rh_rf.fkin(np.concatenate((qd[0:2],qd[10:14])))
+        [rh_lf_ptip, rh_lf_Rtip, rh_lf_Jv, rh_lf_Jw] = self.rh_lf.fkin(np.concatenate((qd[0:2],qd[14:19])))
+        # We don't need the right-hand thumb — we set these to fixed joints
+        # [rh_th_ptip, rh_th_Rtip, rh_th_Jv, rh_th_Jw] = self.rh_thumb.fkin(np.concatenate((qd[0:2],qd[19:24])))
+
+        [lh_ff_ptip, lh_ff_Rtip, lh_ff_Jv, lh_ff_Jw] = self.lh_ff.fkin(qd[19:26])
+        [lh_mf_ptip, lh_mf_Rtip, lh_mf_Jv, lh_mf_Jw] = self.lh_mf.fkin(np.concatenate((qd[19:22],qd[26:30])))
+        [lh_rf_ptip, lh_rf_Rtip, lh_rf_Jv, lh_rf_Jw] = self.lh_rf.fkin(np.concatenate((qd[19:22],qd[30:34])))
+        [lh_lf_ptip, lh_lf_Rtip, lh_lf_Jv, lh_lf_Jw] = self.lh_lf.fkin(np.concatenate((qd[19:22],qd[34:39])))
+        [lh_th_ptip, lh_th_Rtip, lh_th_Jv, lh_th_Jw] = self.lh_thumb.fkin(np.concatenate((qd[19:22],qd[39:40]))) 
 
         [ptips, Rtips, errR, Jv, Jw] = [np.hstack((rh_ff_ptip, rh_mf_ptip, 
                                     rh_rf_ptip, rh_lf_ptip, 
@@ -163,16 +191,15 @@ class Trajectory():
                                     rh_rf_Rtip, rh_lf_Rtip, 
                                     lh_ff_Rtip, lh_mf_Rtip, lh_rf_Rtip, 
                                     lh_lf_Rtip, lh_th_Rtip)),
-                                 np.hstack((eR(self.Rdlast, rh_ff_Rtip),
-                                            eR(self.Rdlast, rh_mf_Rtip), 
-                                            eR(self.Rdlast, rh_rf_Rtip), 
-                                            eR(self.Rdlast, rh_lf_Rtip), 
-                                            eR(self.Rdlast), 
-                                            eR(self.Rdlast, lh_ff_Rtip), 
-                                            eR(self.Rdlast, lh_mf_Rtip), 
-                                            eR(self.Rdlast, lh_rf_Rtip), 
-                                            eR(self.Rdlast, lh_lf_Rtip), 
-                                            eR(self.Rdlast, lh_th_Rtip))),
+                                 np.hstack((eR(Rd[:,0:3], rh_ff_Rtip),
+                                            eR(Rd[:,3:6], rh_mf_Rtip), 
+                                            eR(Rd[:,6:9], rh_rf_Rtip), 
+                                            eR(Rd[:,9:12], rh_lf_Rtip),
+                                            eR(Rd[:,12:15], lh_ff_Rtip), 
+                                            eR(Rd[:,15:18], lh_mf_Rtip), 
+                                            eR(Rd[:,18:21], lh_rf_Rtip), 
+                                            eR(Rd[:,21:24], lh_lf_Rtip), 
+                                            eR(Rd[:,24:27], lh_th_Rtip))),
                                  np.hstack((rh_ff_Jv, rh_mf_Jv, rh_rf_Jv, 
                                     rh_lf_Jv,
                                     lh_ff_Jv, lh_mf_Jv, lh_rf_Jv, lh_lf_Jv, 
@@ -189,13 +216,12 @@ class Trajectory():
         errp = ep(self.pdlast, ptips)
         err = np.concatenate((errp, np.zeros(2), errR, np.zeros(2)))
         
-        qdlast = self.qd
         qddot = Jpinv @ (xddot + self.lam * err)
         print(f'\nqddot:\n {qddot}\n')
         print(f'\nself.qd:\n {self.qd}\n')
 
-        self.qd += qddot * dt
-        qd = self.qd
+        qd += qddot * dt
+        self.qd += qd
         self.pdlast = pd
         self.Rdlast = Rd
 
