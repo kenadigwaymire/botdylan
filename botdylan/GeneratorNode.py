@@ -131,7 +131,6 @@ class GeneratorNode(Node):
 
         # Compute the trajectory for this time.
         des = self.trajectory.evaluate(self.t, self.dt)
-        print(f"\ndes:\n{des}\n")
         if des is None:
             self.future.set_result("Trajectory has ended")
             return

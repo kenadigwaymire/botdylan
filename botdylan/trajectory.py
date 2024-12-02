@@ -34,20 +34,20 @@ def song_info(song):
 
 class Fretboard():
     def __init__(self, num_frets, dx, dy, z):
-        self.dx = dx
-        self.dy = dy
+        self.dx = -dx # distance between frets
+        self.dy = dy # distance between strings
         self.z = z # string z height
-        self.width = NUM_STRINGS * dy
-        self.length = num_frets * dx
+        self.width = NUM_STRINGS * dy # usable fretboard width
+        self.length = num_frets * dx # fretboard length
         self.fretboard = [[(i, j) for j in range(num_frets)] for i in range(NUM_STRINGS)]
     def pd_from_chord(self, chord, p0):
-        chord_position = np.copy(chord)
-        chord_position = chord_position * np.array([-self.dx, self.dy])
-        neck_base_z = self.z - GUITAR_HEIGHT # the z position of the bottom of the guitar
-        lh_th_postion = np.array([chord_position[0,0] - 0.001, p0[22], neck_base_z])
+        # Read a chord as a list of (string #, fret #) tuples
+        chord_position = np.copy(chord) * np.array([self.dy, self.dx])
         chord_position[:, 1] += self.dx / 2
-        chord_position = np.hstack((np.array(list(zip(chord_position[:,0], 
-                                                     chord_position[:,1],
+        neck_base_z = self.z - GUITAR_HEIGHT # the z position of the bottom of the guitar
+        lh_th_postion = np.array([chord_position[0,1] - 0.001, p0[22], neck_base_z])
+        chord_position = np.hstack((np.array(list(zip(chord_position[:,1], 
+                                                     chord_position[:,0],
                                                      self.z * np.ones(4))))))
         chord_position = np.hstack((chord_position, lh_th_postion))
         print(f'\nchord pos:\n {chord_position}\n')
@@ -206,11 +206,6 @@ class Trajectory():
         [lh_th_ptip, lh_th_Rtip, lh_th_Jv, lh_th_Jw] = self.lh_thumb.fkin(np.concatenate((qd[19:22],qd[39:40])))
         Jv[24:27, 19:22], Jv[24:27, 39:40], Jw[24:27, 19:22], Jw[24:27, 39:40] = lh_th_Jv[:,0:3], lh_th_Jv[:,3:4], lh_th_Jw[:,0:3], lh_th_Jw[:,3:4]
 
-        # print(f'\nJv:\n {Jv}\n')
-        # print(f'\nJw:\n {Jw}\n')
-        # print(f'\nlh_lf_Jv:\n {lh_lf_Jv}\n')
-        # print(f'\nlh_th_Jv:\n {lh_th_Jv}\n')
-
         [ptips, Rtips, errR] = [np.hstack((rh_ff_ptip, rh_mf_ptip, 
                                     rh_rf_ptip, rh_lf_ptip, 
                                     lh_ff_ptip, lh_mf_ptip, lh_rf_ptip, 
@@ -229,20 +224,23 @@ class Trajectory():
                                             eR(Rd[:,21:24], lh_lf_Rtip), 
                                             eR(Rd[:,24:27], lh_th_Rtip)))]
         
+        print(f'\nptips:\n {ptips}\n')
+
         # J = np.vstack((Jv, Jw))
         J = Jv
         Jt = np.transpose(J)
-        Jpinv = np.linalg.pinv(J)
+        # Jpinv = np.linalg.pinv(J)
+        # print(f'\nJpinv:\n {Jpinv}\n')
         gamma = 0.075
         Jwinv = Jt @ (J @ Jt + gamma**2 * np.eye(J.shape[0]))
-        print(f'\nJpinv:\n {Jpinv}\n')
+        print(f'\nJwinv:\n {Jwinv}\n')
         
         errp = ep(self.pdlast, ptips)
         # err = np.concatenate((errp, errR))
         err = errp
         
         # qddot = Jpinv @ (xddot + self.lam * err)
-        qddot = Jwinv @ (xddot + self.lam * err)
+        qddot = Jt @ np.linalg.inv(J @ Jt) @ (xddot + self.lam * err)
         print(f'\nqddot:\n {qddot}\n')
         print(f'\nself.qd:\n {self.qd}\n')
         print(f'\nxddot:\n {xddot}\n')
