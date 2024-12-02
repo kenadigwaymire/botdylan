@@ -42,7 +42,7 @@ class Fretboard():
         self.fretboard = [[(i, j) for j in range(num_frets)] for i in range(NUM_STRINGS)]
     def pd_from_chord(self, chord, p0):
         chord_position = np.copy(chord)
-        chord_position = chord_position * np.array([self.dy, self.dx])
+        chord_position = chord_position * np.array([-self.dx, self.dy])
         neck_base_z = self.z - GUITAR_HEIGHT # the z position of the bottom of the guitar
         lh_th_postion = np.array([chord_position[0,0] - 0.001, p0[22], neck_base_z])
         chord_position[:, 1] += self.dx / 2
@@ -95,14 +95,14 @@ class Trajectory():
                             0.0, 0.0, 0.0, 0.0, 
                             0.0, 0.0, 0.0, 0.0,
                             0.0, 0.0, 0.0, 0.0,
-                            0.0, 0.9599, 0.0, 0.0, 0.0,
-                            0.2,
+                            0.0, 0.0, 0.0, 0.0, 0.0,
+                            0.0,
                             0.0, 0.0,
                             0.0, 0.0, 0.0, 0.0,
                             0.0, 0.0, 0.0, 0.0,
                             0.0, 0.0, 0.0, 0.0,
-                            0.0, 0.9599, 0.0, 0.0, 0.0,
-                            1.5707963267948966])
+                            0.0, 0.0, 0.0, 0.0, 0.0,
+                            0.0])
         self.qd = np.copy(self.q0)
         # Initial tip positions:
         self.p0 = np.hstack([
@@ -163,20 +163,24 @@ class Trajectory():
     def evaluate(self, t, dt):
         # Initialize a guitar with: 21 frets, spaced 1 inch apart, and 
         # 6 strings spaced 0.5 inches apart, at  a height of 0
-        fretboard = Fretboard(21, 1, 0.5, 0)
+        fretboard = Fretboard(21, 0.125, 0.0625, 0.2)
 
         # Get the beat (T seconds), chords, and strumming pattern
         [T, chords, strumming_pattern] = song_info('some_song')
 
+        prevChord = np.copy(self.p0)
         nextChord = fretboard.pd_from_chord(chords[0].get('G'), self.p0)
         nextChord = np.hstack((self.p0[0:12], nextChord))
+        # nextChord = prevChord
+        print(f'\nprevChord:\n {prevChord}\n')
         print(f'\nnextChord:\n {nextChord}\n')
-        prevChord = np.copy(self.p0)
         (pd, vd) = goto(t, T, prevChord, nextChord)
+        print(f'\npd:\n {pd}\n')
         print(f'\nvd:\n {vd}\n')
         Rd = self.Rdlast # replace with rotation trajectory
         wd = np.zeros(27)
-        xddot = np.hstack((vd, wd))
+        # xddot = np.hstack((vd, wd))
+        xddot = vd
 
         qd = np.copy(self.qd)
 
@@ -225,19 +229,24 @@ class Trajectory():
                                             eR(Rd[:,21:24], lh_lf_Rtip), 
                                             eR(Rd[:,24:27], lh_th_Rtip)))]
         
-        J = np.vstack((Jv, Jw))
+        # J = np.vstack((Jv, Jw))
+        J = Jv
+        Jt = np.transpose(J)
         Jpinv = np.linalg.pinv(J)
+        gamma = 0.075
+        Jwinv = Jt @ (J @ Jt + gamma**2 * np.eye(J.shape[0]))
         print(f'\nJpinv:\n {Jpinv}\n')
         
         errp = ep(self.pdlast, ptips)
-        err = np.concatenate((errp, errR))
+        # err = np.concatenate((errp, errR))
+        err = errp
         
-        qddot = Jpinv @ (xddot + self.lam * err)
+        # qddot = Jpinv @ (xddot + self.lam * err)
+        qddot = Jwinv @ (xddot + self.lam * err)
         print(f'\nqddot:\n {qddot}\n')
-        print(f'\nqddot.size:\n {qddot.shape}\n')
         print(f'\nself.qd:\n {self.qd}\n')
         print(f'\nxddot:\n {xddot}\n')
-        print(f'\nself.qd:\n {self.lam * err}\n')
+        print(f'\nerror:\n {self.lam * err}\n')
 
         qd += qddot * dt
         self.qd += qd
