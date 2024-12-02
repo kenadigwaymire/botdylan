@@ -176,24 +176,38 @@ class Trajectory():
         print(f'\nvd:\n {vd}\n')
         Rd = self.Rdlast # replace with rotation trajectory
         wd = np.zeros(27)
-        xddot = np.hstack((vd, np.zeros(2), wd, np.zeros(2)))
+        xddot = np.hstack((vd, wd))
 
         qd = np.copy(self.qd)
 
-        [rh_ff_ptip, rh_ff_Rtip, rh_ff_Jv, rh_ff_Jw] = self.rh_ff.fkin(qd[0:6])
+        Jv = np.zeros((27, 40))
+        Jw = np.zeros((27, 40))
+        [rh_ff_ptip, rh_ff_Rtip, Jv[0:3, 0:6], Jw[0:3, 0:6]] = self.rh_ff.fkin(qd[0:6])
         [rh_mf_ptip, rh_mf_Rtip, rh_mf_Jv, rh_mf_Jw] = self.rh_mf.fkin(np.concatenate((qd[0:2],qd[6:10])))
+        Jv[3:6, 0:2], Jv[3:6, 6:10], Jw[3:6, 0:2], Jw[3:6, 6:10] = rh_mf_Jv[:,0:2], rh_mf_Jv[:,2:6], rh_mf_Jw[:,0:2], rh_mf_Jw[:,2:6]
         [rh_rf_ptip, rh_rf_Rtip, rh_rf_Jv, rh_rf_Jw] = self.rh_rf.fkin(np.concatenate((qd[0:2],qd[10:14])))
+        Jv[6:9, 0:2], Jv[6:9, 10:14], Jw[6:9, 0:2], Jw[6:9, 10:14] = rh_rf_Jv[:,0:2], rh_rf_Jv[:,2:6], rh_rf_Jw[:,0:2], rh_rf_Jw[:,2:6]
         [rh_lf_ptip, rh_lf_Rtip, rh_lf_Jv, rh_lf_Jw] = self.rh_lf.fkin(np.concatenate((qd[0:2],qd[14:19])))
+        Jv[9:12, 0:2], Jv[9:12, 14:19], Jw[9:12, 0:2], Jw[9:12, 14:19] = rh_lf_Jv[:,0:2], rh_lf_Jv[:,2:7], rh_lf_Jw[:,0:2], rh_lf_Jw[:,2:7]
         # We don't need the right-hand thumb — we set these to fixed joints
         # [rh_th_ptip, rh_th_Rtip, rh_th_Jv, rh_th_Jw] = self.rh_thumb.fkin(np.concatenate((qd[0:2],qd[19:24])))
 
-        [lh_ff_ptip, lh_ff_Rtip, lh_ff_Jv, lh_ff_Jw] = self.lh_ff.fkin(qd[19:26])
+        [lh_ff_ptip, lh_ff_Rtip, Jv[12:15, 19:26], Jw[12:15, 19:26]] = self.lh_ff.fkin(qd[19:26])
         [lh_mf_ptip, lh_mf_Rtip, lh_mf_Jv, lh_mf_Jw] = self.lh_mf.fkin(np.concatenate((qd[19:22],qd[26:30])))
+        Jv[15:18, 19:22], Jv[15:18, 26:30], Jw[15:18, 19:22], Jw[15:18, 26:30] = lh_mf_Jv[:,0:3], lh_mf_Jv[:,3:7], lh_mf_Jw[:,0:3], lh_mf_Jw[:,3:7]
         [lh_rf_ptip, lh_rf_Rtip, lh_rf_Jv, lh_rf_Jw] = self.lh_rf.fkin(np.concatenate((qd[19:22],qd[30:34])))
+        Jv[18:21, 19:22], Jv[18:21, 30:34], Jw[18:21, 19:22], Jw[18:21, 30:34] = lh_rf_Jv[:,0:3], lh_rf_Jv[:,3:7], lh_rf_Jw[:,0:3], lh_rf_Jw[:,3:7]
         [lh_lf_ptip, lh_lf_Rtip, lh_lf_Jv, lh_lf_Jw] = self.lh_lf.fkin(np.concatenate((qd[19:22],qd[34:39])))
-        [lh_th_ptip, lh_th_Rtip, lh_th_Jv, lh_th_Jw] = self.lh_thumb.fkin(np.concatenate((qd[19:22],qd[39:40]))) 
+        Jv[21:24, 19:22], Jv[21:24, 34:39], Jw[21:24, 19:22], Jw[21:24, 34:39] = lh_lf_Jv[:,0:3], lh_lf_Jv[:,3:8], lh_lf_Jw[:,0:3], lh_lf_Jw[:,3:8]
+        [lh_th_ptip, lh_th_Rtip, lh_th_Jv, lh_th_Jw] = self.lh_thumb.fkin(np.concatenate((qd[19:22],qd[39:40])))
+        Jv[24:27, 19:22], Jv[24:27, 39:40], Jw[24:27, 19:22], Jw[24:27, 39:40] = lh_th_Jv[:,0:3], lh_th_Jv[:,3:4], lh_th_Jw[:,0:3], lh_th_Jw[:,3:4]
 
-        [ptips, Rtips, errR, Jv, Jw] = [np.hstack((rh_ff_ptip, rh_mf_ptip, 
+        # print(f'\nJv:\n {Jv}\n')
+        # print(f'\nJw:\n {Jw}\n')
+        # print(f'\nlh_lf_Jv:\n {lh_lf_Jv}\n')
+        # print(f'\nlh_th_Jv:\n {lh_th_Jv}\n')
+
+        [ptips, Rtips, errR] = [np.hstack((rh_ff_ptip, rh_mf_ptip, 
                                     rh_rf_ptip, rh_lf_ptip, 
                                     lh_ff_ptip, lh_mf_ptip, lh_rf_ptip, 
                                     lh_lf_ptip, lh_th_ptip)),
@@ -209,22 +223,14 @@ class Trajectory():
                                             eR(Rd[:,15:18], lh_mf_Rtip), 
                                             eR(Rd[:,18:21], lh_rf_Rtip), 
                                             eR(Rd[:,21:24], lh_lf_Rtip), 
-                                            eR(Rd[:,24:27], lh_th_Rtip))),
-                                 np.hstack((rh_ff_Jv, rh_mf_Jv, rh_rf_Jv, 
-                                    rh_lf_Jv,
-                                    lh_ff_Jv, lh_mf_Jv, lh_rf_Jv, lh_lf_Jv, 
-                                    lh_th_Jv)),
-                                 np.hstack((rh_ff_Jw, rh_mf_Jw, rh_rf_Jw, 
-                                    rh_lf_Jw,
-                                    lh_ff_Jw, lh_mf_Jw, lh_rf_Jw, lh_lf_Jw, 
-                                    lh_th_Jw))]
+                                            eR(Rd[:,24:27], lh_th_Rtip)))]
         
         J = np.vstack((Jv, Jw))
         Jpinv = np.linalg.pinv(J)
         print(f'\nJpinv:\n {Jpinv}\n')
         
         errp = ep(self.pdlast, ptips)
-        err = np.concatenate((errp, np.zeros(2), errR, np.zeros(2)))
+        err = np.concatenate((errp, errR))
         
         qddot = Jpinv @ (xddot + self.lam * err)
         print(f'\nqddot:\n {qddot}\n')
@@ -252,6 +258,7 @@ def main(args=None):
 
     # Initialize the generator node for 100Hz udpates, using the above
     # Trajectory class.
+    print(f"\nTrajectory:\n{Trajectory}\n")
     generator = GeneratorNode('generator', 100, Trajectory)
 
     # Spin, meaning keep running (taking care of the timer callbacks

@@ -131,6 +131,7 @@ class GeneratorNode(Node):
 
         # Compute the trajectory for this time.
         des = self.trajectory.evaluate(self.t, self.dt)
+        print(f"\ndes:\n{des}\n")
         if des is None:
             self.future.set_result("Trajectory has ended")
             return
@@ -168,10 +169,10 @@ class GeneratorNode(Node):
             print(q)
             print(qdot)
             raise ValueError("(q) and (qdot) must be same len as jointnames!")
-        if not (len(p) == 3 and len(v) == 3):
-            raise ValueError("(p) and (v) must be length 3!")
-        if not (len(w) == 3):
-            raise ValueError("(omega) must be length 3!")
+        # if not (len(p) == 3 and len(v) == 3):
+        #     raise ValueError("(p) and (v) must be length 3!")
+        # if not (len(w) == 3):
+        #     raise ValueError("(omega) must be length 3!")
 
         # Determine the corresponding ROS time (seconds since 1970).
         now = self.start + rclpy.time.Duration(seconds=self.t)
@@ -184,39 +185,39 @@ class GeneratorNode(Node):
         msg.velocity     = qdot                 # List of joint velocities
         self.pubjoint.publish(msg)
 
-        # Build up a pose message and publish.
-        msg = PoseStamped()
-        msg.header.stamp       = now.to_msg()   # Current time for ROS
-        msg.pose.position.x    = p[0]
-        msg.pose.position.y    = p[1]
-        msg.pose.position.z    = p[2]
-        msg.pose.orientation.x = quat[0]
-        msg.pose.orientation.y = quat[1]
-        msg.pose.orientation.z = quat[2]
-        msg.pose.orientation.w = quat[3]
-        self.pubpose.publish(msg)
+        # # Build up a pose message and publish.
+        # msg = PoseStamped()
+        # msg.header.stamp       = now.to_msg()   # Current time for ROS
+        # msg.pose.position.x    = p[0]
+        # msg.pose.position.y    = p[1]
+        # msg.pose.position.z    = p[2]
+        # msg.pose.orientation.x = quat[0]
+        # msg.pose.orientation.y = quat[1]
+        # msg.pose.orientation.z = quat[2]
+        # msg.pose.orientation.w = quat[3]
+        # self.pubpose.publish(msg)
 
-        # Build up a twist message and publish.
-        msg = TwistStamped()
-        msg.header.stamp    = now.to_msg()      # Current time for ROS
-        msg.twist.linear.x  = v[0]
-        msg.twist.linear.y  = v[1]
-        msg.twist.linear.z  = v[2]
-        msg.twist.angular.x = w[0]
-        msg.twist.angular.y = w[1]
-        msg.twist.angular.z = w[2]
-        self.pubtwist.publish(msg)
+        # # Build up a twist message and publish.
+        # msg = TwistStamped()
+        # msg.header.stamp    = now.to_msg()      # Current time for ROS
+        # msg.twist.linear.x  = v[0]
+        # msg.twist.linear.y  = v[1]
+        # msg.twist.linear.z  = v[2]
+        # msg.twist.angular.x = w[0]
+        # msg.twist.angular.y = w[1]
+        # msg.twist.angular.z = w[2]
+        # self.pubtwist.publish(msg)
 
-        # Prepare a transform message and broadcast.
-        msg = TransformStamped()
-        msg.header.stamp            = now.to_msg()
-        msg.header.frame_id         = 'world'
-        msg.child_frame_id          = 'desired'
-        msg.transform.translation.x = p[0]
-        msg.transform.translation.y = p[1]
-        msg.transform.translation.z = p[2]
-        msg.transform.rotation.x    = quat[0]
-        msg.transform.rotation.y    = quat[1]
-        msg.transform.rotation.z    = quat[2]
-        msg.transform.rotation.w    = quat[3]
-        self.tfbroadcaster.sendTransform(msg)
+        # # Prepare a transform message and broadcast.
+        # msg = TransformStamped()
+        # msg.header.stamp            = now.to_msg()
+        # msg.header.frame_id         = 'world'
+        # msg.child_frame_id          = 'desired'
+        # msg.transform.translation.x = p[0]
+        # msg.transform.translation.y = p[1]
+        # msg.transform.translation.z = p[2]
+        # msg.transform.rotation.x    = quat[0]
+        # msg.transform.rotation.y    = quat[1]
+        # msg.transform.rotation.z    = quat[2]
+        # msg.transform.rotation.w    = quat[3]
+        # self.tfbroadcaster.sendTransform(msg)
