@@ -50,18 +50,18 @@
   <joint name="high_e_to_neck" type="fixed">
     <parent link="neck"/>
     <child link="str_high_e"/>
-    <origin xyz="0.0357 -0.1 0.01" rpy="0 0 0"/>
+    <origin xyz="0.0357 -0.075 0.01" rpy="0 0 0"/>
   </joint>
 
   <link name="str_high_e">
     <visual>
         <origin xyz="0.00 0.00 0.0" rpy="1.57 0 0"/>
-        <geometry> <cylinder radius="0.002" length="1.65"/> </geometry>
+        <geometry> <cylinder radius="0.002" length="1.7"/> </geometry>
         <material name="silver"/>
     </visual>
     <collision>
         <origin xyz="0.00 0.00 0.0" rpy="1.57 0 0"/>
-        <geometry> <cylinder radius="0.002" length="1.65"/> </geometry>
+        <geometry> <cylinder radius="0.002" length="1.7"/> </geometry>
     </collision>
   </link>
 
@@ -74,12 +74,12 @@
   <link name="str_b">
     <visual>
         <origin xyz="0.0 0.0 0.00" rpy="1.57 0 0"/>
-        <geometry> <cylinder radius="0.002" length="1.65"/> </geometry>
+        <geometry> <cylinder radius="0.002" length="1.7"/> </geometry>
         <material name="silver"/>
     </visual>
     <collision>
         <origin xyz="0.0 0.00 0.00" rpy="1.57 0 0"/>
-        <geometry> <cylinder radius="0.002" length="1.65"/> </geometry>
+        <geometry> <cylinder radius="0.002" length="1.7"/> </geometry>
     </collision>
   </link>
   
@@ -92,12 +92,12 @@
   <link name="str_g">
     <visual>
         <origin xyz="0.0 0.0 0.00" rpy="1.57 0 0"/>
-        <geometry> <cylinder radius="0.002" length="1.65"/> </geometry>
+        <geometry> <cylinder radius="0.002" length="1.7"/> </geometry>
         <material name="silver"/>
     </visual>
     <collision>
         <origin xyz="0.0 0.00 0.00" rpy="1.57 0 0"/>
-        <geometry> <cylinder radius="0.002" length="1.65"/> </geometry>
+        <geometry> <cylinder radius="0.002" length="1.7"/> </geometry>
     </collision>
   </link>
 
@@ -110,12 +110,12 @@
   <link name="str_d">
     <visual>
         <origin xyz="0.0 0.0 0.00" rpy="1.57 0 0"/>
-        <geometry> <cylinder radius="0.002" length="1.65"/> </geometry>
+        <geometry> <cylinder radius="0.002" length="1.7"/> </geometry>
         <material name="silver"/>
     </visual>
     <collision>
         <origin xyz="0.0 0.00 0.00" rpy="1.57 0 0"/>
-        <geometry> <cylinder radius="0.002" length="1.65"/> </geometry>
+        <geometry> <cylinder radius="0.002" length="1.7"/> </geometry>
     </collision>
   </link>
 
@@ -128,12 +128,12 @@
   <link name="str_a">
     <visual>
         <origin xyz="0.0 0.0 0.00" rpy="1.57 0 0"/>
-        <geometry> <cylinder radius="0.002" length="1.65"/> </geometry>
+        <geometry> <cylinder radius="0.002" length="1.7"/> </geometry>
         <material name="silver"/>
     </visual>
     <collision>
         <origin xyz="0.0 0.00 0.00" rpy="1.57 0 0"/>
-        <geometry> <cylinder radius="0.002" length="1.65"/> </geometry>
+        <geometry> <cylinder radius="0.002" length="1.7"/> </geometry>
     </collision>
   </link>
 
@@ -146,12 +146,12 @@
   <link name="str_low_e">
     <visual>
         <origin xyz="0.0 0.0 0.00" rpy="1.57 0 0"/>
-        <geometry> <cylinder radius="0.002" length="1.65"/> </geometry>
+        <geometry> <cylinder radius="0.002" length="1.7"/> </geometry>
         <material name="silver"/>
     </visual>
     <collision>
         <origin xyz="0.0 0.00 0.00" rpy="1.57 0 0"/>
-        <geometry> <cylinder radius="0.002" length="1.65"/> </geometry>
+        <geometry> <cylinder radius="0.002" length="1.7"/> </geometry>
     </collision>
   </link>
 
