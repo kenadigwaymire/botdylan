@@ -1,6 +1,3 @@
-# use this to load custom rviz
-# ros2 launch botdylan botdylan.launch.py rviz_file:=trey.rviz
-
 import os
 import xacro
 from ament_index_python.packages import get_package_share_directory as pkgdir
@@ -17,9 +14,6 @@ def generate_launch_description():
     # Locate the folder containing RVIZ configuration files
     rviz_folder = os.path.join(pkgdir('botdylan'), 'rviz')
     
-    # Default RVIZ file name
-    default_rviz = 'viewurdfplus.rviz'
-
     # Locate the URDF file relative to its package
     urdf = os.path.join(pkgdir('sr_description'), 'robots/sr_hand_bimanual.urdf')
 
@@ -34,11 +28,11 @@ def generate_launch_description():
     ######################################################################
     # DECLARE LAUNCH ARGUMENTS
 
-    # Declare an argument to specify the RVIZ configuration file
+    # Declare an argument to specify the RVIZ filename
     rviz_arg = DeclareLaunchArgument(
-        'rviz_file',
-        default_value=os.path.join(rviz_folder, default_rviz),
-        description='Path to the RVIZ configuration file'
+        'rviz_filename',
+        default_value='viewurdfplus.rviz',
+        description='Filename of the RVIZ configuration (located in the rviz folder)'
     )
 
     ######################################################################
@@ -59,7 +53,7 @@ def generate_launch_description():
         package='rviz2',
         executable='rviz2',
         output='screen',
-        arguments=['-d', LaunchConfiguration('rviz_file')],
+        arguments=['-d', os.path.join(rviz_folder, LaunchConfiguration('rviz_filename'))],
         on_exit=Shutdown()
     )
 
