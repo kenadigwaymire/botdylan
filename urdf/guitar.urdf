@@ -10,7 +10,7 @@
   <joint name="neck_to_world" type="fixed">
     <parent link="world"/>
     <child link="neck"/>
-    <origin xyz="0.00 0.00 0.00" rpy="0 0 0"/>
+    <origin xyz="0.00 0.00 0.00" rpy="-1.57 1.57 0"/>
   </joint>
 
   <link name="neck">
@@ -28,7 +28,7 @@
   <joint name="string1_to_neck" type="fixed">
     <parent link="neck"/>
     <child link="string1"/>
-    <origin xyz="0.00 0.00 0.005" rpy="0 0 0"/>
+    <origin xyz="0.0375 0.00 0.005" rpy="0 0 0"/>
   </joint>
 
   <link name="string1">
