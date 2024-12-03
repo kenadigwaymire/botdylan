@@ -13,7 +13,7 @@ find_package(ament_cmake REQUIRED)
 # find_package(<dependency> REQUIRED)
 
 install(
-  DIRECTORY hand meshes other robots
+  DIRECTORY hand meshes other robots launch
   DESTINATION share/${PROJECT_NAME}
 )
 
