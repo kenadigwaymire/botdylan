@@ -27,18 +27,36 @@
 
   <joint name="string1_to_neck" type="fixed">
     <parent link="neck"/>
-    <child link="string1"/>
+    <child link="str_high_e"/>
     <origin xyz="0.0375 0.00 0.005" rpy="0 0 0"/>
   </joint>
 
-  <link name="string1">
+  <link name="str_high_e">
     <visual>
         <origin xyz="0.00 0.00 0.005" rpy="1.57 0 0"/>
         <geometry> <cylinder radius="0.002" length="1.5"/> </geometry>
         <material name="silver"/>
     </visual>
     <collision>
-        <origin xyz="0.00 0.00 0.05" rpy="1.57 0 0"/>
+        <origin xyz="0.00 0.00 0.005" rpy="1.57 0 0"/>
+        <geometry> <cylinder radius="0.002" length="1.5"/> </geometry>
+    </collision>
+  </link>
+
+  <joint name="high_e_to_b" type="fixed">
+    <parent link="str_high_e"/>
+    <child link="str_b"/>
+    <origin xyz="0.0375 0.00 0.005" rpy="0 0 0"/>
+  </joint>
+
+  <link name="str_b">
+    <visual>
+        <origin xyz="0.00 0.0125 0.000" rpy="0 0 0"/>
+        <geometry> <cylinder radius="0.002" length="1.5"/> </geometry>
+        <material name="silver"/>
+    </visual>
+    <collision>
+        <origin xyz="0.00 0.00 0.005" rpy="1.57 0 0"/>
         <geometry> <cylinder radius="0.002" length="1.5"/> </geometry>
     </collision>
   </link>
