@@ -36,7 +36,7 @@
         <material name="silver"/>
     </visual>
     <collision>
-        <origin xyz="0.00 0.00 0.05" rpy="0 0.5 0"/>
+        <origin xyz="0.00 0.00 0.05" rpy="1 0 0"/>
         <geometry> <cylinder radius="0.01" length="1.2"/> </geometry>
     </collision>
   </link>
