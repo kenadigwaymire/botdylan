@@ -1,0 +1,15 @@
+running develop
+running egg_info
+writing botdylan.egg-info/PKG-INFO
+writing dependency_links to botdylan.egg-info/dependency_links.txt
+writing entry points to botdylan.egg-info/entry_points.txt
+writing requirements to botdylan.egg-info/requires.txt
+writing top-level names to botdylan.egg-info/top_level.txt
+reading manifest file 'botdylan.egg-info/SOURCES.txt'
+writing manifest file 'botdylan.egg-info/SOURCES.txt'
+running build_ext
+Creating /home/trey/robotws/src/botdylan/install/botdylan/lib/python3.10/site-packages/botdylan.egg-link (link to .)
+Installing trajectory script to /home/trey/robotws/src/botdylan/install/botdylan/lib/botdylan
+
+Installed /home/trey/robotws/src/botdylan/build/botdylan
+running symlink_data

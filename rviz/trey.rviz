@@ -7,6 +7,11 @@ Panels:
         - /Global Options1
         - /Status1
         - /RobotModel1
+        - /RobotModel2
+        - /TF1
+        - /TF1/Tree1
+        - /TF1/Tree1/world1
+        - /TF1/Tree1/world1/neck1
       Splitter Ratio: 0.5
     Tree Height: 555
   - Class: rviz_common/Selection
@@ -384,6 +389,279 @@ Visualization Manager:
       Update Interval: 0
       Value: true
       Visual Enabled: true
+    - Alpha: 1
+      Class: rviz_default_plugins/RobotModel
+      Collision Enabled: false
+      Description File: /home/trey/robotws/src/botdylan/urdf/guitar.urdf
+      Description Source: File
+      Description Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: ""
+      Enabled: true
+      Links:
+        All Links Enabled: true
+        Expand Joint Details: false
+        Expand Link Details: false
+        Expand Tree: false
+        Link Tree Style: Links in Alphabetic Order
+        neck:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        string1:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        world:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+      Mass Properties:
+        Inertia: false
+        Mass: false
+      Name: RobotModel
+      TF Prefix: ""
+      Update Interval: 0
+      Value: true
+      Visual Enabled: true
+    - Class: rviz_default_plugins/TF
+      Enabled: true
+      Frame Timeout: 15
+      Frames:
+        All Enabled: true
+        guitar_base_link:
+          Value: true
+        lh_ffdistal:
+          Value: true
+        lh_ffknuckle:
+          Value: true
+        lh_ffmiddle:
+          Value: true
+        lh_ffproximal:
+          Value: true
+        lh_fftip:
+          Value: true
+        lh_forearm:
+          Value: true
+        lh_imu:
+          Value: true
+        lh_lfdistal:
+          Value: true
+        lh_lfknuckle:
+          Value: true
+        lh_lfmetacarpal:
+          Value: true
+        lh_lfmiddle:
+          Value: true
+        lh_lfproximal:
+          Value: true
+        lh_lftip:
+          Value: true
+        lh_manipulator:
+          Value: true
+        lh_mfdistal:
+          Value: true
+        lh_mfknuckle:
+          Value: true
+        lh_mfmiddle:
+          Value: true
+        lh_mfproximal:
+          Value: true
+        lh_mftip:
+          Value: true
+        lh_palm:
+          Value: true
+        lh_rfdistal:
+          Value: true
+        lh_rfknuckle:
+          Value: true
+        lh_rfmiddle:
+          Value: true
+        lh_rfproximal:
+          Value: true
+        lh_rftip:
+          Value: true
+        lh_thbase:
+          Value: true
+        lh_thdistal:
+          Value: true
+        lh_thhub:
+          Value: true
+        lh_thmiddle:
+          Value: true
+        lh_thproximal:
+          Value: true
+        lh_thtip:
+          Value: true
+        lh_wrist:
+          Value: true
+        neck:
+          Value: true
+        rh_ffdistal:
+          Value: true
+        rh_ffknuckle:
+          Value: true
+        rh_ffmiddle:
+          Value: true
+        rh_ffproximal:
+          Value: true
+        rh_fftip:
+          Value: true
+        rh_forearm:
+          Value: true
+        rh_imu:
+          Value: true
+        rh_lfdistal:
+          Value: true
+        rh_lfknuckle:
+          Value: true
+        rh_lfmetacarpal:
+          Value: true
+        rh_lfmiddle:
+          Value: true
+        rh_lfproximal:
+          Value: true
+        rh_lftip:
+          Value: true
+        rh_manipulator:
+          Value: true
+        rh_mfdistal:
+          Value: true
+        rh_mfknuckle:
+          Value: true
+        rh_mfmiddle:
+          Value: true
+        rh_mfproximal:
+          Value: true
+        rh_mftip:
+          Value: true
+        rh_palm:
+          Value: true
+        rh_rfdistal:
+          Value: true
+        rh_rfknuckle:
+          Value: true
+        rh_rfmiddle:
+          Value: true
+        rh_rfproximal:
+          Value: true
+        rh_rftip:
+          Value: true
+        rh_thbase:
+          Value: true
+        rh_thdistal:
+          Value: true
+        rh_thhub:
+          Value: true
+        rh_thmiddle:
+          Value: true
+        rh_thproximal:
+          Value: true
+        rh_thtip:
+          Value: true
+        rh_wrist:
+          Value: true
+        string1:
+          Value: true
+        world:
+          Value: true
+      Marker Scale: 1
+      Name: TF
+      Show Arrows: true
+      Show Axes: true
+      Show Names: false
+      Tree:
+        world:
+          guitar_base_link:
+            {}
+          neck:
+            string1:
+              {}
+          rh_forearm:
+            lh_forearm:
+              lh_wrist:
+                lh_palm:
+                  lh_ffknuckle:
+                    lh_ffproximal:
+                      lh_ffmiddle:
+                        lh_ffdistal:
+                          lh_fftip:
+                            {}
+                  lh_imu:
+                    {}
+                  lh_lfmetacarpal:
+                    lh_lfknuckle:
+                      lh_lfproximal:
+                        lh_lfmiddle:
+                          lh_lfdistal:
+                            lh_lftip:
+                              {}
+                  lh_manipulator:
+                    {}
+                  lh_mfknuckle:
+                    lh_mfproximal:
+                      lh_mfmiddle:
+                        lh_mfdistal:
+                          lh_mftip:
+                            {}
+                  lh_rfknuckle:
+                    lh_rfproximal:
+                      lh_rfmiddle:
+                        lh_rfdistal:
+                          lh_rftip:
+                            {}
+                  lh_thbase:
+                    lh_thproximal:
+                      lh_thhub:
+                        lh_thmiddle:
+                          lh_thdistal:
+                            lh_thtip:
+                              {}
+            rh_wrist:
+              rh_palm:
+                rh_ffknuckle:
+                  rh_ffproximal:
+                    rh_ffmiddle:
+                      rh_ffdistal:
+                        rh_fftip:
+                          {}
+                rh_imu:
+                  {}
+                rh_lfmetacarpal:
+                  rh_lfknuckle:
+                    rh_lfproximal:
+                      rh_lfmiddle:
+                        rh_lfdistal:
+                          rh_lftip:
+                            {}
+                rh_manipulator:
+                  {}
+                rh_mfknuckle:
+                  rh_mfproximal:
+                    rh_mfmiddle:
+                      rh_mfdistal:
+                        rh_mftip:
+                          {}
+                rh_rfknuckle:
+                  rh_rfproximal:
+                    rh_rfmiddle:
+                      rh_rfdistal:
+                        rh_rftip:
+                          {}
+                rh_thbase:
+                  rh_thproximal:
+                    rh_thhub:
+                      rh_thmiddle:
+                        rh_thdistal:
+                          rh_thtip:
+                            {}
+      Update Interval: 0
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 88; 143; 163
@@ -445,10 +723,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.5603981614112854
+      Pitch: 0.4753980040550232
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 1.6253974437713623
+      Yaw: 1.7553980350494385
     Saved: ~
 Window Geometry:
   Displays:
@@ -466,5 +744,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1200
-  X: 28
-  Y: 28
+  X: -4
+  Y: -4
