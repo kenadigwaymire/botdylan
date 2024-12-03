@@ -91,44 +91,11 @@ class Trajectory():
         
         # Init joint values (doesnt work rn cause chain is <6 and len(jointnames) = 48)
         # Initial joint positions:
-        self.q0 = np.array([0.0, 0.0, 
-                            0.0, 0.0, 0.0, 0.0, 
-                            0.0, 0.0, 0.0, 0.0,
-                            0.0, 0.0, 0.0, 0.0,
-                            0.0, 0.0, 0.0, 0.0, 0.0,
-                            0.0,
-                            0.0, 0.0,
-                            0.0, 0.0, 0.0, 0.0,
-                            0.0, 0.0, 0.0, 0.0,
-                            0.0, 0.0, 0.0, 0.0,
-                            0.0, 0.0, 0.0, 0.0, 0.0,
-                            0.0])
+        self.q0 = np.zeros(40)
         self.qd = np.copy(self.q0)
         # Initial tip positions:
-        self.p0 = np.hstack([
-            self.rh_ff.fkin(self.q0[0:6])[0],
-            self.rh_mf.fkin(np.concatenate((self.q0[0:2],self.q0[6:10])))[0],
-            self.rh_rf.fkin(np.concatenate((self.q0[0:2],self.q0[10:14])))[0],
-            self.rh_lf.fkin(np.concatenate((self.q0[0:2],self.q0[14:19])))[0],
-
-            self.lh_ff.fkin(self.q0[19:26])[0],
-            self.lh_mf.fkin(np.concatenate((self.q0[19:22],self.q0[26:30])))[0],
-            self.lh_rf.fkin(np.concatenate((self.q0[19:22],self.q0[30:34])))[0],
-            self.lh_lf.fkin(np.concatenate((self.q0[19:22],self.q0[34:39])))[0],
-            self.lh_thumb.fkin(np.concatenate((self.q0[19:22],self.q0[39:40])))[0]
-            ])
-        self.R0 = np.hstack([
-            self.rh_ff.fkin(self.q0[0:6])[1],
-            self.rh_mf.fkin(np.concatenate((self.q0[0:2],self.q0[6:10])))[1],
-            self.rh_rf.fkin(np.concatenate((self.q0[0:2],self.q0[10:14])))[1],
-            self.rh_lf.fkin(np.concatenate((self.q0[0:2],self.q0[14:19])))[1],
-
-            self.lh_ff.fkin(self.q0[19:26])[1],
-            self.lh_mf.fkin(np.concatenate((self.q0[19:22],self.q0[26:30])))[1],
-            self.lh_rf.fkin(np.concatenate((self.q0[19:22],self.q0[30:34])))[1],
-            self.lh_lf.fkin(np.concatenate((self.q0[19:22],self.q0[34:39])))[1],
-            self.lh_thumb.fkin(np.concatenate((self.q0[19:22],self.q0[39:40])))[1]
-            ])
+        self.p0 = self.get_ptips()
+        self.R0 = self.get_Rtips()
 
         # Other params
         self.lam = 20
@@ -158,7 +125,101 @@ class Trajectory():
             # Made these fixed:
             # "lh_THJ4", "lh_THJ3", "lh_THJ2", "lh_THJ1"
             ]
+
+
+    def get_ptips(self):
+        """
+        Returns the positions of the fingers as an array of length 27, representing
+        the x, y, and z positions of each of the 9 fingers used (in the order that
+        they appear in jointnames).
+        """
+        return np.concatenate([
+                self.rh_ff.fkin(self.qd[0:6])[0],
+                self.rh_mf.fkin(np.concatenate((self.qd[0:2],self.qd[6:10])))[0],
+                self.rh_rf.fkin(np.concatenate((self.qd[0:2],self.qd[10:14])))[0],
+                self.rh_lf.fkin(np.concatenate((self.qd[0:2],self.qd[14:19])))[0],
+
+                self.lh_ff.fkin(self.qd[19:26])[0],
+                self.lh_mf.fkin(np.concatenate((self.qd[19:22],self.qd[26:30])))[0],
+                self.lh_rf.fkin(np.concatenate((self.qd[19:22],self.qd[30:34])))[0],
+                self.lh_lf.fkin(np.concatenate((self.qd[19:22],self.qd[34:39])))[0],
+                self.lh_thumb.fkin(np.concatenate((self.qd[19:22],self.qd[39:40])))[0]
+                ])
     
+
+    def get_Rtips(self):
+        """
+        Returns the orientations of the fingers as an array of size 3x27, representing
+        the 3x3 rotation matrices of each of the 9 fingers used (in the order that
+        they appear in jointnames).
+        """
+        return np.hstack([
+                self.rh_ff.fkin(self.qd[0:6])[1],
+                self.rh_mf.fkin(np.concatenate((self.qd[0:2],self.qd[6:10])))[1],
+                self.rh_rf.fkin(np.concatenate((self.qd[0:2],self.qd[10:14])))[1],
+                self.rh_lf.fkin(np.concatenate((self.qd[0:2],self.qd[14:19])))[1],
+
+                self.lh_ff.fkin(self.qd[19:26])[1],
+                self.lh_mf.fkin(np.concatenate((self.qd[19:22],self.qd[26:30])))[1],
+                self.lh_rf.fkin(np.concatenate((self.qd[19:22],self.qd[30:34])))[1],
+                self.lh_lf.fkin(np.concatenate((self.qd[19:22],self.qd[34:39])))[1],
+                self.lh_thumb.fkin(np.concatenate((self.qd[19:22],self.qd[39:40])))[1]
+                ])
+    
+
+    def get_Jv(self):
+        """
+        Returns the translational Jacobian of size 27x40 for the robot (both hands).
+        """
+        Jv = np.zeros((27, 40))
+        Jv[0:3, 0:6] = self.rh_ff.fkin(self.qd[0:6])[2]
+        rh_mf_Jv = self.rh_mf.fkin(np.concatenate((self.qd[0:2],self.qd[6:10])))[2]
+        Jv[3:6, 0:2], Jv[3:6, 6:10] = rh_mf_Jv[:,0:2], rh_mf_Jv[:,2:6]
+        rh_rf_Jv = self.rh_rf.fkin(np.concatenate((self.qd[0:2],self.qd[10:14])))[2]
+        Jv[6:9, 0:2], Jv[6:9, 10:14] = rh_rf_Jv[:,0:2], rh_rf_Jv[:,2:6]
+        rh_lf_Jv = self.rh_lf.fkin(np.concatenate((self.qd[0:2],self.qd[14:19])))[2]
+        Jv[9:12, 0:2], Jv[9:12, 14:19] = rh_lf_Jv[:,0:2], rh_lf_Jv[:,2:7]
+        # We don't need the right-hand thumb — we set these to fixed joints
+        # [rh_th_ptip, rh_th_Rtip, rh_th_Jv, rh_th_Jw] = self.rh_thumb.fkin(np.concatenate((self.qd[0:2],self.qd[19:24])))
+
+        Jv[12:15, 19:26] = self.lh_ff.fkin(self.qd[19:26])[2]
+        lh_mf_Jv = self.lh_mf.fkin(np.concatenate((self.qd[19:22],self.qd[26:30])))[2]
+        Jv[15:18, 19:22], Jv[15:18, 26:30], = lh_mf_Jv[:,0:3], lh_mf_Jv[:,3:7]
+        lh_rf_Jv = self.lh_rf.fkin(np.concatenate((self.qd[19:22],self.qd[30:34])))[2]
+        Jv[18:21, 19:22], Jv[18:21, 30:34] = lh_rf_Jv[:,0:3], lh_rf_Jv[:,3:7]
+        lh_lf_Jv = self.lh_lf.fkin(np.concatenate((self.qd[19:22],self.qd[34:39])))[2]
+        Jv[21:24, 19:22], Jv[21:24, 34:39] = lh_lf_Jv[:,0:3], lh_lf_Jv[:,3:8]
+        lh_th_Jv = self.lh_thumb.fkin(np.concatenate((self.qd[19:22],self.qd[39:40])))[2]
+        Jv[24:27, 19:22], Jv[24:27, 39:40] = lh_th_Jv[:,0:3], lh_th_Jv[:,3:4]
+        return Jv
+    
+
+    def get_Jw(self):
+        """
+        Returns the rotational Jacobian of size 27x40 for the robot (both hands).
+        """
+        Jw = np.zeros((27, 40))
+        Jw[0:3, 0:6] = self.rh_ff.fkin(self.qd[0:6])[3]
+        rh_mf_Jw = self.rh_mf.fkin(np.concatenate((self.qd[0:2],self.qd[6:10])))[3]
+        Jw[3:6, 0:2], Jw[3:6, 6:10] = rh_mf_Jw[:,0:2], rh_mf_Jw[:,2:6]
+        rh_rf_Jw = self.rh_rf.fkin(np.concatenate((self.qd[0:2],self.qd[10:14])))[3]
+        Jw[6:9, 0:2], Jw[6:9, 10:14] = rh_rf_Jw[:,0:2], rh_rf_Jw[:,2:6]
+        rh_lf_Jw = self.rh_lf.fkin(np.concatenate((self.qd[0:2],self.qd[14:19])))[3]
+        Jw[9:12, 0:2], Jw[9:12, 14:19] = rh_lf_Jw[:,0:2], rh_lf_Jw[:,2:7]
+        # We don't need the right-hand thumb — we set these to fixed joints
+        # [rh_th_ptip, rh_th_Rtip, rh_th_Jw, rh_th_Jw] = self.rh_thumb.fkin(np.concatenate((self.qd[0:2],self.qd[19:24])))
+
+        Jw[12:15, 19:26] = self.lh_ff.fkin(self.qd[19:26])[3]
+        lh_mf_Jw = self.lh_mf.fkin(np.concatenate((self.qd[19:22],self.qd[26:30])))[3]
+        Jw[15:18, 19:22], Jw[15:18, 26:30], = lh_mf_Jw[:,0:3], lh_mf_Jw[:,3:7]
+        lh_rf_Jw = self.lh_rf.fkin(np.concatenate((self.qd[19:22],self.qd[30:34])))[3]
+        Jw[18:21, 19:22], Jw[18:21, 30:34] = lh_rf_Jw[:,0:3], lh_rf_Jw[:,3:7]
+        lh_lf_Jw = self.lh_lf.fkin(np.concatenate((self.qd[19:22],self.qd[34:39])))[3]
+        Jw[21:24, 19:22], Jw[21:24, 34:39] = lh_lf_Jw[:,0:3], lh_lf_Jw[:,3:8]
+        lh_th_Jw = self.lh_thumb.fkin(np.concatenate((self.qd[19:22],self.qd[39:40])))[3]
+        Jw[24:27, 19:22], Jw[24:27, 39:40] = lh_th_Jw[:,0:3], lh_th_Jw[:,3:4]
+        return Jw
+
     # Evaluate at the given time.  This was last called (dt) ago.
     def evaluate(self, t, dt):
         # Initialize a guitar with: 21 frets, spaced 1 inch apart, and 
@@ -169,84 +230,53 @@ class Trajectory():
         [T, chords, strumming_pattern] = song_info('some_song')
 
         prevChord = np.copy(self.p0)
-        nextChord = fretboard.pd_from_chord(chords[0].get('G'), self.p0)
-        nextChord = np.hstack((self.p0[0:12], nextChord))
-        # nextChord = prevChord
+        # nextChord = fretboard.pd_from_chord(chords[0].get('G'), self.p0)
+        # nextChord = np.hstack((self.p0[0:12], nextChord))
+        nextChord = np.copy(prevChord)
+        nextChord[0] += 0.005
         print(f'\nprevChord:\n {prevChord}\n')
         print(f'\nnextChord:\n {nextChord}\n')
         (pd, vd) = goto(t, T, prevChord, nextChord)
-        print(f'\npd:\n {pd}\n')
-        print(f'\nvd:\n {vd}\n')
-        Rd = self.Rdlast # replace with rotation trajectory
+        #print(f'\npd:\n {pd}\n')
+        print(f'\nvd:\n{vd}\n')
+        Rd = np.copy(self.Rdlast) # replace with rotation trajectory
         wd = np.zeros(27)
         # xddot = np.hstack((vd, wd))
         xddot = vd
 
         qd = np.copy(self.qd)
 
-        Jv = np.zeros((27, 40))
-        Jw = np.zeros((27, 40))
-        [rh_ff_ptip, rh_ff_Rtip, Jv[0:3, 0:6], Jw[0:3, 0:6]] = self.rh_ff.fkin(qd[0:6])
-        [rh_mf_ptip, rh_mf_Rtip, rh_mf_Jv, rh_mf_Jw] = self.rh_mf.fkin(np.concatenate((qd[0:2],qd[6:10])))
-        Jv[3:6, 0:2], Jv[3:6, 6:10], Jw[3:6, 0:2], Jw[3:6, 6:10] = rh_mf_Jv[:,0:2], rh_mf_Jv[:,2:6], rh_mf_Jw[:,0:2], rh_mf_Jw[:,2:6]
-        [rh_rf_ptip, rh_rf_Rtip, rh_rf_Jv, rh_rf_Jw] = self.rh_rf.fkin(np.concatenate((qd[0:2],qd[10:14])))
-        Jv[6:9, 0:2], Jv[6:9, 10:14], Jw[6:9, 0:2], Jw[6:9, 10:14] = rh_rf_Jv[:,0:2], rh_rf_Jv[:,2:6], rh_rf_Jw[:,0:2], rh_rf_Jw[:,2:6]
-        [rh_lf_ptip, rh_lf_Rtip, rh_lf_Jv, rh_lf_Jw] = self.rh_lf.fkin(np.concatenate((qd[0:2],qd[14:19])))
-        Jv[9:12, 0:2], Jv[9:12, 14:19], Jw[9:12, 0:2], Jw[9:12, 14:19] = rh_lf_Jv[:,0:2], rh_lf_Jv[:,2:7], rh_lf_Jw[:,0:2], rh_lf_Jw[:,2:7]
-        # We don't need the right-hand thumb — we set these to fixed joints
-        # [rh_th_ptip, rh_th_Rtip, rh_th_Jv, rh_th_Jw] = self.rh_thumb.fkin(np.concatenate((qd[0:2],qd[19:24])))
+        Jv = self.get_Jv()
 
-        [lh_ff_ptip, lh_ff_Rtip, Jv[12:15, 19:26], Jw[12:15, 19:26]] = self.lh_ff.fkin(qd[19:26])
-        [lh_mf_ptip, lh_mf_Rtip, lh_mf_Jv, lh_mf_Jw] = self.lh_mf.fkin(np.concatenate((qd[19:22],qd[26:30])))
-        Jv[15:18, 19:22], Jv[15:18, 26:30], Jw[15:18, 19:22], Jw[15:18, 26:30] = lh_mf_Jv[:,0:3], lh_mf_Jv[:,3:7], lh_mf_Jw[:,0:3], lh_mf_Jw[:,3:7]
-        [lh_rf_ptip, lh_rf_Rtip, lh_rf_Jv, lh_rf_Jw] = self.lh_rf.fkin(np.concatenate((qd[19:22],qd[30:34])))
-        Jv[18:21, 19:22], Jv[18:21, 30:34], Jw[18:21, 19:22], Jw[18:21, 30:34] = lh_rf_Jv[:,0:3], lh_rf_Jv[:,3:7], lh_rf_Jw[:,0:3], lh_rf_Jw[:,3:7]
-        [lh_lf_ptip, lh_lf_Rtip, lh_lf_Jv, lh_lf_Jw] = self.lh_lf.fkin(np.concatenate((qd[19:22],qd[34:39])))
-        Jv[21:24, 19:22], Jv[21:24, 34:39], Jw[21:24, 19:22], Jw[21:24, 34:39] = lh_lf_Jv[:,0:3], lh_lf_Jv[:,3:8], lh_lf_Jw[:,0:3], lh_lf_Jw[:,3:8]
-        [lh_th_ptip, lh_th_Rtip, lh_th_Jv, lh_th_Jw] = self.lh_thumb.fkin(np.concatenate((qd[19:22],qd[39:40])))
-        Jv[24:27, 19:22], Jv[24:27, 39:40], Jw[24:27, 19:22], Jw[24:27, 39:40] = lh_th_Jv[:,0:3], lh_th_Jv[:,3:4], lh_th_Jw[:,0:3], lh_th_Jw[:,3:4]
-
-        [ptips, Rtips, errR] = [np.hstack((rh_ff_ptip, rh_mf_ptip, 
-                                    rh_rf_ptip, rh_lf_ptip, 
-                                    lh_ff_ptip, lh_mf_ptip, lh_rf_ptip, 
-                                    lh_lf_ptip, lh_th_ptip)),
-                                 np.hstack((rh_ff_Rtip, rh_mf_Rtip, 
-                                    rh_rf_Rtip, rh_lf_Rtip, 
-                                    lh_ff_Rtip, lh_mf_Rtip, lh_rf_Rtip, 
-                                    lh_lf_Rtip, lh_th_Rtip)),
-                                 np.hstack((eR(Rd[:,0:3], rh_ff_Rtip),
-                                            eR(Rd[:,3:6], rh_mf_Rtip), 
-                                            eR(Rd[:,6:9], rh_rf_Rtip), 
-                                            eR(Rd[:,9:12], rh_lf_Rtip),
-                                            eR(Rd[:,12:15], lh_ff_Rtip), 
-                                            eR(Rd[:,15:18], lh_mf_Rtip), 
-                                            eR(Rd[:,18:21], lh_rf_Rtip), 
-                                            eR(Rd[:,21:24], lh_lf_Rtip), 
-                                            eR(Rd[:,24:27], lh_th_Rtip)))]
+        ptips = self.get_ptips()
         
-        print(f'\nptips:\n {ptips}\n')
+        #print(f'\nptips:\n {ptips}\n')
 
         # J = np.vstack((Jv, Jw))
         J = Jv
         Jt = np.transpose(J)
-        # Jpinv = np.linalg.pinv(J)
-        # print(f'\nJpinv:\n {Jpinv}\n')
-        gamma = 0.075
-        Jwinv = Jt @ (J @ Jt + gamma**2 * np.eye(J.shape[0]))
-        print(f'\nJwinv:\n {Jwinv}\n')
+        Jpinv = np.linalg.pinv(J)
+        print(f'\nJpinv[:,0:20]:\n {Jpinv[:,0:20]}\n')
+        print(f'\nJpinv[:,20:40]:\n {Jpinv[:,20:40]}\n')
+
+        # gamma = 0.075
+        # Jwinv = Jt @ (J @ Jt + gamma**2 * np.eye(J.shape[0]))
+        # print(f'\nJwinv:\n {Jwinv}\n')
         
         errp = ep(self.pdlast, ptips)
         # err = np.concatenate((errp, errR))
         err = errp
         
-        # qddot = Jpinv @ (xddot + self.lam * err)
-        qddot = Jt @ np.linalg.inv(J @ Jt) @ (xddot + self.lam * err)
+        qddot = Jpinv @ (xddot + self.lam * err)
+        #qddot = Jt @ np.linalg.inv(J @ Jt) @ (xddot + self.lam * err)
         print(f'\nqddot:\n {qddot}\n')
-        print(f'\nself.qd:\n {self.qd}\n')
+        #print(f'\nself.qd:\n {self.qd}\n')
         print(f'\nxddot:\n {xddot}\n')
-        print(f'\nerror:\n {self.lam * err}\n')
+        #print(f'\nerror:\n {self.lam * err}\n')
+        print(f"\nJ@qddot:\n {J @ qddot - self.lam * err}")
 
         qd += qddot * dt
+        print(f"\nqddot * dt:\n{qddot * dt}\n")
         self.qd += qd
         self.pdlast = pd
         self.Rdlast = Rd
