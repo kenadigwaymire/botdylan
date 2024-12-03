@@ -1,8 +1,14 @@
 import os
+import xacro
+
 from ament_index_python.packages import get_package_share_directory as pkgdir
-from launch import LaunchDescription
-from launch.actions import Shutdown
-from launch_ros.actions import Node
+
+from launch                            import LaunchDescription
+from launch.actions                    import DeclareLaunchArgument
+from launch.actions                    import OpaqueFunction
+from launch.actions                    import Shutdown
+from launch.substitutions              import LaunchConfiguration
+from launch_ros.actions                import Node
 
 
 def generate_launch_description():
@@ -50,6 +56,7 @@ def generate_launch_description():
         package='botdylan',
         executable='trajectory',
         output='screen'
+        
     )
 
     # Joint state publisher GUI node
@@ -57,7 +64,8 @@ def generate_launch_description():
         name='joint_state_publisher_gui',
         package='joint_state_publisher_gui',
         executable='joint_state_publisher_gui',
-        output='screen'
+        output='screen',
+        on_exit=Shutdown()
     )
 
     ######################################################################
