@@ -15,8 +15,8 @@ def generate_launch_description():
     # LOCATE FILES
 
     # Locate the folder containing RVIZ configuration files
-    rviz_folder = os.path.join(pkgdir('botdylan'), 'share', 'botdylan', 'rviz')
-
+    rviz_folder = os.path.join(pkgdir('botdylan'), 'rviz')
+    
     # Default RVIZ file name
     default_rviz = 'viewurdfplus.rviz'
 
