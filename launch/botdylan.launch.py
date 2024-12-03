@@ -1,6 +1,3 @@
-# use this to load custom rviz
-# ros2 launch botdylan botdylan.launch.py rviz_file:=trey.rviz
-
 import os
 import xacro
 from ament_index_python.packages import get_package_share_directory as pkgdir
@@ -20,16 +17,27 @@ def generate_launch_description():
     # Default RVIZ file name
     default_rviz = 'viewurdfplus.rviz'
 
-    # Locate the URDF file relative to its package
-    urdf = os.path.join(pkgdir('sr_description'), 'robots/sr_hand_bimanual.urdf')
+    # Locate the primary URDF file relative to its package
+    primary_urdf = os.path.join(pkgdir('sr_description'), 'robots/sr_hand_bimanual.urdf')
 
-    # Preprocess the URDF file (if it's a xacro file, handle it here)
-    if urdf.endswith('.xacro'):
-        robot_description = xacro.process_file(urdf).toxml()
+    # Locate the second URDF file relative to its package
+    second_urdf = os.path.join(pkgdir('botdylan'), 'rurdf/guitar.urdf')
+
+    # Preprocess the primary URDF file (if it's a xacro file, handle it here)
+    if primary_urdf.endswith('.xacro'):
+        primary_robot_description = xacro.process_file(primary_urdf).toxml()
     else:
         # Load the raw URDF file as XML
-        with open(urdf, 'r') as file:
-            robot_description = file.read()
+        with open(primary_urdf, 'r') as file:
+            primary_robot_description = file.read()
+
+    # Preprocess the second URDF file (if it's a xacro file, handle it here)
+    if second_urdf.endswith('.xacro'):
+        second_robot_description = xacro.process_file(second_urdf).toxml()
+    else:
+        # Load the raw URDF file as XML
+        with open(second_urdf, 'r') as file:
+            second_robot_description = file.read()
 
     ######################################################################
     # DECLARE LAUNCH ARGUMENTS
@@ -44,13 +52,22 @@ def generate_launch_description():
     ######################################################################
     # PREPARE THE LAUNCH ELEMENTS
 
-    # Configure the robot_state_publisher node
-    node_robot_state_publisher = Node(
-        name='robot_state_publisher',
+    # Configure the primary robot_state_publisher node
+    node_primary_robot_state_publisher = Node(
+        name='robot_state_publisher_primary',
         package='robot_state_publisher',
         executable='robot_state_publisher',
         output='screen',
-        parameters=[{'robot_description': robot_description}]
+        parameters=[{'robot_description': primary_robot_description}]
+    )
+
+    # Configure the second robot_state_publisher node
+    node_second_robot_state_publisher = Node(
+        name='robot_state_publisher_second',
+        package='robot_state_publisher',
+        executable='robot_state_publisher',
+        output='screen',
+        parameters=[{'robot_description': second_robot_description}]
     )
 
     # Configure the RVIZ node to use the selected configuration
@@ -77,7 +94,7 @@ def generate_launch_description():
         package='joint_state_publisher_gui',
         executable='joint_state_publisher_gui',
         output='screen',
-        parameters=[{'robot_description': robot_description}]
+        parameters=[{'robot_description': primary_robot_description}]  # This could remain the same or be updated as needed
     )
 
     ######################################################################
@@ -85,7 +102,8 @@ def generate_launch_description():
 
     return LaunchDescription([
         rviz_arg,
-        node_robot_state_publisher,
+        node_primary_robot_state_publisher,
+        node_second_robot_state_publisher,
         node_rviz,
         node_trajectory,
         node_joint_state_publisher_gui,
