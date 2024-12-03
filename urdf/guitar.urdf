@@ -28,17 +28,17 @@
   <joint name="high_e_to_neck" type="fixed">
     <parent link="neck"/>
     <child link="str_high_e"/>
-    <origin xyz="0.0357 0.00 0.005" rpy="0 0 0"/>
+    <origin xyz="0.0357 0.00 0.01" rpy="0 0 0"/>
   </joint>
 
   <link name="str_high_e">
     <visual>
-        <origin xyz="0.00 0.00 0.005" rpy="1.57 0 0"/>
+        <origin xyz="0.00 0.00 0.0" rpy="1.57 0 0"/>
         <geometry> <cylinder radius="0.002" length="1.5"/> </geometry>
         <material name="silver"/>
     </visual>
     <collision>
-        <origin xyz="0.00 0.00 0.005" rpy="1.57 0 0"/>
+        <origin xyz="0.00 0.00 0.0" rpy="1.57 0 0"/>
         <geometry> <cylinder radius="0.002" length="1.5"/> </geometry>
     </collision>
   </link>
@@ -46,7 +46,7 @@
   <joint name="high_e_to_b" type="fixed">
     <parent link="str_high_e"/>
     <child link="str_b"/>
-    <origin xyz="-0.0143 0.0 0.005" rpy="0 0 0"/>
+    <origin xyz="-0.0143 0.0 0.000" rpy="0 0 0"/>
   </joint>
 
   <link name="str_b">
@@ -136,7 +136,7 @@
   <joint name="neck_to_fret0" type="fixed">
     <parent link="neck"/>
     <child link="fret0"/>
-    <origin xyz="0.0 0.75 0.005" rpy="0 0 0"/>
+    <origin xyz="0.0 0.75 0.01" rpy="0 0 0"/>
   </joint>
 
   <link name="fret0">
@@ -154,7 +154,7 @@
   <joint name="fret0_to_fret1" type="fixed">
     <parent link="fret0"/>
     <child link="fret1"/>
-    <origin xyz="0.0 -0.075 0.00" rpy="0 0 0"/>
+    <origin xyz="0.0 -0.075 0.0" rpy="0 0 0"/>
   </joint>
 
   <link name="fret1">
