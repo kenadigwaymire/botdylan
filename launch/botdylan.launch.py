@@ -21,7 +21,7 @@ def generate_launch_description():
     primary_urdf = os.path.join(pkgdir('sr_description'), 'robots/sr_hand_bimanual.urdf')
 
     # Locate the second URDF file relative to its package
-    second_urdf = os.path.join(pkgdir('botdylan'), 'rurdf/guitar.urdf')
+    second_urdf = os.path.join(pkgdir('botdylan'), 'urdf/guitar.urdf')
 
     # Preprocess the primary URDF file (if it's a xacro file, handle it here)
     if primary_urdf.endswith('.xacro'):
