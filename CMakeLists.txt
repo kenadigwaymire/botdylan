@@ -16,6 +16,10 @@ install(
   DIRECTORY launch/ rviz/
   DESTINATION share/${PROJECT_NAME}
 )
+install(
+  TARGETS trajectory
+  DESTINATION lib/${PROJECT_NAME}
+)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
