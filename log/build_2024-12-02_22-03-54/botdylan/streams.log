@@ -1,0 +1,19 @@
+[0.324s] Invoking command in '/home/trey/robotws/src/botdylan/build/botdylan': PYTHONPATH=/home/trey/robotws/src/botdylan/build/botdylan/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/trey/robotws/src/botdylan/install/botdylan/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py develop --editable --build-directory /home/trey/robotws/src/botdylan/build/botdylan/build --no-deps symlink_data
+[0.456s] running develop
+[0.456s] /usr/lib/python3/dist-packages/setuptools/command/easy_install.py:158: EasyInstallDeprecationWarning: easy_install command is deprecated. Use build and pip and other standards-based tools.
+[0.456s]   warnings.warn(
+[0.546s] running egg_info
+[0.546s] writing botdylan.egg-info/PKG-INFO
+[0.546s] writing dependency_links to botdylan.egg-info/dependency_links.txt
+[0.546s] writing entry points to botdylan.egg-info/entry_points.txt
+[0.547s] writing requirements to botdylan.egg-info/requires.txt
+[0.547s] writing top-level names to botdylan.egg-info/top_level.txt
+[0.548s] reading manifest file 'botdylan.egg-info/SOURCES.txt'
+[0.549s] writing manifest file 'botdylan.egg-info/SOURCES.txt'
+[0.549s] running build_ext
+[0.549s] Creating /home/trey/robotws/src/botdylan/install/botdylan/lib/python3.10/site-packages/botdylan.egg-link (link to .)
+[0.550s] Installing trajectory script to /home/trey/robotws/src/botdylan/install/botdylan/lib/botdylan
+[0.550s] 
+[0.550s] Installed /home/trey/robotws/src/botdylan/build/botdylan
+[0.550s] running symlink_data
+[0.562s] Invoked command in '/home/trey/robotws/src/botdylan/build/botdylan' returned '0': PYTHONPATH=/home/trey/robotws/src/botdylan/build/botdylan/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/trey/robotws/src/botdylan/install/botdylan/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py develop --editable --build-directory /home/trey/robotws/src/botdylan/build/botdylan/build --no-deps symlink_data
