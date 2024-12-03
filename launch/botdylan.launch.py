@@ -23,19 +23,17 @@ def generate_launch_description():
     # Locate the second URDF file relative to its package
     second_urdf = os.path.join(pkgdir('botdylan'), 'urdf/guitar.urdf')
 
-    # Preprocess the primary URDF file (if it's a xacro file, handle it here)
+    # Preprocess the primary URDF file
     if primary_urdf.endswith('.xacro'):
         primary_robot_description = xacro.process_file(primary_urdf).toxml()
     else:
-        # Load the raw URDF file as XML
         with open(primary_urdf, 'r') as file:
             primary_robot_description = file.read()
 
-    # Preprocess the second URDF file (if it's a xacro file, handle it here)
+    # Preprocess the second URDF file
     if second_urdf.endswith('.xacro'):
         second_robot_description = xacro.process_file(second_urdf).toxml()
     else:
-        # Load the raw URDF file as XML
         with open(second_urdf, 'r') as file:
             second_robot_description = file.read()
 
@@ -70,6 +68,14 @@ def generate_launch_description():
         parameters=[{'robot_description': second_robot_description}]
     )
 
+    # Add a static transform to position the guitar relative to the world frame or the robot
+    node_static_transform = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        name='static_transform_publisher',
+        arguments=['1', '0', '0', '0', '0', '0', 'world', 'guitar_base_link']
+    )
+
     # Configure the RVIZ node to use the selected configuration
     node_rviz = Node(
         name='rviz',
@@ -94,7 +100,7 @@ def generate_launch_description():
         package='joint_state_publisher_gui',
         executable='joint_state_publisher_gui',
         output='screen',
-        parameters=[{'robot_description': primary_robot_description}]  # This could remain the same or be updated as needed
+        parameters=[{'robot_description': primary_robot_description}]
     )
 
     ######################################################################
@@ -104,6 +110,7 @@ def generate_launch_description():
         rviz_arg,
         node_primary_robot_state_publisher,
         node_second_robot_state_publisher,
+        node_static_transform,
         node_rviz,
         node_trajectory,
         node_joint_state_publisher_gui,
