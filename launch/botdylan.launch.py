@@ -1,25 +1,21 @@
-"""
-Launch file to start:
-  1) RVIZ with a custom configuration
-  2) robot_state_publisher to broadcast the robot model
-  3) Joint sliders for visualization
-  4) Trajectory controller for the robot
-"""
-
 import os
 import xacro
 from ament_index_python.packages import get_package_share_directory as pkgdir
 from launch import LaunchDescription
-from launch.actions import Shutdown
+from launch.actions import DeclareLaunchArgument, Shutdown
 from launch_ros.actions import Node
+from launch.substitutions import LaunchConfiguration
 
 
 def generate_launch_description():
     ######################################################################
     # LOCATE FILES
 
-    # Locate the RVIZ configuration file relative to the package
-    rvizcfg = os.path.join(pkgdir('botdylan'), 'rviz/urdf.rviz')
+    # Locate the folder containing RVIZ configuration files
+    rviz_folder = os.path.join(pkgdir('botdylan'), 'rviz')
+    
+    # Default RVIZ file name
+    default_rviz = 'viewurdfplus.rviz'
 
     # Locate the URDF file relative to its package
     urdf = os.path.join(pkgdir('sr_description'), 'robots/sr_hand_bimanual.urdf')
@@ -33,6 +29,16 @@ def generate_launch_description():
             robot_description = file.read()
 
     ######################################################################
+    # DECLARE LAUNCH ARGUMENTS
+
+    # Declare an argument to specify the RVIZ configuration file
+    rviz_arg = DeclareLaunchArgument(
+        'rviz_file',
+        default_value=os.path.join(rviz_folder, default_rviz),
+        description='Path to the RVIZ configuration file'
+    )
+
+    ######################################################################
     # PREPARE THE LAUNCH ELEMENTS
 
     # Configure the robot_state_publisher node
@@ -44,13 +50,13 @@ def generate_launch_description():
         parameters=[{'robot_description': robot_description}]
     )
 
-    # Configure the RVIZ node to use the custom configuration
+    # Configure the RVIZ node to use the selected configuration
     node_rviz = Node(
         name='rviz',
         package='rviz2',
         executable='rviz2',
         output='screen',
-        arguments=['-d', rvizcfg],
+        arguments=['-d', LaunchConfiguration('rviz_file')],
         on_exit=Shutdown()
     )
 
@@ -75,6 +81,7 @@ def generate_launch_description():
     # RETURN THE ELEMENTS IN ONE LIST
 
     return LaunchDescription([
+        rviz_arg,
         node_robot_state_publisher,
         node_rviz,
         node_trajectory,

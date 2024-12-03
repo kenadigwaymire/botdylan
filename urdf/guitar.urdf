@@ -1,5 +1,7 @@
 <robot name="guitar_neck">
   <!-- Base Link (Guitar Neck) -->
+  <link name="world">
+
   <link name="neck">
     <visual>
       <geometry>
@@ -11,98 +13,7 @@
     </visual>
   </link>
 
-  <!-- String Template -->
-  <material name="silver">
-    <color rgba="0.8 0.8 0.8 1.0"/>
-  </material>
-
-  <link name="string_1">
-    <visual>
-      <geometry>
-        <cylinder length="1.0" radius="0.001"/>
-      </geometry>
-      <material name="silver"/>
-      <origin xyz="0 -0.025 0.01" rpy="1.5708 0 0"/>
-    </visual>
-  </link>
-
-  <link name="string_2">
-    <visual>
-      <geometry>
-        <cylinder length="1.0" radius="0.001"/>
-      </geometry>
-      <material name="silver"/>
-      <origin xyz="0 -0.015 0.01" rpy="1.5708 0 0"/>
-    </visual>
-  </link>
-
-  <link name="string_3">
-    <visual>
-      <geometry>
-        <cylinder length="1.0" radius="0.001"/>
-      </geometry>
-      <material name="silver"/>
-      <origin xyz="0 -0.005 0.01" rpy="1.5708 0 0"/>
-    </visual>
-  </link>
-
-  <link name="string_4">
-    <visual>
-      <geometry>
-        <cylinder length="1.0" radius="0.001"/>
-      </geometry>
-      <material name="silver"/>
-      <origin xyz="0 0.005 0.01" rpy="1.5708 0 0"/>
-    </visual>
-  </link>
-
-  <link name="string_5">
-    <visual>
-      <geometry>
-        <cylinder length="1.0" radius="0.001"/>
-      </geometry>
-      <material name="silver"/>
-      <origin xyz="0 0.015 0.01" rpy="1.5708 0 0"/>
-    </visual>
-  </link>
-
-  <link name="string_6">
-    <visual>
-      <geometry>
-        <cylinder length="1.0" radius="0.001"/>
-      </geometry>
-      <material name="silver"/>
-      <origin xyz="0 0.025 0.01" rpy="1.5708 0 0"/>
-    </visual>
-  </link>
-
-  <joint name="string_1_joint" type="fixed">
-    <parent link="neck"/>
-    <child link="string_1"/>
-  </joint>
-
-  <joint name="string_2_joint" type="fixed">
-    <parent link="neck"/>
-    <child link="string_2"/>
-  </joint>
-
-  <joint name="string_3_joint" type="fixed">
-    <parent link="neck"/>
-    <child link="string_3"/>
-  </joint>
-
-  <joint name="string_4_joint" type="fixed">
-    <parent link="neck"/>
-    <child link="string_4"/>
-  </joint>
-
-  <joint name="string_5_joint" type="fixed">
-    <parent link="neck"/>
-    <child link="string_5"/>
-  </joint>
-
-  <joint name="string_6_joint" type="fixed">
-    <parent link="neck"/>
-    <child link="string_6"/>
+  <joint name="neck_to_world" type="fixed">
+    <parent link="world"/>
   </joint>
 </robot>
