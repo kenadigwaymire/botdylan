@@ -2,8 +2,8 @@
   
   <link name="world"/>
 
-  <material name="brown"> <color rgba="173 124 86 1"/> </material>
-  <material name="silver"> <color rgba="227 227 227 1"/> </material>
+  <material name="brown"> <color rgba="0.67 0.49 0.34 1"/> </material>
+  <material name="silver"> <color rgba="0.89 0.89 0.89 1"/> </material>
 
   <joint name="neck_to_world" type="fixed">
     <parent link="world"/>
