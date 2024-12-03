@@ -15,4 +15,7 @@ botdylan.egg-info/entry_points.txt
 botdylan.egg-info/requires.txt
 botdylan.egg-info/top_level.txt
 botdylan.egg-info/zip-safe
+launch/botdylan.launch.py
 resource/botdylan
+urdf/guitar.urdf
+urdf/sr_hand_bimanual.urdf
