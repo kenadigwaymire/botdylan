@@ -17,7 +17,7 @@ def generate_launch_description():
     # LOCATE FILES
 
     # Locate the RVIZ configuration file
-    rvizcfg = os.path.join(pkgdir('botdylan'), 'rviz/viewurdfplus.rviz')
+    rvizcfg = os.path.join(pkgdir('botdylan'), 'rviz/config.rviz')
     assert os.path.exists(rvizcfg), f"RVIZ config file not found: {rvizcfg}"
 
     # Locate the URDF file
