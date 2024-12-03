@@ -1,19 +1,22 @@
 <robot name="guitar_neck">
   <!-- Base Link (Guitar Neck) -->
   <link name="world">
+  
+  <joint name="neck_to_world" type="fixed">
+    <parent link="world"/>
+    <child link="neck"/>
+    <origin xyz="0.00 0.00 0.00" rpy="0 0 0"/>
+  </joint>
 
   <link name="neck">
     <visual>
-      <geometry>
-        <box size="1.0 0.05 0.02"/> 
-      <material name="brown">
-        <color rgba="0.7 0.4 0.2 1.0"/>
-      </material>
-      <origin xyz="0 0 0.01"/>
+      <origin xyz="0.00 0.00 0.00" rpy="0 0 0"/>
+      <geometry> <box size="0.50 0.60 0.05"/> </geometry>
+      <material name="orange"/>
     </visual>
+    <collision>
+      <origin          xyz="0.00 0.00 0.00" rpy="0 0 0"/>
+      <geometry> <box size="0.50 0.60 0.05"/> </geometry>
+    </collision>
   </link>
-
-  <joint name="neck_to_world" type="fixed">
-    <parent link="world"/>
-  </joint>
 </robot>

@@ -1,3 +1,6 @@
+# use this to load custom rviz
+# ros2 launch botdylan botdylan.launch.py rviz_file:=trey.rviz
+
 import os
 import xacro
 from ament_index_python.packages import get_package_share_directory as pkgdir
@@ -22,11 +25,11 @@ def generate_launch_description():
 
     # Preprocess the URDF file (if it's a xacro file, handle it here)
     if urdf.endswith('.xacro'):
-        robot_description = xacro.process_file(urdf).toxml()
+        robot_descrition1 = xacro.process_file(urdf).toxml()
     else:
         # Load the raw URDF file as XML
         with open(urdf, 'r') as file:
-            robot_description = file.read()
+            robot_descrition1 = file.read()
 
     ######################################################################
     # DECLARE LAUNCH ARGUMENTS
@@ -47,7 +50,7 @@ def generate_launch_description():
         package='robot_state_publisher',
         executable='robot_state_publisher',
         output='screen',
-        parameters=[{'robot_description': robot_description}]
+        parameters=[{'robot_descrition1': robot_descrition1}]
     )
 
     # Configure the RVIZ node to use the selected configuration
@@ -74,7 +77,7 @@ def generate_launch_description():
         package='joint_state_publisher_gui',
         executable='joint_state_publisher_gui',
         output='screen',
-        parameters=[{'robot_description': robot_description}]
+        parameters=[{'robot_descrition1': robot_descrition1}]
     )
 
     ######################################################################
