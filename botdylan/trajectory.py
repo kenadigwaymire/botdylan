@@ -233,16 +233,17 @@ class Trajectory():
         # nextChord = fretboard.pd_from_chord(chords[0].get('G'), self.p0)
         # nextChord = np.hstack((self.p0[0:12], nextChord))
         nextChord = np.copy(prevChord)
-        nextChord[0] += 0.005
+        nextChord[1] += 0.00005
         print(f'\nprevChord:\n {prevChord}\n')
         print(f'\nnextChord:\n {nextChord}\n')
-        (pd, vd) = goto(t, T, prevChord, nextChord)
-        #print(f'\npd:\n {pd}\n')
-        print(f'\nvd:\n{vd}\n')
-        Rd = np.copy(self.Rdlast) # replace with rotation trajectory
-        wd = np.zeros(27)
-        # xddot = np.hstack((vd, wd))
-        xddot = vd
+        if t <= 3:
+            (pd, vd) = goto(t, T, prevChord, nextChord)
+            #print(f'\npd:\n {pd}\n')
+            print(f'\nvd:\n{vd}\n')
+            Rd = np.copy(self.Rdlast) # replace with rotation trajectory
+            wd = np.zeros(27)
+            # xddot = np.hstack((vd, wd))
+            xddot = vd
 
         qd = np.copy(self.qd)
 
@@ -255,9 +256,9 @@ class Trajectory():
         # J = np.vstack((Jv, Jw))
         J = Jv
         Jt = np.transpose(J)
-        Jpinv = np.linalg.pinv(J)
-        print(f'\nJpinv[:,0:20]:\n {Jpinv[:,0:20]}\n')
-        print(f'\nJpinv[:,20:40]:\n {Jpinv[:,20:40]}\n')
+        # Jpinv = np.linalg.pinv(J)
+        # print(f'\nJpinv[:,0:20]:\n {Jpinv[:,0:20]}\n')
+        # print(f'\nJpinv[:,20:40]:\n {Jpinv[:,20:40]}\n')
 
         # gamma = 0.075
         # Jwinv = Jt @ (J @ Jt + gamma**2 * np.eye(J.shape[0]))
@@ -267,17 +268,18 @@ class Trajectory():
         # err = np.concatenate((errp, errR))
         err = errp
         
-        qddot = Jpinv @ (xddot + self.lam * err)
-        #qddot = Jt @ np.linalg.inv(J @ Jt) @ (xddot + self.lam * err)
+        #qddot = Jpinv @ (xddot + self.lam * err)
+        qddot = Jt @ np.linalg.inv(J @ Jt) @ (xddot + self.lam * err)
         print(f'\nqddot:\n {qddot}\n')
         #print(f'\nself.qd:\n {self.qd}\n')
         print(f'\nxddot:\n {xddot}\n')
         #print(f'\nerror:\n {self.lam * err}\n')
-        print(f"\nJ@qddot:\n {J @ qddot - self.lam * err}")
+        print(f"\nJ @ qddot:\n {J @ qddot - self.lam * err}")
 
         qd += qddot * dt
         print(f"\nqddot * dt:\n{qddot * dt}\n")
         self.qd += qd
+        print(f"\nSelf.qd\n{self.qd}\n")
         self.pdlast = pd
         self.Rdlast = Rd
 
