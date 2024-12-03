@@ -2,6 +2,8 @@
   <!-- Base Link (Guitar Neck) -->
   <link name="world"/>
 
+  <material name="brown"> <color rgba="138 80 44 0.8"/> </material>
+
   <joint name="neck_to_world" type="fixed">
     <parent link="world"/>
     <child link="neck"/>
