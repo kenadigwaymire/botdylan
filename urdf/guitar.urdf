@@ -1,5 +1,7 @@
+<?xml version="1.0" ?>
+
 <robot name="guitar_neck">
-  
+
   <link name="world"/>
 
   <material name="brown"> <color rgba="0.67 0.49 0.34 1"/> </material>
@@ -14,30 +16,30 @@
   <link name="neck">
     <visual>
       <origin xyz="0.00 0.00 0.00" rpy="0 0 0"/>
-      <geometry> <box size="0.50 1.2 0.05"/> </geometry>
+      <geometry> <box size="0.10 1.5 0.02"/> </geometry>
       <material name="brown"/>
     </visual>
     <collision>
       <origin          xyz="0.00 0.00 0.00" rpy="0 0 0"/>
-      <geometry> <box size="0.50 1.2 0.05"/> </geometry>
+      <geometry> <box size="0.10 1.5 0.02"/> </geometry>
     </collision>
   </link>
 
   <joint name="string1_to_neck" type="fixed">
     <parent link="neck"/>
     <child link="string1"/>
-    <origin xyz="0.00 0.00 0.05" rpy="0 0 0"/>
+    <origin xyz="0.00 0.00 0.005" rpy="0 0 0"/>
   </joint>
 
   <link name="string1">
     <visual>
-        <origin xyz="0.00 0.00 0.05" rpy="1.57 0 0"/>
-        <geometry> <cylinder radius="0.01" length="1.2"/> </geometry>
+        <origin xyz="0.00 0.00 0.005" rpy="1.57 0 0"/>
+        <geometry> <cylinder radius="0.002" length="1.5"/> </geometry>
         <material name="silver"/>
     </visual>
     <collision>
         <origin xyz="0.00 0.00 0.05" rpy="1.57 0 0"/>
-        <geometry> <cylinder radius="0.01" length="1.2"/> </geometry>
+        <geometry> <cylinder radius="0.002" length="1.5"/> </geometry>
     </collision>
   </link>
 
