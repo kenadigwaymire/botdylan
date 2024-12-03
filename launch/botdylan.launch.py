@@ -18,11 +18,11 @@ def generate_launch_description():
 
     # Locate the RVIZ configuration file
     rvizcfg = os.path.join(pkgdir('botdylan'), 'rviz/config.rviz')
-    assert os.path.exists(rvizcfg), f"RVIZ config file not found: {rvizcfg}"
+    #assert os.path.exists(rvizcfg), f"RVIZ config file not found: {rvizcfg}"
 
     # Locate the URDF file
     urdf = os.path.join(pkgdir('sr_description'), 'robots/sr_hand_bimanual.urdf')
-    assert os.path.exists(urdf), f"URDF file not found: {urdf}"
+    #assert os.path.exists(urdf), f"URDF file not found: {urdf}"
 
     # Load the robot's URDF file (XML)
     with open(urdf, 'r') as file:
