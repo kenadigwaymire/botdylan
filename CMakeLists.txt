@@ -17,7 +17,7 @@ install(
   DESTINATION share/${PROJECT_NAME}
 )
 install(
-  TARGETS trajectory
+  TARGETS trajectory.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
