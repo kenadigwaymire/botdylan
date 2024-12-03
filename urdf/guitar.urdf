@@ -136,10 +136,28 @@
   <joint name="neck_to_fret0" type="fixed">
     <parent link="neck"/>
     <child link="fret0"/>
-    <origin xyz="0.0 0.75 0.003" rpy="0 0 0"/>
+    <origin xyz="0.0 0.75 0.005" rpy="0 0 0"/>
   </joint>
 
   <link name="fret0">
+    <visual>
+        <origin xyz="0.00 0.00 0.00" rpy="0 1.57 0"/>
+        <geometry> <cylinder radius="0.002" length=".1"/> </geometry>
+        <material name="silver"/>
+    </visual>
+    <collision>
+        <origin xyz="0.00 0.00 0.00" rpy="0 1.57 0"/>
+        <geometry> <cylinder radius="0.002" length=".1"/> </geometry>
+    </collision>
+  </link>
+
+  <joint name="fret0_to_fret1" type="fixed">
+    <parent link="fret0"/>
+    <child link="fret1"/>
+    <origin xyz="0.0 -0.075 0.00" rpy="0 0 0"/>
+  </joint>
+
+  <link name="fret1">
     <visual>
         <origin xyz="0.00 0.00 0.00" rpy="0 1.57 0"/>
         <geometry> <cylinder radius="0.002" length=".1"/> </geometry>
