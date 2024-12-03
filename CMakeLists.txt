@@ -1,4 +1,3 @@
-
 cmake_minimum_required(VERSION 3.8)
 project(botdylan)
 
@@ -8,12 +7,9 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
 
 install(
-  DIRECTORY hand meshes other robots
+  DIRECTORY launch rviz urdf botdylan
   DESTINATION share/${PROJECT_NAME}
 )
 
