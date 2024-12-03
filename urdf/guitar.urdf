@@ -1,7 +1,7 @@
 <robot name="guitar_neck">
   <!-- Base Link (Guitar Neck) -->
-  <link name="world">
-  
+  <link name="world"/>
+
   <joint name="neck_to_world" type="fixed">
     <parent link="world"/>
     <child link="neck"/>
