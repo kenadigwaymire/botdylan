@@ -13,7 +13,7 @@ find_package(ament_cmake REQUIRED)
 # find_package(<dependency> REQUIRED)
 
 install(
-  DIRECTORY launch rviz
+  DIRECTORY hand meshes other robots
   DESTINATION share/${PROJECT_NAME}
 )
 
