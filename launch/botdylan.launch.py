@@ -56,7 +56,6 @@ def generate_launch_description():
         package='botdylan',
         executable='trajectory',
         output='screen'
-        
     )
 
     # Joint state publisher GUI node
