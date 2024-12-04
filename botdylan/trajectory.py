@@ -25,7 +25,7 @@ STRING_NOTES = {0 : 'e_high', 1 : 'b', 2 : 'g', 3 : 'd', 4 : 'a', 5 : 'e_low'}
 # gets initialized.
 def song_info(song):
     # Eventually change these to be pulled or calculated from a song file
-    T = 0.5
+    T = 3
     chords = [{'G' : [(4, 1), (5, 2), (1, 2), (5, 2)]}]
     strumming_pattern = []
     return [T, chords, strumming_pattern]
@@ -253,20 +253,23 @@ class Trajectory():
         [T, chords, strumming_pattern] = song_info('some_song')
 
         prevChord = np.copy(self.p0)
-        # nextChord = fretboard.pd_from_chord(chords[0].get('G'), self.p0)
-        # nextChord = np.hstack((self.p0[0:12], nextChord))
-        nextChord = np.copy(prevChord)
-        nextChord[2] -= 0.1
-        print(f'\nprevChord:\n {prevChord}\n')
-        print(f'\nnextChord:\n {nextChord}\n')
+        nextChord = fretboard.pd_from_chord(chords[0].get('G'), self.p0)
+        nextChord = np.hstack((self.p0[0:12], nextChord))
+        # nextChord = np.copy(prevChord)
+        # nextChord[2] -= 0.075
+        # print(f'\nprevChord:\n {prevChord}\n')
+        # print(f'\nnextChord:\n {nextChord}\n')
         if t <= T:
             (pd, vd) = goto(t, T, prevChord, nextChord)
+            # pf = np.copy(self.p0[0:3])
+            # pf[2] += 0.05
+            # (pd, vd) = goto(t, T, self.p0[0:3], pf)
         else:
             vd = np.zeros(27)
-            pd = self.pdlast
+            pd = self.pdlast#[0:3]
         
         #print(f'\npd:\n {pd}\n')
-        print(f'\nvd:\n{vd}\n')
+        #print(f'\nvd:\n{vd}\n')
         Rd = np.copy(self.Rdlast) # replace with rotation trajectory
         wd = np.zeros(27)
         # xddot = np.hstack((vd, wd))
@@ -276,8 +279,9 @@ class Trajectory():
         Jv = self.get_Jv()
 
         ptips = self.get_ptips()
-        
-        print(f'\nptips:\n {ptips}\n')
+        #print(f'\nptips:\n {ptips}\n')
+
+        #(ptip, Rtip, Jv, JW) = self.rh_ff.fkin(self.qd[0:6])
 
         # J = np.vstack((Jv, Jw))
         J = Jv
@@ -285,12 +289,12 @@ class Trajectory():
         # print(f'\nJv[0:12,:] - Right Hand:\n {Jv[0:12,:]}\n')
         # print(f'\nJv[14:27,:] - Left Hand:\n {Jv[12:27,:]}\n')
         Jt = np.transpose(J)
-        # Jpinv = np.linalg.pinv(J)
+        Jpinv = np.linalg.pinv(J)
         # print(f'\nJpinv[:,0:20]:\n {Jpinv[:,0:20]}\n')
         # print(f'\nJpinv[:,20:40]:\n {Jpinv[:,20:40]}\n')
 
-        gamma = 0.00075
-        Jwinv = Jt @ (J @ Jt + gamma**2 * np.eye(J.shape[0]))
+        #gamma = 0.00075
+        #Jwinv = Jt @ (J @ Jt + gamma**2 * np.eye(J.shape[0]))
         # Jwinv[0:2,0:3] = np.zeros((2,3))
         # Jwinv[6:40,0:3] = np.zeros((34,3))
         # Jwinv[:,3:27] = np.zeros((40,24))
@@ -298,15 +302,18 @@ class Trajectory():
         
         errp = ep(self.pdlast, ptips)
         # err = np.concatenate((errp, errR))
+        # errp = ep(self.pdlast[0:3], ptip)
         err = errp
         
-        qddot = Jwinv @ (xddot + self.lam * err)
+        #qddot = np.zeros(40)
+        qddot = Jpinv @ (xddot + self.lam * err)
         #qddot = Jt @ np.linalg.inv(J @ Jt) @ (xddot + self.lam * err)
         print(f'\nqddot:\n {qddot}\n')
         #print(f'\nself.qd:\n {self.qd}\n')
         print(f'\nxddot:\n {xddot}\n')
         print(f'\nerror:\n {err}\n')
-        #print(f"\nJ @ qddot:\n {J @ qddot - self.lam * err}")
+        # print(f"\nJ @ qddot:\n {J @ qddot - self.lam * err}")
+        print(f"\nJ @ qddot:\n {J @ qddot - self.lam * err}")
 
         qd += qddot * dt
         # print(f"\nqddot * dt:\n{qddot * dt}\n")
