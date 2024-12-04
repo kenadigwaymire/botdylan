@@ -138,6 +138,6 @@ def generate_launch_description():
         node_primary_robot_state_publisher,
         node_rviz,
         node_joint_state_publisher,
-        trajectory_after_rviz,
+        #trajectory_after_rviz,
         second_urdf_timer
     ])
