@@ -285,8 +285,8 @@ class Trajectory():
         # J[0:3,6:40] = np.zeros((3,34))
         # J[3:27,:] = np.zeros((24,40))
         #print(f"size of Jv: {Jv.shape}")
-        print(f'\nJv[0:12,:] - Right Hand:\n {Jv[0:12,:]}\n')
-        print(f'\nJv[14:27,:] - Left Hand:\n {Jv[12:27,:]}\n')
+        # print(f'\nJv[0:12,:] - Right Hand:\n {Jv[0:12,:]}\n')
+        # print(f'\nJv[14:27,:] - Left Hand:\n {Jv[12:27,:]}\n')
         Jt = np.transpose(J)
         # Jpinv = np.linalg.pinv(J)
         # print(f'\nJpinv[:,0:20]:\n {Jpinv[:,0:20]}\n')
@@ -297,7 +297,7 @@ class Trajectory():
         # Jwinv[0:2,0:3] = np.zeros((2,3))
         # Jwinv[6:40,0:3] = np.zeros((34,3))
         # Jwinv[:,3:27] = np.zeros((40,24))
-        print(f'\nJwinv:\n {Jwinv}\n')
+        #print(f'\nJwinv:\n {Jwinv}\n')
         
         errp = ep(self.pdlast, ptips)
         # err = np.concatenate((errp, errR))
@@ -308,12 +308,12 @@ class Trajectory():
         print(f'\nqddot:\n {qddot}\n')
         #print(f'\nself.qd:\n {self.qd}\n')
         print(f'\nxddot:\n {xddot}\n')
-        #print(f'\nerror:\n {self.lam * err}\n')
-        print(f"\nJ @ qddot:\n {J @ qddot - self.lam * err}")
+        print(f'\nerror:\n {err}\n')
+        #print(f"\nJ @ qddot:\n {J @ qddot - self.lam * err}")
 
         qd += qddot * dt
-        print(f"\nqddot * dt:\n{qddot * dt}\n")
-        self.qd += qd
+        # print(f"\nqddot * dt:\n{qddot * dt}\n")
+        self.qd = qd
         print(f"\nSelf.qd\n{self.qd}\n")
         self.pdlast = pd
         self.Rdlast = Rd
