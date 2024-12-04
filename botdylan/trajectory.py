@@ -233,18 +233,21 @@ class Trajectory():
         # nextChord = fretboard.pd_from_chord(chords[0].get('G'), self.p0)
         # nextChord = np.hstack((self.p0[0:12], nextChord))
         nextChord = np.copy(prevChord)
-        nextChord[1] += 0.00005
+        #nextChord[1] += 0.00005
         print(f'\nprevChord:\n {prevChord}\n')
         print(f'\nnextChord:\n {nextChord}\n')
         if t <= 3:
             (pd, vd) = goto(t, T, prevChord, nextChord)
-            #print(f'\npd:\n {pd}\n')
-            print(f'\nvd:\n{vd}\n')
-            Rd = np.copy(self.Rdlast) # replace with rotation trajectory
-            wd = np.zeros(27)
-            # xddot = np.hstack((vd, wd))
-            xddot = vd
-
+        else:
+            vd = np.zeros(27)
+            pd = self.pdlast
+        
+        #print(f'\npd:\n {pd}\n')
+        print(f'\nvd:\n{vd}\n')
+        Rd = np.copy(self.Rdlast) # replace with rotation trajectory
+        wd = np.zeros(27)
+        # xddot = np.hstack((vd, wd))
+        xddot = vd
         qd = np.copy(self.qd)
 
         Jv = self.get_Jv()
@@ -255,6 +258,9 @@ class Trajectory():
 
         # J = np.vstack((Jv, Jw))
         J = Jv
+        #print(f"size of Jv: {Jv.shape}")
+        print(f'\nJv[0:12,:] - Right Hand:\n {Jv[0:12,:]}\n')
+        print(f'\nJv[14:27,:] - Left Hand:\n {Jv[12:27,:]}\n')
         Jt = np.transpose(J)
         # Jpinv = np.linalg.pinv(J)
         # print(f'\nJpinv[:,0:20]:\n {Jpinv[:,0:20]}\n')
