@@ -18,20 +18,19 @@ def generate_launch_description():
     # Default RVIZ file name
     default_rviz = 'viewurdfplus.rviz'
 
-    # Locate the primary URDF file relative to its package
+    # Locate the hands URDF file relative to its package
     primary_urdf = os.path.join(pkgdir('sr_description'), 'robots/sr_hand_bimanual.urdf')
 
-    # Locate the second URDF file relative to its package
+    # Locate the guitar URDF file relative to its package
     second_urdf = os.path.join(pkgdir('botdylan'), 'urdf/guitar.urdf')
 
-    # Preprocess the primary URDF file
+    # Checking if xacro or normal to get robot_description
     if primary_urdf.endswith('.xacro'):
         primary_robot_description = xacro.process_file(primary_urdf).toxml()
     else:
         with open(primary_urdf, 'r') as file:
             primary_robot_description = file.read()
 
-    # Preprocess the second URDF file
     if second_urdf.endswith('.xacro'):
         second_robot_description = xacro.process_file(second_urdf).toxml()
     else:
@@ -42,6 +41,8 @@ def generate_launch_description():
     # DECLARE LAUNCH ARGUMENTS
 
     # Declare an argument to specify the RVIZ configuration file
+    # Added because robot description topic refused to work. This way we 
+    # can setup separate rviz files with different local file paths.
     rviz_arg = DeclareLaunchArgument(
         'rviz_file',
         default_value=os.path.join(rviz_folder, default_rviz),
@@ -70,12 +71,13 @@ def generate_launch_description():
     )
 
     # Add a static transform to position the guitar relative to the world frame or the robot
-    node_static_transform = Node(
-        package='tf2_ros',
-        executable='static_transform_publisher',
-        name='static_transform_publisher',
-        arguments=['1', '0', '0', '0', '0', '0', 'world', 'guitar_base_link']
-    )
+    # Decided to have a world node in both urdfs and make joints relative to this
+    # node_static_transform = Node(
+    #     package='tf2_ros',
+    #     executable='static_transform_publisher',
+    #     name='static_transform_publisher',
+    #     arguments=['1', '0', '0', '0', '0', '0', 'world', 'guitar_base_link']
+    # )
 
     # Configure the RVIZ node to use the selected configuration
     node_rviz = Node(
@@ -98,13 +100,13 @@ def generate_launch_description():
     ######################################################################
     # SEQUENCE NODES
 
-    # RVIZ loads after the primary robot_state_publisher
-    rviz_after_primary = RegisterEventHandler(
-        event_handler=OnProcessStart(
-            target_action=node_primary_robot_state_publisher,
-            on_start=[node_rviz]
-        )
-    )
+    # # RVIZ loads after the primary robot_state_publisher
+    # rviz_after_primary = RegisterEventHandler(
+    #     event_handler=OnProcessStart(
+    #         target_action=node_primary_robot_state_publisher,
+    #         on_start=[node_rviz]
+    #     )
+    # )
 
     # Trajectory loads after RVIZ
     trajectory_after_rviz = RegisterEventHandler(

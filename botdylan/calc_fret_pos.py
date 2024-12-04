@@ -1,3 +1,6 @@
+# Was going to place frets at correct relative locations, 
+# but decided to scrap for initial testing
+
 def calculate_fret_offsets(neck_length, num_frets):
     # The ratio between adjacent frets
     fret_ratio = 0.943874
