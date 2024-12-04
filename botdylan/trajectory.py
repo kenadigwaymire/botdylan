@@ -25,7 +25,7 @@ STRING_NOTES = {0 : 'e_high', 1 : 'b', 2 : 'g', 3 : 'd', 4 : 'a', 5 : 'e_low'}
 # gets initialized.
 def song_info(song):
     # Eventually change these to be pulled or calculated from a song file
-    T = 1
+    T = 0.5
     chords = [{'G' : [(4, 1), (5, 2), (1, 2), (5, 2)]}]
     strumming_pattern = []
     return [T, chords, strumming_pattern]
@@ -255,16 +255,16 @@ class Trajectory():
         prevChord = np.copy(self.p0)
         # nextChord = fretboard.pd_from_chord(chords[0].get('G'), self.p0)
         # nextChord = np.hstack((self.p0[0:12], nextChord))
-        nextChord = np.copy(self.p0)
-        nextChord[1] += 0.05
+        nextChord = np.copy(prevChord)
+        nextChord[2] -= 0.1
+        print(f'\nprevChord:\n {prevChord}\n')
+        print(f'\nnextChord:\n {nextChord}\n')
         if t <= T:
             (pd, vd) = goto(t, T, prevChord, nextChord)
         else:
             vd = np.zeros(27)
             pd = self.pdlast
         
-        print(f'\nprevChord:\n {prevChord}\n')
-        print(f'\nnextChord:\n {nextChord}\n')
         #print(f'\npd:\n {pd}\n')
         print(f'\nvd:\n{vd}\n')
         Rd = np.copy(self.Rdlast) # replace with rotation trajectory
@@ -289,7 +289,7 @@ class Trajectory():
         # print(f'\nJpinv[:,0:20]:\n {Jpinv[:,0:20]}\n')
         # print(f'\nJpinv[:,20:40]:\n {Jpinv[:,20:40]}\n')
 
-        gamma = 0.000075
+        gamma = 0.00075
         Jwinv = Jt @ (J @ Jt + gamma**2 * np.eye(J.shape[0]))
         # Jwinv[0:2,0:3] = np.zeros((2,3))
         # Jwinv[6:40,0:3] = np.zeros((34,3))
