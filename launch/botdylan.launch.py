@@ -2,8 +2,9 @@ import os
 import xacro
 from ament_index_python.packages import get_package_share_directory as pkgdir
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, TimerAction, Shutdown
+from launch.actions import DeclareLaunchArgument, RegisterEventHandler, Shutdown
 from launch_ros.actions import Node
+from launch.event_handlers import OnProcessStart
 from launch.substitutions import LaunchConfiguration
 
 
@@ -13,7 +14,7 @@ def generate_launch_description():
 
     # Locate the folder containing RVIZ configuration files
     rviz_folder = os.path.join(pkgdir('botdylan'), 'rviz')
-    
+
     # Default RVIZ file name
     default_rviz = 'viewurdfplus.rviz'
 
@@ -86,26 +87,39 @@ def generate_launch_description():
         on_exit=Shutdown()
     )
 
-    # Configure the joint trajectory node (delayed start using TimerAction)
-    node_trajectory = TimerAction(
-        period=5.0,  # Delay in seconds
-        actions=[
-            Node(
-                name='kintest',
-                package='botdylan',
-                executable='trajectory',
-                output='screen'
-            )
-        ]
+    # Configure the trajectory node
+    node_trajectory = Node(
+        name='kintest',
+        package='botdylan',
+        executable='trajectory',
+        output='screen'
     )
 
-    # Configure the joint_state_publisher_gui node
-    node_joint_state_publisher_gui = Node(
-        name='joint_state_publisher_gui',
-        package='joint_state_publisher_gui',
-        executable='joint_state_publisher_gui',
-        output='screen',
-        parameters=[{'robot_description': primary_robot_description}]
+    ######################################################################
+    # SEQUENCE NODES
+
+    # RVIZ loads after the primary robot_state_publisher
+    rviz_after_primary = RegisterEventHandler(
+        event_handler=OnProcessStart(
+            target_action=node_primary_robot_state_publisher,
+            on_start=[node_rviz]
+        )
+    )
+
+    # Trajectory loads after RVIZ
+    trajectory_after_rviz = RegisterEventHandler(
+        event_handler=OnProcessStart(
+            target_action=node_rviz,
+            on_start=[node_trajectory]
+        )
+    )
+
+    # Second robot_state_publisher loads after trajectory
+    second_urdf_after_trajectory = RegisterEventHandler(
+        event_handler=OnProcessStart(
+            target_action=node_trajectory,
+            on_start=[node_second_robot_state_publisher]
+        )
     )
 
     ######################################################################
@@ -114,9 +128,7 @@ def generate_launch_description():
     return LaunchDescription([
         rviz_arg,
         node_primary_robot_state_publisher,
-        #node_static_transform,
-        node_rviz,
-        node_second_robot_state_publisher,
-        node_trajectory,
-        #node_joint_state_publisher_gui,
+        rviz_after_primary,
+        trajectory_after_rviz,
+        second_urdf_after_trajectory
     ])
