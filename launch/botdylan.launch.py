@@ -139,5 +139,5 @@ def generate_launch_description():
         node_rviz,
         node_joint_state_publisher_gui,
         #trajectory_after_rviz,
-        second_urdf_timer
+        #second_urdf_timer
     ])
