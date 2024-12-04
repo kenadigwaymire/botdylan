@@ -128,7 +128,7 @@ def generate_launch_description():
     return LaunchDescription([
         rviz_arg,
         node_primary_robot_state_publisher,
-        rviz_after_primary,
+        node_rviz,
         trajectory_after_rviz,
         second_urdf_after_trajectory
     ])
