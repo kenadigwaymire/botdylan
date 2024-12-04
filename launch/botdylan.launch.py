@@ -110,8 +110,8 @@ def generate_launch_description():
         rviz_arg,
         node_primary_robot_state_publisher,
         node_second_robot_state_publisher,
-        node_static_transform,
+        #node_static_transform,
         node_rviz,
-        node_trajectory,
-        node_joint_state_publisher_gui,
+        node_trajectory
+        #node_joint_state_publisher_gui,
     ])
