@@ -70,11 +70,11 @@ def generate_launch_description():
         parameters=[{'robot_description': second_robot_description}]
     )
 
-    # Configure the joint_state_publisher node
-    node_joint_state_publisher = Node(
-        name='joint_state_publisher',
-        package='joint_state_publisher',
-        executable='joint_state_publisher',
+    # Configure the joint_state_publisher_gui node
+    node_joint_state_publisher_gui = Node(
+        name='joint_state_publisher_gui',
+        package='joint_state_publisher_gui',
+        executable='joint_state_publisher_gui',
         output='screen'
     )
 
@@ -137,7 +137,7 @@ def generate_launch_description():
         rviz_arg,
         node_primary_robot_state_publisher,
         node_rviz,
-        node_joint_state_publisher,
+        node_joint_state_publisher_gui,
         #trajectory_after_rviz,
         second_urdf_timer
     ])
