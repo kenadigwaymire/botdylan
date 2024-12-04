@@ -2,7 +2,7 @@ import os
 import xacro
 from ament_index_python.packages import get_package_share_directory as pkgdir
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, Shutdown
+from launch.actions import DeclareLaunchArgument, TimerAction, Shutdown
 from launch_ros.actions import Node
 from launch.substitutions import LaunchConfiguration
 
@@ -86,12 +86,17 @@ def generate_launch_description():
         on_exit=Shutdown()
     )
 
-    # Configure the joint trajectory node
-    node_trajectory = Node(
-        name='kintest',
-        package='botdylan',
-        executable='trajectory',
-        output='screen'
+    # Configure the joint trajectory node (delayed start using TimerAction)
+    node_trajectory = TimerAction(
+        period=5.0,  # Delay in seconds
+        actions=[
+            Node(
+                name='kintest',
+                package='botdylan',
+                executable='trajectory',
+                output='screen'
+            )
+        ]
     )
 
     # Configure the joint_state_publisher_gui node
@@ -111,7 +116,7 @@ def generate_launch_description():
         node_primary_robot_state_publisher,
         #node_static_transform,
         node_rviz,
+        node_second_robot_state_publisher,
         node_trajectory,
-        node_second_robot_state_publisher
         #node_joint_state_publisher_gui,
     ])
