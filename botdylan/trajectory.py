@@ -256,7 +256,7 @@ class Trajectory():
         # nextChord = fretboard.pd_from_chord(chords[0].get('G'), self.p0)
         # nextChord = np.hstack((self.p0[0:12], nextChord))
         nextChord = np.copy(prevChord)
-        nextChord[2] -= 0.005
+        #nextChord[2] -= 0.005
         print(f'\nprevChord:\n {prevChord}\n')
         print(f'\nnextChord:\n {nextChord}\n')
         if t <= 3:
@@ -277,7 +277,7 @@ class Trajectory():
 
         ptips = self.get_ptips()
         
-        #print(f'\nptips:\n {ptips}\n')
+        print(f'\nptips:\n {ptips}\n')
 
         # J = np.vstack((Jv, Jw))
         J = Jv
@@ -294,9 +294,9 @@ class Trajectory():
 
         gamma = 0.00075
         Jwinv = Jt @ (J @ Jt + gamma**2 * np.eye(J.shape[0]))
-        Jwinv[0:2,0:3] = np.zeros((2,3))
-        Jwinv[6:40,0:3] = np.zeros((34,3))
-        Jwinv[:,3:27] = np.zeros((40,24))
+        # Jwinv[0:2,0:3] = np.zeros((2,3))
+        # Jwinv[6:40,0:3] = np.zeros((34,3))
+        # Jwinv[:,3:27] = np.zeros((40,24))
         print(f'\nJwinv:\n {Jwinv}\n')
         
         errp = ep(self.pdlast, ptips)
@@ -332,7 +332,6 @@ def main(args=None):
 
     # Initialize the generator node for 100Hz udpates, using the above
     # Trajectory class.
-    print(f"\nTrajectory:\n{Trajectory}\n")
     generator = GeneratorNode('generator', 100, Trajectory)
 
     # Spin, meaning keep running (taking care of the timer callbacks
