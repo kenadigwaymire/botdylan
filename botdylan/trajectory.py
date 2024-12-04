@@ -87,9 +87,10 @@ class Trajectory():
         self.lh_lf = KinematicChain(node, 'world', 'lh_lftip',
                             self.jointnames()[19:22]+self.jointnames()[34:39])
         self.lh_thumb = KinematicChain(node, 'world', 'lh_thtip',
-                            self.jointnames()[19:22]+[self.jointnames()[39]])
+                            self.jointnames()[19:22]+self.jointnames()[39:40])
+
+
         
-        # Init joint values (doesnt work rn cause chain is <6 and len(jointnames) = 48)
         # Initial joint positions:
         self.q0 = np.zeros(40)
         self.qd = np.copy(self.q0)
@@ -106,6 +107,7 @@ class Trajectory():
     def jointnames(self):
         # Return a list of joint names FOR THE EXPECTED URDF!
         return [
+            # len(jointnames) = 43
             # -------------------- Right Hand (STRUMMING) --------------------
             "rh_WRJ2", "rh_WRJ1", # wrist
             "rh_FFJ4", "rh_FFJ3", "rh_FFJ2", "rh_FFJ1", # pointer
@@ -123,7 +125,7 @@ class Trajectory():
             "lh_LFJ5", "lh_LFJ4", "lh_LFJ3", "lh_LFJ2", "lh_LFJ1", # pinky
             "lh_THJ5", # Keeping one joint to pivot thumb up and down to stay below guitar neck when wrist moves
             # Made these fixed:
-            # "lh_THJ4", "lh_THJ3", "lh_THJ2", "lh_THJ1"
+            #"lh_THJ4", "lh_THJ3", "lh_THJ2", "lh_THJ1"
             ]
 
 
@@ -143,7 +145,7 @@ class Trajectory():
                 self.lh_mf.fkin(np.concatenate((self.qd[19:22],self.qd[26:30])))[0],
                 self.lh_rf.fkin(np.concatenate((self.qd[19:22],self.qd[30:34])))[0],
                 self.lh_lf.fkin(np.concatenate((self.qd[19:22],self.qd[34:39])))[0],
-                self.lh_thumb.fkin(np.concatenate((self.qd[19:22],self.qd[39:40])))[0]
+                self.lh_thumb.fkin(np.concatenate((self.qd[19:22],self.qd[39:43])))[0]
                 ])
     
 
@@ -233,7 +235,7 @@ class Trajectory():
         # nextChord = fretboard.pd_from_chord(chords[0].get('G'), self.p0)
         # nextChord = np.hstack((self.p0[0:12], nextChord))
         nextChord = np.copy(prevChord)
-        #nextChord[1] += 0.00005
+        nextChord[2] -= 0.005
         print(f'\nprevChord:\n {prevChord}\n')
         print(f'\nnextChord:\n {nextChord}\n')
         if t <= 3:
@@ -258,6 +260,9 @@ class Trajectory():
 
         # J = np.vstack((Jv, Jw))
         J = Jv
+        # J[0:3,0:2] = np.zeros((3,2))
+        # J[0:3,6:40] = np.zeros((3,34))
+        # J[3:27,:] = np.zeros((24,40))
         #print(f"size of Jv: {Jv.shape}")
         print(f'\nJv[0:12,:] - Right Hand:\n {Jv[0:12,:]}\n')
         print(f'\nJv[14:27,:] - Left Hand:\n {Jv[12:27,:]}\n')
@@ -266,16 +271,19 @@ class Trajectory():
         # print(f'\nJpinv[:,0:20]:\n {Jpinv[:,0:20]}\n')
         # print(f'\nJpinv[:,20:40]:\n {Jpinv[:,20:40]}\n')
 
-        # gamma = 0.075
-        # Jwinv = Jt @ (J @ Jt + gamma**2 * np.eye(J.shape[0]))
-        # print(f'\nJwinv:\n {Jwinv}\n')
+        gamma = 0.00075
+        Jwinv = Jt @ (J @ Jt + gamma**2 * np.eye(J.shape[0]))
+        Jwinv[0:2,0:3] = np.zeros((2,3))
+        Jwinv[6:40,0:3] = np.zeros((34,3))
+        Jwinv[:,3:27] = np.zeros((40,24))
+        print(f'\nJwinv:\n {Jwinv}\n')
         
         errp = ep(self.pdlast, ptips)
         # err = np.concatenate((errp, errR))
         err = errp
         
-        #qddot = Jpinv @ (xddot + self.lam * err)
-        qddot = Jt @ np.linalg.inv(J @ Jt) @ (xddot + self.lam * err)
+        qddot = Jwinv @ (xddot + self.lam * err)
+        #qddot = Jt @ np.linalg.inv(J @ Jt) @ (xddot + self.lam * err)
         print(f'\nqddot:\n {qddot}\n')
         #print(f'\nself.qd:\n {self.qd}\n')
         print(f'\nxddot:\n {xddot}\n')
