@@ -109,9 +109,9 @@ def generate_launch_description():
     return LaunchDescription([
         rviz_arg,
         node_primary_robot_state_publisher,
-        node_second_robot_state_publisher,
         #node_static_transform,
         node_rviz,
-        node_trajectory
+        node_trajectory,
+        node_second_robot_state_publisher
         #node_joint_state_publisher_gui,
     ])
