@@ -116,7 +116,7 @@ def generate_launch_description():
 
     # Second URDF loads after a timer
     second_urdf_timer = TimerAction(
-        period=5.0,  # Delay in seconds
+        period=3.0,  # Delay in seconds
         actions=[node_second_robot_state_publisher]
     )
 
