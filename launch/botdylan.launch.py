@@ -70,6 +70,14 @@ def generate_launch_description():
         parameters=[{'robot_description': second_robot_description}]
     )
 
+    # Configure the joint_state_publisher node
+    node_joint_state_publisher = Node(
+        name='joint_state_publisher',
+        package='joint_state_publisher',
+        executable='joint_state_publisher',
+        output='screen'
+    )
+
     # Add a static transform to position the guitar relative to the world frame or the robot
     # Decided to have a world node in both urdfs and make joints relative to this
     # node_static_transform = Node(
@@ -129,6 +137,7 @@ def generate_launch_description():
         rviz_arg,
         node_primary_robot_state_publisher,
         node_rviz,
-        trajectory_after_rviz,
-        second_urdf_timer
+        node_joint_state_publisher
+        #trajectory_after_rviz,
+        #second_urdf_timer
     ])

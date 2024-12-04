@@ -222,9 +222,9 @@ class Trajectory():
 
     # Evaluate at the given time.  This was last called (dt) ago.
     def evaluate(self, t, dt):
-        # Initialize a guitar with: 21 frets, spaced 1 inch apart, and 
+        # Initialize a guitar with: 20 frets, spaced 1 inch apart, and 
         # 6 strings spaced 0.5 inches apart, at  a height of 0
-        fretboard = Fretboard(21, 0.125, 0.0625, 0.2)
+        fretboard = Fretboard(20, 0.125, 0.0625, 0.2)
 
         # Get the beat (T seconds), chords, and strumming pattern
         [T, chords, strumming_pattern] = song_info('some_song')
