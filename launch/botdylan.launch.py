@@ -2,7 +2,7 @@ import os
 import xacro
 from ament_index_python.packages import get_package_share_directory as pkgdir
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, RegisterEventHandler, Shutdown
+from launch.actions import DeclareLaunchArgument, RegisterEventHandler, Shutdown, TimerAction
 from launch_ros.actions import Node
 from launch.event_handlers import OnProcessStart
 from launch.substitutions import LaunchConfiguration
@@ -114,12 +114,10 @@ def generate_launch_description():
         )
     )
 
-    # Second robot_state_publisher loads after trajectory
-    second_urdf_after_trajectory = RegisterEventHandler(
-        event_handler=OnProcessStart(
-            target_action=node_trajectory,
-            on_start=[node_second_robot_state_publisher]
-        )
+    # Second URDF loads after a timer
+    second_urdf_timer = TimerAction(
+        period=5.0,  # Delay in seconds
+        actions=[node_second_robot_state_publisher]
     )
 
     ######################################################################
@@ -130,5 +128,5 @@ def generate_launch_description():
         node_primary_robot_state_publisher,
         node_rviz,
         trajectory_after_rviz,
-        #second_urdf_after_trajectory
+        second_urdf_timer
     ])
