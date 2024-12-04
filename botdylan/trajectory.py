@@ -101,7 +101,7 @@ class Trajectory():
             0.017, 0.709, 0.620, 0.959,  # rh_MFJ4, rh_MFJ3, rh_MFJ2, rh_MFJ1
             0.032, 0.759, 0.747, 0.951,  # rh_RFJ4, rh_RFJ3, rh_RFJ2, rh_RFJ1
             0.497, 0.047, 0.818, 1.163, 0.976,  # rh_LFJ5, rh_LFJ4, rh_LFJ3, rh_LFJ2, rh_LFJ1
-            # Right hand thumb fixed (not used in qd)
+            # Right hand thumb fixed
 
             # -------------------- Left Hand (FRETTING) --------------------
             0.632,  # right_hand_to_left_hand
@@ -109,7 +109,7 @@ class Trajectory():
             0.021, 0.610, 0.526, 0.492,  # lh_FFJ4, lh_FFJ3, lh_FFJ2, lh_FFJ1
             0.021, 0.759, 0.781, 0.705,  # lh_MFJ4, lh_MFJ3, lh_MFJ2, lh_MFJ1
             0.002, 0.659, 0.849, 0.645,  # lh_RFJ4, lh_RFJ3, lh_RFJ2, lh_RFJ1
-            0.335, 0.077, 0.630, 0.594, 0.277  # lh_LFJ5, lh_LFJ4, lh_LFJ3, lh_LFJ2, lh_LFJ1, lh_THJ5
+            0.335, 0.077, 0.630, 0.781, 0.594, 0.277  # lh_LFJ5, lh_LFJ4, lh_LFJ3, lh_LFJ2, lh_LFJ1, lh_THJ5
             # Fixed left hand thumb joints excluded
         ])
 
