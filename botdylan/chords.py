@@ -41,4 +41,3 @@ class Chords():
 
 
 G = Chords('G', [[2, 'a'], [3, 'e_low'], [3, 'e_high'], [np.nan, np.nan]])
-

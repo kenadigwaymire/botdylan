@@ -22,7 +22,7 @@ from botdylan.fretboard          import *
 # gets initialized.
 def song_info(song):
     # Eventually change these to be pulled or calculated from a song file
-    T = 3
+    T = 5
     chords = [G]
     strumming_pattern = []
     return [T, chords, strumming_pattern]
