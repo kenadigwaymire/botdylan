@@ -149,7 +149,7 @@ Visualization Manager:
       Length: 0.30000001192092896
       Name: Axes
       Radius: 0.029999999329447746
-      Reference Frame: desired
+      Reference Frame: world
       Value: true
   Enabled: true
   Global Options:

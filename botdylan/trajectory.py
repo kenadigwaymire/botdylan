@@ -14,49 +14,19 @@ from botdylan.TrajectoryUtils    import *
 # Grab the general fkin
 from botdylan.KinematicChain     import KinematicChain
 
-NUM_STRINGS = 6
-
-# TODO: DETERMINE THESE:
-GUITAR_HEIGHT = 0.15 # z-distance from the bottom of the guitar neck to the strings
-
-STRING_NOTES = {0 : 'e_high', 1 : 'b', 2 : 'g', 3 : 'd', 4 : 'a', 5 : 'e_low'}
+# Grab the chords
+from botdylan.chords             import *
+from botdylan.fretboard          import *
 
 # TODO: Flesh out a function to read the song that gets initialized when the tajectory
 # gets initialized.
 def song_info(song):
     # Eventually change these to be pulled or calculated from a song file
     T = 3
-    chords = [{'G' : [(4, 1), (5, 2), (1, 2), (5, 2)]}]
+    chords = [G]
     strumming_pattern = []
     return [T, chords, strumming_pattern]
-
-# TODO: draw fretboard for guitar and map positions to chords
-
-class Fretboard():
-    def __init__(self, num_frets, dx, dy, z):
-        self.dx = -dx # distance between frets
-        self.dy = dy # distance between strings
-        self.z = z # string z height
-        self.width = NUM_STRINGS * dy # usable fretboard width
-        self.length = num_frets * dx # fretboard length
-        self.fretboard = [[(i, j) for j in range(num_frets)] for i in range(NUM_STRINGS)]
-    def pd_from_chord(self, chord, p0):
-        # Read a chord as a list of (string #, fret #) tuples
-        chord_position = np.copy(chord) * np.array([self.dy, self.dx])
-        chord_position[:, 1] += self.dx / 2
-        neck_base_z = self.z - GUITAR_HEIGHT # the z position of the bottom of the guitar
-        lh_th_postion = np.array([chord_position[0,1] - 0.001, p0[22], neck_base_z])
-        chord_position = np.hstack((np.array(list(zip(chord_position[:,1], 
-                                                     chord_position[:,0],
-                                                     self.z * np.ones(4))))))
-        chord_position = np.hstack((chord_position, lh_th_postion))
-        print(f'\nchord pos:\n {chord_position}\n')
-        return chord_position
-    def get_coord_from_pos(self, curr_pos):
-        return (curr_pos[0] / self.dy, (curr_pos[1] - (self.dx / 2)) / self.dx)
-    def get_val_range_of_fret(self):
-        return None # temporary for debugging
-        
+       
 #
 #   Trajectory Class
 #
@@ -87,48 +57,42 @@ class Trajectory():
         self.lh_lf = KinematicChain(node, 'world', 'lh_lftip',
                             self.jointnames()[19:22]+self.jointnames()[34:39])
         self.lh_thumb = KinematicChain(node, 'world', 'lh_thtip',
-                            self.jointnames()[19:22]+self.jointnames()[39:40])
-
-
+                            self.jointnames()[19:22]+self.jointnames()[39:44])
         
         # Initial joint positions:
-        # self.q0 = np.zeros(40)
-
-        # Test
         self.q0 = np.array([
             # -------------------- Right Hand (STRUMMING) --------------------
-            0.027, 0.283,  # rh_WRJ2, rh_WRJ1
-            0.157, 0.907, 0.968, 1.036,  # rh_FFJ4, rh_FFJ3, rh_FFJ2, rh_FFJ1
-            0.017, 0.709, 0.620, 0.959,  # rh_MFJ4, rh_MFJ3, rh_MFJ2, rh_MFJ1
-            0.032, 0.759, 0.747, 0.951,  # rh_RFJ4, rh_RFJ3, rh_RFJ2, rh_RFJ1
+            0.0, 0.0,                           # rh_WRJ2, rh_WRJ1
+            0.157, 0.907, 0.968, 1.036,         # rh_FFJ4, rh_FFJ3, rh_FFJ2, rh_FFJ1
+            0.017, 0.709, 0.620, 0.959,         # rh_MFJ4, rh_MFJ3, rh_MFJ2, rh_MFJ1
+            0.032, 0.759, 0.747, 0.951,         # rh_RFJ4, rh_RFJ3, rh_RFJ2, rh_RFJ1
             0.497, 0.047, 0.818, 1.163, 0.976,  # rh_LFJ5, rh_LFJ4, rh_LFJ3, rh_LFJ2, rh_LFJ1
             # Right hand thumb fixed
 
             # -------------------- Left Hand (FRETTING) --------------------
-            0.632,  # right_hand_to_left_hand
-            -0.188, 0.149,  # lh_WRJ2, lh_WRJ1
-            0.021, 0.610, 0.526, 0.492,  # lh_FFJ4, lh_FFJ3, lh_FFJ2, lh_FFJ1
-            0.021, 0.759, 0.781, 0.705,  # lh_MFJ4, lh_MFJ3, lh_MFJ2, lh_MFJ1
-            0.002, 0.659, 0.849, 0.645,  # lh_RFJ4, lh_RFJ3, lh_RFJ2, lh_RFJ1
-            0.335, 0.077, 0.630, 0.781, 0.594, 0.277  # lh_LFJ5, lh_LFJ4, lh_LFJ3, lh_LFJ2, lh_LFJ1, lh_THJ5
-            # Fixed left hand thumb joints excluded
+            0.632,                              # right_hand_to_left_hand
+            0.0, 0.0,                           # lh_WRJ2, lh_WRJ1
+            0.021, 0.610, 0.526, 0.492,         # lh_FFJ4, lh_FFJ3, lh_FFJ2, lh_FFJ1
+            0.021, 0.759, 0.781, 0.705,         # lh_MFJ4, lh_MFJ3, lh_MFJ2, lh_MFJ1
+            0.002, 0.659, 0.849, 0.645,         # lh_RFJ4, lh_RFJ3, lh_RFJ2, lh_RFJ1
+            0.335, 0.077, 0.630, 0.781, 0.594,  # lh_LFJ5, lh_LFJ4, lh_LFJ3, lh_LFJ2, lh_LFJ1
+            0.277, 0.205, 0.110, 0.306, -0.250  # lh_THJ5, lh_THJ4, lh_THJ3, lh_THJ2, lh_THJ1
         ])
 
         self.qd = np.copy(self.q0)
         # Initial tip positions:
         self.p0 = self.get_ptips()
-        self.R0 = self.get_Rtips()
 
         # Other params
-        self.lam = 20
+        self.lam = 20 # lambda for primary task
+        self.lams = 3 # lambda for secondary task
         self.pdlast = np.copy(self.p0)
-        self.Rdlast = np.copy(self.R0)
         
     # Declare the joint names.
     def jointnames(self):
         # Return a list of joint names FOR THE EXPECTED URDF!
         return [
-            # len(jointnames) = 43
+            # len(jointnames) = 44
             # -------------------- Right Hand (STRUMMING) --------------------
             "rh_WRJ2", "rh_WRJ1", # wrist
             "rh_FFJ4", "rh_FFJ3", "rh_FFJ2", "rh_FFJ1", # pointer
@@ -144,9 +108,7 @@ class Trajectory():
             "lh_MFJ4", "lh_MFJ3", "lh_MFJ2", "lh_MFJ1", # middle
             "lh_RFJ4", "lh_RFJ3", "lh_RFJ2", "lh_RFJ1", # ring
             "lh_LFJ5", "lh_LFJ4", "lh_LFJ3", "lh_LFJ2", "lh_LFJ1", # pinky
-            "lh_THJ5", # Keeping one joint to pivot thumb up and down to stay below guitar neck when wrist moves
-            # Made these fixed:
-            #"lh_THJ4", "lh_THJ3", "lh_THJ2", "lh_THJ1"
+            "lh_THJ5", "lh_THJ4", "lh_THJ3", "lh_THJ2", "lh_THJ1" # thumb
             ]
 
 
@@ -166,35 +128,15 @@ class Trajectory():
                 self.lh_mf.fkin(np.concatenate((self.qd[19:22],self.qd[26:30])))[0],
                 self.lh_rf.fkin(np.concatenate((self.qd[19:22],self.qd[30:34])))[0],
                 self.lh_lf.fkin(np.concatenate((self.qd[19:22],self.qd[34:39])))[0],
-                self.lh_thumb.fkin(np.concatenate((self.qd[19:22],self.qd[39:43])))[0]
-                ])
-    
-
-    def get_Rtips(self):
-        """
-        Returns the orientations of the fingers as an array of size 3x27, representing
-        the 3x3 rotation matrices of each of the 9 fingers used (in the order that
-        they appear in jointnames).
-        """
-        return np.hstack([
-                self.rh_ff.fkin(self.qd[0:6])[1],
-                self.rh_mf.fkin(np.concatenate((self.qd[0:2],self.qd[6:10])))[1],
-                self.rh_rf.fkin(np.concatenate((self.qd[0:2],self.qd[10:14])))[1],
-                self.rh_lf.fkin(np.concatenate((self.qd[0:2],self.qd[14:19])))[1],
-
-                self.lh_ff.fkin(self.qd[19:26])[1],
-                self.lh_mf.fkin(np.concatenate((self.qd[19:22],self.qd[26:30])))[1],
-                self.lh_rf.fkin(np.concatenate((self.qd[19:22],self.qd[30:34])))[1],
-                self.lh_lf.fkin(np.concatenate((self.qd[19:22],self.qd[34:39])))[1],
-                self.lh_thumb.fkin(np.concatenate((self.qd[19:22],self.qd[39:40])))[1]
+                self.lh_thumb.fkin(np.concatenate((self.qd[19:22],self.qd[39:44])))[0]
                 ])
     
 
     def get_Jv(self):
         """
-        Returns the translational Jacobian of size 27x40 for the robot (both hands).
+        Returns the translational Jacobian of size 27x44 for the robot (both hands).
         """
-        Jv = np.zeros((27, 40))
+        Jv = np.zeros((27, 44))
         Jv[0:3, 0:6] = self.rh_ff.fkin(self.qd[0:6])[2]
         rh_mf_Jv = self.rh_mf.fkin(np.concatenate((self.qd[0:2],self.qd[6:10])))[2]
         Jv[3:6, 0:2], Jv[3:6, 6:10] = rh_mf_Jv[:,0:2], rh_mf_Jv[:,2:6]
@@ -212,53 +154,27 @@ class Trajectory():
         Jv[18:21, 19:22], Jv[18:21, 30:34] = lh_rf_Jv[:,0:3], lh_rf_Jv[:,3:7]
         lh_lf_Jv = self.lh_lf.fkin(np.concatenate((self.qd[19:22],self.qd[34:39])))[2]
         Jv[21:24, 19:22], Jv[21:24, 34:39] = lh_lf_Jv[:,0:3], lh_lf_Jv[:,3:8]
-        lh_th_Jv = self.lh_thumb.fkin(np.concatenate((self.qd[19:22],self.qd[39:40])))[2]
-        Jv[24:27, 19:22], Jv[24:27, 39:40] = lh_th_Jv[:,0:3], lh_th_Jv[:,3:4]
+        lh_th_Jv = self.lh_thumb.fkin(np.concatenate((self.qd[19:22],self.qd[39:44])))[2]
+        Jv[24:27, 19:22], Jv[24:27, 39:44] = lh_th_Jv[:,0:3], lh_th_Jv[:,3:8]
         return Jv
-    
-
-    def get_Jw(self):
-        """
-        Returns the rotational Jacobian of size 27x40 for the robot (both hands).
-        """
-        Jw = np.zeros((27, 40))
-        Jw[0:3, 0:6] = self.rh_ff.fkin(self.qd[0:6])[3]
-        rh_mf_Jw = self.rh_mf.fkin(np.concatenate((self.qd[0:2],self.qd[6:10])))[3]
-        Jw[3:6, 0:2], Jw[3:6, 6:10] = rh_mf_Jw[:,0:2], rh_mf_Jw[:,2:6]
-        rh_rf_Jw = self.rh_rf.fkin(np.concatenate((self.qd[0:2],self.qd[10:14])))[3]
-        Jw[6:9, 0:2], Jw[6:9, 10:14] = rh_rf_Jw[:,0:2], rh_rf_Jw[:,2:6]
-        rh_lf_Jw = self.rh_lf.fkin(np.concatenate((self.qd[0:2],self.qd[14:19])))[3]
-        Jw[9:12, 0:2], Jw[9:12, 14:19] = rh_lf_Jw[:,0:2], rh_lf_Jw[:,2:7]
-        # We don't need the right-hand thumb — we set these to fixed joints
-        # [rh_th_ptip, rh_th_Rtip, rh_th_Jw, rh_th_Jw] = self.rh_thumb.fkin(np.concatenate((self.qd[0:2],self.qd[19:24])))
-
-        Jw[12:15, 19:26] = self.lh_ff.fkin(self.qd[19:26])[3]
-        lh_mf_Jw = self.lh_mf.fkin(np.concatenate((self.qd[19:22],self.qd[26:30])))[3]
-        Jw[15:18, 19:22], Jw[15:18, 26:30], = lh_mf_Jw[:,0:3], lh_mf_Jw[:,3:7]
-        lh_rf_Jw = self.lh_rf.fkin(np.concatenate((self.qd[19:22],self.qd[30:34])))[3]
-        Jw[18:21, 19:22], Jw[18:21, 30:34] = lh_rf_Jw[:,0:3], lh_rf_Jw[:,3:7]
-        lh_lf_Jw = self.lh_lf.fkin(np.concatenate((self.qd[19:22],self.qd[34:39])))[3]
-        Jw[21:24, 19:22], Jw[21:24, 34:39] = lh_lf_Jw[:,0:3], lh_lf_Jw[:,3:8]
-        lh_th_Jw = self.lh_thumb.fkin(np.concatenate((self.qd[19:22],self.qd[39:40])))[3]
-        Jw[24:27, 19:22], Jw[24:27, 39:40] = lh_th_Jw[:,0:3], lh_th_Jw[:,3:4]
-        return Jw
 
     # Evaluate at the given time.  This was last called (dt) ago.
     def evaluate(self, t, dt):
-        # Initialize a guitar with: 20 frets, spaced 1 inch apart, and 
-        # 6 strings spaced 0.5 inches apart, at  a height of 0
-        fretboard = Fretboard(20, 0.125, 0.0625, 0.2)
+        # Initialize a guitar with: 20 frets, spaced 0.125 inches apart, and 
+        # 6 strings spaced 0.0625 inches apart, at  a height of 0.2
+        fretboard = Fretboard(x0=-0.080, y0=0.315, z0=0.075, dx=0.050, dy=0.005, num_frets=20)
 
         # Get the beat (T seconds), chords, and strumming pattern
         [T, chords, strumming_pattern] = song_info('some_song')
 
         prevChord = np.copy(self.p0)
-        nextChord = fretboard.pd_from_chord(chords[0].get('G'), self.p0)
+        [nextChord, wrist_xd] = fretboard.pf_from_chord(G, self.p0)
         nextChord = np.hstack((self.p0[0:12], nextChord))
         # nextChord = np.copy(prevChord)
         # nextChord[2] -= 0.075
-        # print(f'\nprevChord:\n {prevChord}\n')
-        # print(f'\nnextChord:\n {nextChord}\n')
+        print(f'\nprevChord:\n {prevChord[12:27]}\n')
+        print(f'\nnextChord:\n {nextChord[12:27]}\n')
+        print(f'\nwrist_xd:\n {wrist_xd}\n')
         if t <= T:
             (pd, vd) = goto(t, T, prevChord, nextChord)
             # pf = np.copy(self.p0[0:3])
@@ -270,8 +186,7 @@ class Trajectory():
         
         #print(f'\npd:\n {pd}\n')
         #print(f'\nvd:\n{vd}\n')
-        Rd = np.copy(self.Rdlast) # replace with rotation trajectory
-        wd = np.zeros(27)
+    
         # xddot = np.hstack((vd, wd))
         xddot = vd
         qd = np.copy(self.qd)
@@ -279,7 +194,7 @@ class Trajectory():
         Jv = self.get_Jv()
 
         ptips = self.get_ptips()
-        #print(f'\nptips:\n {ptips}\n')
+        print(f'\nptips:\n {ptips[12:27]}\n')
 
         #(ptip, Rtip, Jv, JW) = self.rh_ff.fkin(self.qd[0:6])
 
@@ -291,13 +206,13 @@ class Trajectory():
         Jt = np.transpose(J)
         Jpinv = np.linalg.pinv(J)
         # print(f'\nJpinv[:,0:20]:\n {Jpinv[:,0:20]}\n')
-        # print(f'\nJpinv[:,20:40]:\n {Jpinv[:,20:40]}\n')
+        # print(f'\nJpinv[:,20:44]:\n {Jpinv[:,20:44]}\n')
 
         #gamma = 0.00075
         #Jwinv = Jt @ (J @ Jt + gamma**2 * np.eye(J.shape[0]))
         # Jwinv[0:2,0:3] = np.zeros((2,3))
-        # Jwinv[6:40,0:3] = np.zeros((34,3))
-        # Jwinv[:,3:27] = np.zeros((40,24))
+        # Jwinv[6:44,0:3] = np.zeros((34,3))
+        # Jwinv[:,3:27] = np.zeros((44,24))
         #print(f'\nJwinv:\n {Jwinv}\n')
         
         errp = ep(self.pdlast, ptips)
@@ -305,24 +220,34 @@ class Trajectory():
         # errp = ep(self.pdlast[0:3], ptip)
         err = errp
         
-        #qddot = np.zeros(40)
+        #qddot = np.zeros(44)
         qddot = Jpinv @ (xddot + self.lam * err)
         #qddot = Jt @ np.linalg.inv(J @ Jt) @ (xddot + self.lam * err)
-        print(f'\nqddot:\n {qddot}\n')
+        #print(f'\nqddot:\n {qddot}\n')
         #print(f'\nself.qd:\n {self.qd}\n')
-        print(f'\nxddot:\n {xddot}\n')
-        print(f'\nerror:\n {err}\n')
+        #print(f'\nxddot:\n {xddot}\n')
+        #print(f'\nerror:\n {err}\n')
         # print(f"\nJ @ qddot:\n {J @ qddot - self.lam * err}")
-        print(f"\nJ @ qddot:\n {J @ qddot - self.lam * err}")
+        #print(f"\nJ @ qddot:\n {J @ qddot - self.lam * err}")
+
+        # SECONDARY TASK: Push each joint toward humanlike hand position
+        q_goal = np.copy(self.q0)   # We already initialize the hand in a human like position
+        q_goal[19] = wrist_xd      # "Comfortable" wrist position will vary depending on the chord
+        print(f'\nq0:\n {self.q0[19:44]}\n')
+        print(f'\nq_goal:\n {q_goal[19:44]}\n')
+        
+        qsdot = self.lams * (q_goal - qd)
+
+        # Combined joint velocity:
+        qddot += (np.eye(J.shape[1]) - Jpinv @ J) @ qsdot
 
         qd += qddot * dt
         # print(f"\nqddot * dt:\n{qddot * dt}\n")
         self.qd = qd
-        print(f"\nSelf.qd\n{self.qd}\n")
+        print(f"\nSelf.qd\n{self.qd[19:44]}\n")
         self.pdlast = pd
-        self.Rdlast = Rd
 
-        return (qd, qddot, pd, vd, Rd, wd)
+        return (qd, qddot, pd, vd)
 
 #
 #  Main Code

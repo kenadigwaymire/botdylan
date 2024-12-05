@@ -131,3 +131,59 @@ def main(args=None):
 
 if __name__ == "__main__":
     main()
+
+# Scrapped Code:
+# def get_Jw(self):
+#         """
+#         Returns the rotational Jacobian of size 27x40 for the robot (both hands).
+#         """
+#         Jw = np.zeros((27, 40))
+#         Jw[0:3, 0:6] = self.rh_ff.fkin(self.qd[0:6])[3]
+#         rh_mf_Jw = self.rh_mf.fkin(np.concatenate((self.qd[0:2],self.qd[6:10])))[3]
+#         Jw[3:6, 0:2], Jw[3:6, 6:10] = rh_mf_Jw[:,0:2], rh_mf_Jw[:,2:6]
+#         rh_rf_Jw = self.rh_rf.fkin(np.concatenate((self.qd[0:2],self.qd[10:14])))[3]
+#         Jw[6:9, 0:2], Jw[6:9, 10:14] = rh_rf_Jw[:,0:2], rh_rf_Jw[:,2:6]
+#         rh_lf_Jw = self.rh_lf.fkin(np.concatenate((self.qd[0:2],self.qd[14:19])))[3]
+#         Jw[9:12, 0:2], Jw[9:12, 14:19] = rh_lf_Jw[:,0:2], rh_lf_Jw[:,2:7]
+#         # We don't need the right-hand thumb — we set these to fixed joints
+#         # [rh_th_ptip, rh_th_Rtip, rh_th_Jw, rh_th_Jw] = self.rh_thumb.fkin(np.concatenate((self.qd[0:2],self.qd[19:24])))
+
+#         Jw[12:15, 19:26] = self.lh_ff.fkin(self.qd[19:26])[3]
+#         lh_mf_Jw = self.lh_mf.fkin(np.concatenate((self.qd[19:22],self.qd[26:30])))[3]
+#         Jw[15:18, 19:22], Jw[15:18, 26:30], = lh_mf_Jw[:,0:3], lh_mf_Jw[:,3:7]
+#         lh_rf_Jw = self.lh_rf.fkin(np.concatenate((self.qd[19:22],self.qd[30:34])))[3]
+#         Jw[18:21, 19:22], Jw[18:21, 30:34] = lh_rf_Jw[:,0:3], lh_rf_Jw[:,3:7]
+#         lh_lf_Jw = self.lh_lf.fkin(np.concatenate((self.qd[19:22],self.qd[34:39])))[3]
+#         Jw[21:24, 19:22], Jw[21:24, 34:39] = lh_lf_Jw[:,0:3], lh_lf_Jw[:,3:8]
+#         lh_th_Jw = self.lh_thumb.fkin(np.concatenate((self.qd[19:22],self.qd[39:40])))[3]
+#         Jw[24:27, 19:22], Jw[24:27, 39:40] = lh_th_Jw[:,0:3], lh_th_Jw[:,3:4]
+#         return Jw
+
+# def get_Rtips(self):
+#         """
+#         Returns the orientations of the fingers as an array of size 3x27, representing
+#         the 3x3 rotation matrices of each of the 9 fingers used (in the order that
+#         they appear in jointnames).
+#         """
+#         return np.hstack([
+#                 self.rh_ff.fkin(self.qd[0:6])[1],
+#                 self.rh_mf.fkin(np.concatenate((self.qd[0:2],self.qd[6:10])))[1],
+#                 self.rh_rf.fkin(np.concatenate((self.qd[0:2],self.qd[10:14])))[1],
+#                 self.rh_lf.fkin(np.concatenate((self.qd[0:2],self.qd[14:19])))[1],
+
+#                 self.lh_ff.fkin(self.qd[19:26])[1],
+#                 self.lh_mf.fkin(np.concatenate((self.qd[19:22],self.qd[26:30])))[1],
+#                 self.lh_rf.fkin(np.concatenate((self.qd[19:22],self.qd[30:34])))[1],
+#                 self.lh_lf.fkin(np.concatenate((self.qd[19:22],self.qd[34:39])))[1],
+#                 self.lh_thumb.fkin(np.concatenate((self.qd[19:22],self.qd[39:40])))[1]
+#                 ])
+
+# self.R0 = self.get_Rtips()
+# self.Rdlast = np.copy(self.R0)
+# self.Rdlast = Rd
+
+# # We're not actually interested in the rotations of the fingers, but we 
+# abitrarily initialize them here to make the evaluate function compatible
+# with the GeneratorNode.py
+# Rd = np.zeros((3,27))
+# wd = np.zeros(27)]
