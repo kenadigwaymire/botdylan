@@ -1,7 +1,7 @@
 import numpy as np
 
 # Following guitar conventions
-STRING_NOTES = {'e_low': 6, 'a': 5, 'd': 4, 'g': 3, 'b': 2, 'e_high': 1}
+STRING_NOTES = {'e_high': 1, 'b': 2, 'g': 3, 'd': 4, 'a': 5, 'e_low': 6}
 
 # Chord Generator
 class Chords():
@@ -42,4 +42,4 @@ class Chords():
 
 G = Chords('G', [[2, 'a'], [3, 'e_low'], [3, 'e_high'], [np.nan, np.nan]])
 C = Chords('C', [[1, 'b'], [2, 'd'], [3, 'a'], [np.nan, np.nan]])
-E = Chords('E', [[1, 'g'], [2, 'a'], [3, 'd'], [np.nan, np.nan]])
+E = Chords('E', [[1, 'g'], [2, 'a'], [2, 'd'], [np.nan, np.nan]])
