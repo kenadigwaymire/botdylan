@@ -23,7 +23,7 @@ from botdylan.fretboard          import *
 def song_info(song):
     # Eventually change these to be pulled or calculated from a song file
     T = 5
-    chords = [G]
+    chords = [G, C]
     strumming_pattern = []
     return [T, chords, strumming_pattern]
        
@@ -66,26 +66,26 @@ class Trajectory():
             0.157, 0.907, 0.968, 1.036,         # rh_FFJ4, rh_FFJ3, rh_FFJ2, rh_FFJ1
             0.017, 0.709, 0.620, 0.959,         # rh_MFJ4, rh_MFJ3, rh_MFJ2, rh_MFJ1
             0.032, 0.759, 0.747, 0.951,         # rh_RFJ4, rh_RFJ3, rh_RFJ2, rh_RFJ1
-            0.497, 0.047, 0.818, 1.163, 0.976,  # rh_LFJ5, rh_LFJ4, rh_LFJ3, rh_LFJ2, rh_LFJ1
+            0.075, 0.015, 0.630, 0.781, 0.594,  # rh_LFJ5, rh_LFJ4, rh_LFJ3, rh_LFJ2, rh_LFJ1
             # Right hand thumb fixed
 
             # -------------------- Left Hand (FRETTING) --------------------
-            0.632,                              # right_hand_to_left_hand
+            0.750,                              # right_hand_to_left_hand
             0.0, 0.0,                           # lh_WRJ2, lh_WRJ1
             0.021, 0.610, 0.526, 0.492,         # lh_FFJ4, lh_FFJ3, lh_FFJ2, lh_FFJ1
             0.021, 0.759, 0.781, 0.705,         # lh_MFJ4, lh_MFJ3, lh_MFJ2, lh_MFJ1
             0.002, 0.659, 0.849, 0.645,         # lh_RFJ4, lh_RFJ3, lh_RFJ2, lh_RFJ1
-            0.335, 0.077, 0.630, 0.781, 0.594,  # lh_LFJ5, lh_LFJ4, lh_LFJ3, lh_LFJ2, lh_LFJ1
-            0.277, 0.205, 0.110, 0.306, -0.250  # lh_THJ5, lh_THJ4, lh_THJ3, lh_THJ2, lh_THJ1
+            0.075, 0.015, 0.630, 0.781, 0.594,  # lh_LFJ5, lh_LFJ4, lh_LFJ3, lh_LFJ2, lh_LFJ1
+            0.277, 0.205, 0.110, 0.306, 0.10  # lh_THJ5, lh_THJ4, lh_THJ3, lh_THJ2, lh_THJ1
         ])
-
+        
         self.qd = np.copy(self.q0)
         # Initial tip positions:
         self.p0 = self.get_ptips()
 
         # Other params
-        self.lam = 20 # lambda for primary task
-        self.lams = 3 # lambda for secondary task
+        self.lam = 40 # lambda for primary task
+        self.lams = 10 # lambda for secondary task
         self.pdlast = np.copy(self.p0)
         
     # Declare the joint names.
@@ -162,27 +162,33 @@ class Trajectory():
     def evaluate(self, t, dt):
         # Initialize a guitar with: 20 frets, spaced 0.125 inches apart, and 
         # 6 strings spaced 0.0625 inches apart, at  a height of 0.2
-        fretboard = Fretboard(x0=-0.080, y0=0.315, z0=0.075, dx=0.050, dy=0.005, num_frets=20)
+        fretboard = Fretboard(x0=-0.080, y0=0.315, z0=0.09, dx=0.040, dy=0.005, num_frets=20)
 
         # Get the beat (T seconds), chords, and strumming pattern
         [T, chords, strumming_pattern] = song_info('some_song')
 
-        prevChord = np.copy(self.p0)
-        [nextChord, wrist_xd] = fretboard.pf_from_chord(G, self.p0)
-        nextChord = np.hstack((self.p0[0:12], nextChord))
-        # nextChord = np.copy(prevChord)
-        # nextChord[2] -= 0.075
-        print(f'\nprevChord:\n {prevChord[12:27]}\n')
-        print(f'\nnextChord:\n {nextChord[12:27]}\n')
-        print(f'\nwrist_xd:\n {wrist_xd}\n')
         if t <= T:
+            prevChord = np.copy(self.p0)
+            [nextChord, wrist_xd] = fretboard.pf_from_chord(G, self.p0, self.p0[0:12])
+            # nextChord = np.copy(prevChord)
+            # nextChord[2] -= 0.075
+            print(f'\nprevChord:\n {prevChord[12:27]}\n')
+            print(f'\nnextChord:\n {nextChord[12:27]}\n')
+            print(f'\nwrist_xd:\n {wrist_xd}\n')
             (pd, vd) = goto(t, T, prevChord, nextChord)
             # pf = np.copy(self.p0[0:3])
             # pf[2] += 0.05
             # (pd, vd) = goto(t, T, self.p0[0:3], pf)
+        elif t <= 2 * T:
+            prevChord = fretboard.pf_from_chord(G, self.p0, self.p0[0:12])[0]
+            [nextChord, wrist_xd] = fretboard.pf_from_chord(C, self.p0, self.p0[0:12])
+            print(f'\nprevChord:\n {prevChord[12:27]}\n')
+            print(f'\nnextChord:\n {nextChord[12:27]}\n')
+            print(f'\nwrist_xd:\n {wrist_xd}\n')
+            (pd, vd) = goto(t, T, prevChord, nextChord)
         else:
             vd = np.zeros(27)
-            pd = self.pdlast#[0:3]
+            pd = self.get_ptips
         
         #print(f'\npd:\n {pd}\n')
         #print(f'\nvd:\n{vd}\n')
@@ -209,7 +215,7 @@ class Trajectory():
         # print(f'\nJpinv[:,20:44]:\n {Jpinv[:,20:44]}\n')
 
         #gamma = 0.00075
-        #Jwinv = Jt @ (J @ Jt + gamma**2 * np.eye(J.shape[0]))
+        # Jwinv = Jt @ (J @ Jt + gamma**2 * np.eye(J.shape[0]))
         # Jwinv[0:2,0:3] = np.zeros((2,3))
         # Jwinv[6:44,0:3] = np.zeros((34,3))
         # Jwinv[:,3:27] = np.zeros((44,24))
@@ -232,11 +238,31 @@ class Trajectory():
 
         # SECONDARY TASK: Push each joint toward humanlike hand position
         q_goal = np.copy(self.q0)   # We already initialize the hand in a human like position
-        q_goal[19] = wrist_xd      # "Comfortable" wrist position will vary depending on the chord
+        q_goal = np.copy(self.qd)
+        q_goal[19] = wrist_xd       # "Comfortable" wrist position will vary depending on the chord
+        q_goal[20] = 0
+        q_goal[21] = 0
+        # q_goal[22] = qd[-26]      
+        q_goal[26] = 0
+        q_goal[30] = 0
+        # q_goal[34] = qd[30]
+        q_goal[40] = np.copy(self.q0[40])
+        q_goal[41] = 0
+
         print(f'\nq0:\n {self.q0[19:44]}\n')
         print(f'\nq_goal:\n {q_goal[19:44]}\n')
         
-        qsdot = self.lams * (q_goal - qd)
+        W = np.array([
+            1.0,
+            1.0, 0.050, 
+            0.75, 0.005, 0.005, 0.005, 
+            0.75, 0.005, 0.005, 0.005, 
+            0.75, 0.005, 0.005, 0.005, 
+            0.25, 0.75, 0.005, 0.005, 0.005,
+            0.005, 0.005, 0.005, 0.005, 0.005])
+        W = np.concatenate((np.zeros(19), W))
+        W = np.ones((44))
+        qsdot = self.lams * np.diag(W) @ (q_goal - qd)
 
         # Combined joint velocity:
         qddot += (np.eye(J.shape[1]) - Jpinv @ J) @ qsdot

@@ -41,3 +41,5 @@ class Chords():
 
 
 G = Chords('G', [[2, 'a'], [3, 'e_low'], [3, 'e_high'], [np.nan, np.nan]])
+C = Chords('C', [[1, 'b'], [2, 'd'], [3, 'a'], [np.nan, np.nan]])
+E = Chords('E', [[1, 'g'], [2, 'a'], [3, 'd'], [np.nan, np.nan]])
