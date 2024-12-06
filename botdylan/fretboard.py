@@ -16,7 +16,7 @@ class Fretboard():
         self.width = NUM_STRINGS * dy   # fretboard width between the E strings
         self.length = num_frets * dx    # fretboard length
         self.fretboard = np.ones((num_frets, NUM_STRINGS))
-    def pf_from_chord(self, chord, p0, right_hand_pd):
+    def pf_from_chord(self, chord, p0):
         """
         Calculate the final position to move to to play a chord
         """
@@ -51,7 +51,6 @@ class Fretboard():
         lh_th_postion = np.array([[wrist_xd, p0[25], neck_base_z]])
 
         pf = np.vstack((pf, lh_th_postion))
-        pf = np.concatenate((pf))
-        return [np.concatenate((right_hand_pd, pf)), -wrist_xd]
+        return [np.concatenate((pf)), -wrist_xd]
     def get_coord_from_pos(self, curr_pos):
         return (curr_pos[0] / self.dy, (curr_pos[1] - (self.dx / 2)) / self.dx)

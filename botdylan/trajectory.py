@@ -1,7 +1,7 @@
 import rclpy # type: ignore
 import numpy as np
 
-from math import pi, sin, cos, acos, atan2, sqrt, fmod, exp
+from math import pi, sin, cos, acos, atan2, sqrt, fmod, exp, floor
 
 # import sys
 # print(sys.path) # To debug pathing
@@ -22,7 +22,7 @@ from botdylan.fretboard          import *
 # gets initialized.
 def song_info(song):
     # Eventually change these to be pulled or calculated from a song file
-    T = 5
+    T = 3
     chords = [G, C, E]
     strumming_pattern = []
     return [T, chords, strumming_pattern]
@@ -68,15 +68,14 @@ class Trajectory():
             0.032, 0.759, 0.747, 0.951,         # rh_RFJ4, rh_RFJ3, rh_RFJ2, rh_RFJ1
             0.075, 0.015, 0.630, 0.781, 0.594,  # rh_LFJ5, rh_LFJ4, rh_LFJ3, rh_LFJ2, rh_LFJ1
             # Right hand thumb fixed
-
             # -------------------- Left Hand (FRETTING) --------------------
             0.750,                              # right_hand_to_left_hand
-            -0.300, 0.100,                           # lh_WRJ2, lh_WRJ1
-            -0.175, 0.600, 0.525, 0.500,         # lh_FFJ4, lh_FFJ3, lh_FFJ2, lh_FFJ1
-            -0.050, 0.615, 0.650, 0.425,         # lh_MFJ4, lh_MFJ3, lh_MFJ2, lh_MFJ1
-            -0.050, 0.525, 0.900, 0.415,         # lh_RFJ4, lh_RFJ3, lh_RFJ2, lh_RFJ1
-            0.125, -0.225, 0.640, 0.840, 0.500,  # lh_LFJ5, lh_LFJ4, lh_LFJ3, lh_LFJ2, lh_LFJ1
-            -0.525, 0.205, 0.110, 0.366, 0.265    # lh_THJ5, lh_THJ4, lh_THJ3, lh_THJ2, lh_THJ1
+            -0.300, 0.100,                      # lh_WRJ2, lh_WRJ1
+            -0.175, 0.600, 0.525, 0.500,        # lh_FFJ4, lh_FFJ3, lh_FFJ2, lh_FFJ1
+            -0.050, 0.615, 0.650, 0.425,        # lh_MFJ4, lh_MFJ3, lh_MFJ2, lh_MFJ1
+            -0.050, 0.525, 0.900, 0.415,        # lh_RFJ4, lh_RFJ3, lh_RFJ2, lh_RFJ1
+            0.125, -0.225, 0.640, 0.840, 0.500, # lh_LFJ5, lh_LFJ4, lh_LFJ3, lh_LFJ2, lh_LFJ1
+            -0.525, 0.205, 0.110, 0.366, 0.265  # lh_THJ5, lh_THJ4, lh_THJ3, lh_THJ2, lh_THJ1
         ])
         
         self.qd = np.copy(self.q0)
@@ -86,7 +85,7 @@ class Trajectory():
         # Other params
         self.lam = 40           # lambda for primary task
         self.lams = 10          # lambda for secondary task
-        self.gamma = 0.075    # gamma for weighted inverse
+        self.gamma = 0.075      # gamma for weighted inverse
         self.pdlast = np.copy(self.p0)
         
     # Declare the joint names.
@@ -95,21 +94,21 @@ class Trajectory():
         return [
             # len(jointnames) = 44
             # -------------------- Right Hand (STRUMMING) --------------------
-            "rh_WRJ2", "rh_WRJ1", # wrist
-            "rh_FFJ4", "rh_FFJ3", "rh_FFJ2", "rh_FFJ1", # pointer
-            "rh_MFJ4", "rh_MFJ3", "rh_MFJ2", "rh_MFJ1", # middle
-            "rh_RFJ4", "rh_RFJ3", "rh_RFJ2", "rh_RFJ1", # ring
-            "rh_LFJ5", "rh_LFJ4", "rh_LFJ3", "rh_LFJ2", "rh_LFJ1", # pinky
+            "rh_WRJ2", "rh_WRJ1",                                   # wrist
+            "rh_FFJ4", "rh_FFJ3", "rh_FFJ2", "rh_FFJ1",             # pointer
+            "rh_MFJ4", "rh_MFJ3", "rh_MFJ2", "rh_MFJ1",             # middle
+            "rh_RFJ4", "rh_RFJ3", "rh_RFJ2", "rh_RFJ1",             # ring
+            "rh_LFJ5", "rh_LFJ4", "rh_LFJ3", "rh_LFJ2", "rh_LFJ1",  # pinky
             # We won't be using the right hand thumb — we set these to fixed joints
             # "rh_THJ5", "rh_THJ4", "rh_THJ3", "rh_THJ2", "rh_THJ1",
             # -------------------- Left Hand (FRETTING) ----------------------
-            "right_hand_to_left_hand",  # prismatic joint for sliding along the neck
-            "lh_WRJ2", "lh_WRJ1", # wrist
-            "lh_FFJ4", "lh_FFJ3", "lh_FFJ2", "lh_FFJ1", # pointer
-            "lh_MFJ4", "lh_MFJ3", "lh_MFJ2", "lh_MFJ1", # middle
-            "lh_RFJ4", "lh_RFJ3", "lh_RFJ2", "lh_RFJ1", # ring
-            "lh_LFJ5", "lh_LFJ4", "lh_LFJ3", "lh_LFJ2", "lh_LFJ1", # pinky
-            "lh_THJ5", "lh_THJ4", "lh_THJ3", "lh_THJ2", "lh_THJ1" # thumb
+            "right_hand_to_left_hand",                              # prismatic joint for sliding along the neck
+            "lh_WRJ2", "lh_WRJ1",                                   # wrist
+            "lh_FFJ4", "lh_FFJ3", "lh_FFJ2", "lh_FFJ1",             # pointer
+            "lh_MFJ4", "lh_MFJ3", "lh_MFJ2", "lh_MFJ1",             # middle
+            "lh_RFJ4", "lh_RFJ3", "lh_RFJ2", "lh_RFJ1",             # ring
+            "lh_LFJ5", "lh_LFJ4", "lh_LFJ3", "lh_LFJ2", "lh_LFJ1",  # pinky
+            "lh_THJ5", "lh_THJ4", "lh_THJ3", "lh_THJ2", "lh_THJ1"   # thumb
             ]
 
 
@@ -158,6 +157,72 @@ class Trajectory():
         lh_th_Jv = self.lh_thumb.fkin(np.concatenate((self.qd[19:22],self.qd[39:44])))[2]
         Jv[24:27, 19:22], Jv[24:27, 39:44] = lh_th_Jv[:,0:3], lh_th_Jv[:,3:8]
         return Jv
+    
+
+    def strumming_trajectory(self, t, T, strum_pattern, strum_length, strum_depth):
+        strum_pattern_list = ["strum", "downstroke", "upstroke"]
+
+        rh_p0 = np.copy(self.p0[0:12])
+        rh_pf = np.copy(self.p0[0:12])
+        if strum_pattern == "strum":
+            t1 = fmod(t, T/4)
+            if t1 < T/4:
+                [rh_pf[1], rh_pf[4], rh_pf[7], rh_pf[10]] = [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] + strum_length/2 * np.ones(4)
+                [rh_pf[2], rh_pf[5], rh_pf[8], rh_pf[11]] = [rh_p0[2], rh_p0[5], rh_p0[8], rh_p0[11]] - strum_depth/2 * np.ones(4)
+            elif t1 < T/2:
+                [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] = [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] + strum_length/2 * np.ones(4)
+                [rh_p0[2], rh_p0[5], rh_p0[8], rh_p0[11]] = [rh_p0[2], rh_p0[5], rh_p0[8], rh_p0[11]] - strum_depth/2 * np.ones(4)
+                [rh_pf[1], rh_pf[4], rh_pf[7], rh_pf[10]] = [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] + strum_length * np.ones(4)
+            elif t1 < 3*T/4:
+                [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] = [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] + strum_length * np.ones(4)
+                [rh_pf[1], rh_pf[4], rh_pf[7], rh_pf[10]] = [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] + strum_length/2 * np.ones(4)
+                [rh_pf[2], rh_pf[5], rh_pf[8], rh_pf[11]] = [rh_p0[2], rh_p0[5], rh_p0[8], rh_p0[11]] - strum_depth/2 * np.ones(4)
+            else:
+                [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] = [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] + strum_length/2 * np.ones(4)
+                [rh_p0[2], rh_p0[5], rh_p0[8], rh_p0[11]] = [rh_p0[2], rh_p0[5], rh_p0[8], rh_p0[11]] - strum_depth/2 * np.ones(4)
+            (rh_pd, rh_vd) = goto(t1, T/3, rh_p0, rh_pf)
+
+        elif strum_pattern == "downstroke":
+            t1 = fmod(t, T/3)
+            if t1 < T/3:
+                [rh_pf[1], rh_pf[4], rh_pf[7], rh_pf[10]] = [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] + strum_length/2 * np.ones(4)
+                [rh_pf[2], rh_pf[5], rh_pf[8], rh_pf[11]] = [rh_p0[2], rh_p0[5], rh_p0[8], rh_p0[11]] - strum_depth/2 * np.ones(4)
+            elif t1 < 2*T/3:
+                [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] = [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] + strum_length/2 * np.ones(4)
+                [rh_p0[2], rh_p0[5], rh_p0[8], rh_p0[11]] = [rh_p0[2], rh_p0[5], rh_p0[8], rh_p0[11]] - strum_depth/2 * np.ones(4)
+                [rh_pf[1], rh_pf[4], rh_pf[7], rh_pf[10]] = [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] + strum_length * np.ones(4)
+            else:
+                [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] = [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] + strum_length * np.ones(4)
+            (rh_pd, rh_vd) = goto(t1, T/3, rh_p0, rh_pf)
+
+        elif strum_pattern == "upstroke":
+            t1 = fmod(t, T/3)
+            if t1 < T/3:
+                [rh_pf[1], rh_pf[4], rh_pf[7], rh_pf[10]] = [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] + strum_length * np.ones(4)
+            elif t1 < 2*T/3:
+                [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] = [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] + strum_length * np.ones(4)
+                [rh_pf[1], rh_pf[4], rh_pf[7], rh_pf[10]] = [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] + strum_length/2 * np.ones(4)
+                [rh_pf[2], rh_pf[5], rh_pf[8], rh_pf[11]] = [rh_p0[2], rh_p0[5], rh_p0[8], rh_p0[11]] - strum_depth/2 * np.ones(4)
+            else:
+                [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] = [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] + strum_length/2 * np.ones(4)
+                [rh_p0[2], rh_p0[5], rh_p0[8], rh_p0[11]] = [rh_p0[2], rh_p0[5], rh_p0[8], rh_p0[11]] - strum_depth/2 * np.ones(4)
+            (rh_pd, rh_vd) = goto(t1, T/3, rh_p0, rh_pf)
+
+        else:
+            raise ValueError(f"{strum_pattern} is not a valid strum pattern. "
+                             f"Please refer to the following list of allowed strum patterns: {strum_pattern_list}")
+        
+        return (rh_pd, rh_vd)
+    
+
+    def fretting_trajectory(self, t, T, prevchord, nextchord):
+        t2 = fmod(t, T/2)
+        if t2 < T/2:
+            (lh_pd, lh_vd) = goto(t2, T/2, prevchord, nextchord)
+        else:
+            (lh_pd, lh_vd) = (nextchord, np.zeros(15))
+        return lh_pd, lh_vd
+
 
     # Evaluate at the given time.  This was last called (dt) ago.
     def evaluate(self, t, dt):
@@ -167,16 +232,32 @@ class Trajectory():
 
         # Get the beat (T seconds), chords, and strumming pattern
         [T, chords, strumming_pattern] = song_info('some_song')
+        chord_ct = floor(t/T)
 
-        if t <= T:
-            prevChord = np.copy(self.p0)
-            [nextChord, wrist_xd] = fretboard.pf_from_chord(E, self.p0, self.p0[0:12])
+        if chord_ct - 1 < 0:
+            prevChord = np.copy(self.p0[12:27])
+        else:
+            prevChord = fretboard.pf_from_chord(chords[chord_ct-1], self.p0)[0]
+        if chord_ct < len(chords):
+            [nextChord, wrist_xd] = fretboard.pf_from_chord(chords[chord_ct], self.p0)
+        else:
+            nextChord = np.copy(prevChord)
+            wrist_xd = np.copy(self.q0[19])
+
+        (lh_pd, lh_vd) = self.fretting_trajectory(t, T, prevChord, nextChord)
+        (rh_pd, rh_vd) = (self.p0[0:12], np.zeros(12))
+        pd = np.concatenate((rh_pd, lh_pd))
+        vd = np.concatenate((rh_vd, lh_vd))
+
+
+        # if t <= T:
+            
+            
             # nextChord = np.copy(prevChord)
             # wrist_xd = np.copy(self.q0[19])
-            print(f'\nprevChord:\n {prevChord[12:27]}\n')
-            print(f'\nnextChord:\n {nextChord[12:27]}\n')
-            print(f'\nwrist_xd:\n {wrist_xd}\n')
-            (pd, vd) = goto(t, T, prevChord, nextChord)
+        print(f'\nprevChord:\n {prevChord[12:27]}\n')
+        print(f'\nnextChord:\n {nextChord[12:27]}\n')
+        print(f'\nwrist_xd:\n {wrist_xd}\n')
             # pf = np.copy(self.p0[0:3])
             # pf[2] += 0.05
             # (pd, vd) = goto(t, T, self.p0[0:3], pf)
@@ -187,9 +268,9 @@ class Trajectory():
         #     print(f'\nnextChord:\n {nextChord[12:27]}\n')
         #     print(f'\nwrist_xd:\n {wrist_xd}\n')
         #     (pd, vd) = goto(t, T, prevChord, nextChord)
-        else:
-            vd = np.zeros(27)
-            pd = self.get_ptips
+        # else:
+        #     vd = np.zeros(27)
+        #     pd = self.get_ptips
         
         #print(f'\npd:\n {pd}\n')
         #print(f'\nvd:\n{vd}\n')
