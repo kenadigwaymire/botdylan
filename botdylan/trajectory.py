@@ -22,7 +22,7 @@ from botdylan.fretboard          import *
 # gets initialized.
 def song_info(song):
     # Eventually change these to be pulled or calculated from a song file
-    T = 0.5
+    T = 1
     chords = [G, C, E, G, E, C, G]
     strumming_pattern = []
     return [T, chords, strumming_pattern]
@@ -83,8 +83,8 @@ class Trajectory():
         self.p0 = self.get_ptips()
 
         # Other params
-        self.lam = 80           # lambda for primary task
-        self.lams = 5          # lambda for secondary task
+        self.lam = 30           # lambda for primary task
+        self.lams = 5           # lambda for secondary task
         self.gamma = 0.075      # gamma for weighted inverse
         self.pdlast = np.copy(self.p0)
         
@@ -180,7 +180,7 @@ class Trajectory():
             else:
                 [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] = [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] + strum_length/2 * np.ones(4)
                 [rh_p0[2], rh_p0[5], rh_p0[8], rh_p0[11]] = [rh_p0[2], rh_p0[5], rh_p0[8], rh_p0[11]] - strum_depth/2 * np.ones(4)
-            (rh_pd, rh_vd) = goto(t1, T/3, rh_p0, rh_pf)
+            (rh_pd, rh_vd) = goto(fmod(t1,T/4), T/4, rh_p0, rh_pf)
 
         elif strum_pattern == "downstroke":
             t1 = fmod(t, T/3)
@@ -193,7 +193,7 @@ class Trajectory():
                 [rh_pf[1], rh_pf[4], rh_pf[7], rh_pf[10]] = [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] + strum_length * np.ones(4)
             else:
                 [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] = [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] + strum_length * np.ones(4)
-            (rh_pd, rh_vd) = goto(t1, T/3, rh_p0, rh_pf)
+            (rh_pd, rh_vd) = goto(fmod(t1,T/3), T/3, rh_p0, rh_pf)
 
         elif strum_pattern == "upstroke":
             t1 = fmod(t, T/3)
@@ -206,7 +206,7 @@ class Trajectory():
             else:
                 [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] = [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] + strum_length/2 * np.ones(4)
                 [rh_p0[2], rh_p0[5], rh_p0[8], rh_p0[11]] = [rh_p0[2], rh_p0[5], rh_p0[8], rh_p0[11]] - strum_depth/2 * np.ones(4)
-            (rh_pd, rh_vd) = goto(t1, T/3, rh_p0, rh_pf)
+            (rh_pd, rh_vd) = goto(fmod(t1,T/3), T/3, rh_p0, rh_pf)
 
         else:
             raise ValueError(f"{strum_pattern} is not a valid strum pattern. "
@@ -218,9 +218,19 @@ class Trajectory():
     def fretting_trajectory(self, t, T, prevchord, nextchord):
         t2 = fmod(t, T)
         if t2 < T/2:
+            # Move to the desired chord
             (lh_pd, lh_vd) = goto(t2, T/2, prevchord, nextchord)
-        else:
+        elif t2 < 3*T/4:
+            # Briefly hold the chord
             (lh_pd, lh_vd) = (nextchord, np.zeros(15))
+        else:
+            # Lift fingers off of the strings a bit before moving to next chord
+            lifted_pos = np.copy(nextchord)
+            for i in [2, 5, 8, 11]:
+                lifted_pos[i] += 0.01
+            print(f"\nnextchord:\n{nextchord}\n")
+            print(f"\nlifted_pos:\n{lifted_pos}\n")
+            (lh_pd, lh_vd) = goto(fmod(t2, T/4), T/4, nextchord, lifted_pos)
         return lh_pd, lh_vd
 
 
@@ -232,21 +242,31 @@ class Trajectory():
 
         # Get the beat (T seconds), chords, and strumming pattern
         [T, chords, strumming_pattern] = song_info('some_song')
+        # Iterate through the chords to play
         if floor(t/T) <= len(chords):
             chord_ct = floor(t/T)
-            # print(f"\nChord:\n{chords[chord_ct]}\n")
+        else:
+            chord_ct = len(chords)
+        # print(f"\nChord:\n{chords[chord_ct]}\n")
 
+        # Determine if starting from p0 or a chord that's already been played
         if chord_ct - 1 < 0:
             prevChord = np.copy(self.p0[12:27])
         else:
             prevChord = fretboard.pf_from_chord(chords[chord_ct-1], self.p0)[0]
+            # # No need to lift the fingers when the song is over.
+            # if chord_ct != len(chords):
+            #     for i in [2, 5, 8, 11]:
+            #         prevChord[i] += 0.01
+
+        # Play the next chord. Return to p0 when the song is done
         if chord_ct < len(chords):
             [nextChord, wrist_xd] = fretboard.pf_from_chord(chords[chord_ct], self.p0)
+            (lh_pd, lh_vd) = self.fretting_trajectory(t, T, prevChord, nextChord)
         else:
-            nextChord = np.copy(prevChord)
+            (lh_pd, lh_vd) = (np.copy(p0), np.zeros(15))
             wrist_xd = np.copy(self.q0[19])
 
-        (lh_pd, lh_vd) = self.fretting_trajectory(t, T, prevChord, nextChord)
         (rh_pd, rh_vd) = (self.p0[0:12], np.zeros(12))
         pd = np.concatenate((rh_pd, lh_pd))
         vd = np.concatenate((rh_vd, lh_vd))
