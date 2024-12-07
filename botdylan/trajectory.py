@@ -22,8 +22,8 @@ from botdylan.fretboard          import *
 # gets initialized.
 def song_info(song):
     # Eventually change these to be pulled or calculated from a song file
-    T = 3
-    chords = [G, C, E]
+    T = 0.5
+    chords = [G, C, E, G, E, C, G]
     strumming_pattern = []
     return [T, chords, strumming_pattern]
        
@@ -49,15 +49,15 @@ class Trajectory():
         
         # LEFT HAND
         self.lh_ff = KinematicChain(node, 'world', 'lh_fftip',
-                            self.jointnames()[19:26])
+                            self.jointnames()[19:27])
         self.lh_mf = KinematicChain(node, 'world', 'lh_mftip',
-                            self.jointnames()[19:22]+self.jointnames()[26:30])
+                            self.jointnames()[19:23]+self.jointnames()[27:31])
         self.lh_rf = KinematicChain(node, 'world', 'lh_rftip', 
-                            self.jointnames()[19:22]+self.jointnames()[30:34])
+                            self.jointnames()[19:23]+self.jointnames()[31:35])
         self.lh_lf = KinematicChain(node, 'world', 'lh_lftip',
-                            self.jointnames()[19:22]+self.jointnames()[34:39])
+                            self.jointnames()[19:23]+self.jointnames()[35:40])
         self.lh_thumb = KinematicChain(node, 'world', 'lh_thtip',
-                            self.jointnames()[19:22]+self.jointnames()[39:44])
+                            self.jointnames()[19:23]+self.jointnames()[40:45])
         
         # Initial joint positions:
         self.q0 = np.array([
@@ -70,7 +70,7 @@ class Trajectory():
             # Right hand thumb fixed
             # -------------------- Left Hand (FRETTING) --------------------
             0.750,                              # right_hand_to_left_hand
-            -0.300, 0.100,                      # lh_WRJ2, lh_WRJ1
+            0.0, -0.300, 0.100,                 # lh_WRJ3, lh_WRJ2, lh_WRJ1
             -0.175, 0.600, 0.525, 0.500,        # lh_FFJ4, lh_FFJ3, lh_FFJ2, lh_FFJ1
             -0.050, 0.615, 0.650, 0.425,        # lh_MFJ4, lh_MFJ3, lh_MFJ2, lh_MFJ1
             -0.050, 0.525, 0.900, 0.415,        # lh_RFJ4, lh_RFJ3, lh_RFJ2, lh_RFJ1
@@ -83,8 +83,8 @@ class Trajectory():
         self.p0 = self.get_ptips()
 
         # Other params
-        self.lam = 40           # lambda for primary task
-        self.lams = 10          # lambda for secondary task
+        self.lam = 80           # lambda for primary task
+        self.lams = 5          # lambda for secondary task
         self.gamma = 0.075      # gamma for weighted inverse
         self.pdlast = np.copy(self.p0)
         
@@ -92,7 +92,7 @@ class Trajectory():
     def jointnames(self):
         # Return a list of joint names FOR THE EXPECTED URDF!
         return [
-            # len(jointnames) = 44
+            # len(jointnames) = 45
             # -------------------- Right Hand (STRUMMING) --------------------
             "rh_WRJ2", "rh_WRJ1",                                   # wrist
             "rh_FFJ4", "rh_FFJ3", "rh_FFJ2", "rh_FFJ1",             # pointer
@@ -103,7 +103,7 @@ class Trajectory():
             # "rh_THJ5", "rh_THJ4", "rh_THJ3", "rh_THJ2", "rh_THJ1",
             # -------------------- Left Hand (FRETTING) ----------------------
             "right_hand_to_left_hand",                              # prismatic joint for sliding along the neck
-            "lh_WRJ2", "lh_WRJ1",                                   # wrist
+            "lh_WRJ3", "lh_WRJ2", "lh_WRJ1",                        # wrist
             "lh_FFJ4", "lh_FFJ3", "lh_FFJ2", "lh_FFJ1",             # pointer
             "lh_MFJ4", "lh_MFJ3", "lh_MFJ2", "lh_MFJ1",             # middle
             "lh_RFJ4", "lh_RFJ3", "lh_RFJ2", "lh_RFJ1",             # ring
@@ -124,19 +124,19 @@ class Trajectory():
                 self.rh_rf.fkin(np.concatenate((self.qd[0:2],self.qd[10:14])))[0],
                 self.rh_lf.fkin(np.concatenate((self.qd[0:2],self.qd[14:19])))[0],
 
-                self.lh_ff.fkin(self.qd[19:26])[0],
-                self.lh_mf.fkin(np.concatenate((self.qd[19:22],self.qd[26:30])))[0],
-                self.lh_rf.fkin(np.concatenate((self.qd[19:22],self.qd[30:34])))[0],
-                self.lh_lf.fkin(np.concatenate((self.qd[19:22],self.qd[34:39])))[0],
-                self.lh_thumb.fkin(np.concatenate((self.qd[19:22],self.qd[39:44])))[0]
+                self.lh_ff.fkin(self.qd[19:27])[0],
+                self.lh_mf.fkin(np.concatenate((self.qd[19:23],self.qd[27:31])))[0],
+                self.lh_rf.fkin(np.concatenate((self.qd[19:23],self.qd[31:35])))[0],
+                self.lh_lf.fkin(np.concatenate((self.qd[19:23],self.qd[35:40])))[0],
+                self.lh_thumb.fkin(np.concatenate((self.qd[19:23],self.qd[40:45])))[0]
                 ])
     
 
     def get_Jv(self):
         """
-        Returns the translational Jacobian of size 27x44 for the robot (both hands).
+        Returns the translational Jacobian of size 27x45 for the robot (both hands).
         """
-        Jv = np.zeros((27, 44))
+        Jv = np.zeros((27, 45))
         Jv[0:3, 0:6] = self.rh_ff.fkin(self.qd[0:6])[2]
         rh_mf_Jv = self.rh_mf.fkin(np.concatenate((self.qd[0:2],self.qd[6:10])))[2]
         Jv[3:6, 0:2], Jv[3:6, 6:10] = rh_mf_Jv[:,0:2], rh_mf_Jv[:,2:6]
@@ -147,15 +147,15 @@ class Trajectory():
         # We don't need the right-hand thumb — we set these to fixed joints
         # [rh_th_ptip, rh_th_Rtip, rh_th_Jv, rh_th_Jw] = self.rh_thumb.fkin(np.concatenate((self.qd[0:2],self.qd[19:24])))
 
-        Jv[12:15, 19:26] = self.lh_ff.fkin(self.qd[19:26])[2]
-        lh_mf_Jv = self.lh_mf.fkin(np.concatenate((self.qd[19:22],self.qd[26:30])))[2]
-        Jv[15:18, 19:22], Jv[15:18, 26:30], = lh_mf_Jv[:,0:3], lh_mf_Jv[:,3:7]
-        lh_rf_Jv = self.lh_rf.fkin(np.concatenate((self.qd[19:22],self.qd[30:34])))[2]
-        Jv[18:21, 19:22], Jv[18:21, 30:34] = lh_rf_Jv[:,0:3], lh_rf_Jv[:,3:7]
-        lh_lf_Jv = self.lh_lf.fkin(np.concatenate((self.qd[19:22],self.qd[34:39])))[2]
-        Jv[21:24, 19:22], Jv[21:24, 34:39] = lh_lf_Jv[:,0:3], lh_lf_Jv[:,3:8]
-        lh_th_Jv = self.lh_thumb.fkin(np.concatenate((self.qd[19:22],self.qd[39:44])))[2]
-        Jv[24:27, 19:22], Jv[24:27, 39:44] = lh_th_Jv[:,0:3], lh_th_Jv[:,3:8]
+        Jv[12:15, 19:27] = self.lh_ff.fkin(self.qd[19:27])[2]
+        lh_mf_Jv = self.lh_mf.fkin(np.concatenate((self.qd[19:23],self.qd[27:31])))[2]
+        Jv[15:18, 19:23], Jv[15:18, 27:31], = lh_mf_Jv[:,0:4], lh_mf_Jv[:,4:8]
+        lh_rf_Jv = self.lh_rf.fkin(np.concatenate((self.qd[19:23],self.qd[31:35])))[2]
+        Jv[18:21, 19:23], Jv[18:21, 31:35] = lh_rf_Jv[:,0:4], lh_rf_Jv[:,4:8]
+        lh_lf_Jv = self.lh_lf.fkin(np.concatenate((self.qd[19:23],self.qd[35:40])))[2]
+        Jv[21:24, 19:23], Jv[21:24, 35:40] = lh_lf_Jv[:,0:4], lh_lf_Jv[:,4:9]
+        lh_th_Jv = self.lh_thumb.fkin(np.concatenate((self.qd[19:23],self.qd[40:45])))[2]
+        Jv[24:27, 19:23], Jv[24:27, 40:45] = lh_th_Jv[:,0:4], lh_th_Jv[:,4:9]
         return Jv
     
 
@@ -216,7 +216,7 @@ class Trajectory():
     
 
     def fretting_trajectory(self, t, T, prevchord, nextchord):
-        t2 = fmod(t, T/2)
+        t2 = fmod(t, T)
         if t2 < T/2:
             (lh_pd, lh_vd) = goto(t2, T/2, prevchord, nextchord)
         else:
@@ -224,7 +224,7 @@ class Trajectory():
         return lh_pd, lh_vd
 
 
-    # Evaluate at the given time.  This was last called (dt) ago.
+    # Evaluate at the given time. This was last called (dt) ago.
     def evaluate(self, t, dt):
         # Initialize a guitar with: 20 frets, spaced 0.125 inches apart, and 
         # 6 strings spaced 0.0625 inches apart, at  a height of 0.2
@@ -232,7 +232,9 @@ class Trajectory():
 
         # Get the beat (T seconds), chords, and strumming pattern
         [T, chords, strumming_pattern] = song_info('some_song')
-        chord_ct = floor(t/T)
+        if floor(t/T) <= len(chords):
+            chord_ct = floor(t/T)
+            # print(f"\nChord:\n{chords[chord_ct]}\n")
 
         if chord_ct - 1 < 0:
             prevChord = np.copy(self.p0[12:27])
@@ -249,33 +251,9 @@ class Trajectory():
         pd = np.concatenate((rh_pd, lh_pd))
         vd = np.concatenate((rh_vd, lh_vd))
 
-
-        # if t <= T:
-            
-            
-            # nextChord = np.copy(prevChord)
-            # wrist_xd = np.copy(self.q0[19])
-        print(f'\nprevChord:\n {prevChord[12:27]}\n')
-        print(f'\nnextChord:\n {nextChord[12:27]}\n')
+        print(f'\nprevChord:\n {prevChord}\n')
+        print(f'\nnextChord:\n {nextChord}\n')
         print(f'\nwrist_xd:\n {wrist_xd}\n')
-            # pf = np.copy(self.p0[0:3])
-            # pf[2] += 0.05
-            # (pd, vd) = goto(t, T, self.p0[0:3], pf)
-        # elif t <= 2 * T:
-        #     prevChord = fretboard.pf_from_chord(G, self.p0, self.p0[0:12])[0]
-        #     [nextChord, wrist_xd] = fretboard.pf_from_chord(C, self.p0, self.p0[0:12])
-        #     print(f'\nprevChord:\n {prevChord[12:27]}\n')
-        #     print(f'\nnextChord:\n {nextChord[12:27]}\n')
-        #     print(f'\nwrist_xd:\n {wrist_xd}\n')
-        #     (pd, vd) = goto(t, T, prevChord, nextChord)
-        # else:
-        #     vd = np.zeros(27)
-        #     pd = self.get_ptips
-        
-        #print(f'\npd:\n {pd}\n')
-        #print(f'\nvd:\n{vd}\n')
-    
-        # xddot = np.hstack((vd, wd))
         xddot = vd
         qd = np.copy(self.qd)
 
@@ -289,55 +267,43 @@ class Trajectory():
         # print(f'\nJv[0:12,:] - Right Hand:\n {Jv[0:12,:]}\n')
         # print(f'\nJv[14:27,:] - Left Hand:\n {Jv[12:27,:]}\n')
         Jt = np.transpose(J)
-        # Jpinv = np.linalg.pinv(J)
-        # print(f'\nJpinv[:,0:20]:\n {Jpinv[:,0:20]}\n')
-        # print(f'\nJpinv[:,20:44]:\n {Jpinv[:,20:44]}\n')
-
         Jwinv = Jt @ np.linalg.inv((J @ Jt + self.gamma**2 * np.eye(J.shape[0])))
-        print(f'\nJwinv:\n {Jwinv}\n')
-        # print(f'\nJpinv:\n {Jpinv}\n')
+        # print(f'\nJwinv:\n {Jwinv}\n')
         
-        errp = ep(self.pdlast, ptips)
-        # err = np.concatenate((errp, errR))
-        # errp = ep(self.pdlast[0:3], ptip)
-        err = errp
+        err = ep(self.pdlast, ptips)
         
-        #qddot = np.zeros(44)
         qddot = Jwinv @ (xddot + self.lam * err)
         #qddot = Jt @ np.linalg.inv(J @ Jt) @ (xddot + self.lam * err)
         #print(f'\nqddot:\n {qddot}\n')
         #print(f'\nself.qd:\n {self.qd}\n')
         #print(f'\nxddot:\n {xddot}\n')
-        #print(f'\nerror:\n {err}\n')
-        # print(f"\nJ @ qddot:\n {J @ qddot - self.lam * err}")
-        #print(f"\nJ @ qddot:\n {J @ qddot - self.lam * err}")
+        print(f'\nerror:\n {err}\n')
 
         # SECONDARY TASK: Push each joint toward humanlike hand position
-        q_goal = np.copy(self.q0)   # We already initialize the hand in a human like position
-        # q_goal = np.copy(self.qd)
+        q_goal = np.copy(self.q0)   # We already initialize the hand in a human-like position
         q_goal[19] = wrist_xd       # "Comfortable" wrist position will vary depending on the chord
         # q_goal[20] = 0
         # q_goal[21] = 0
-        # # q_goal[22] = qd[-26]      
+        # # q_goal[23] = qd[-26]      
         # q_goal[26] = 0
         # q_goal[30] = 0
         # # q_goal[34] = qd[30]
         # q_goal[40] = np.copy(self.q0[40])
         # q_goal[41] = 0
 
-        print(f'\nq0:\n {self.q0[19:44]}\n')
-        print(f'\nq_goal:\n {q_goal[19:44]}\n')
+        print(f'\nq0:\n {self.q0[19:45]}\n')
+        print(f'\nq_goal:\n {q_goal[19:45]}\n')
         
         W = np.array([
             1.0,
-            1.0, 0.050, 
+            0.50, 1.0, 0.050, 
             0.75, 0.005, 0.005, 0.005, 
             0.75, 0.005, 0.005, 0.005, 
             0.75, 0.005, 0.005, 0.005, 
             0.25, 0.75, 0.005, 0.005, 0.005,
             0.005, 0.005, 0.005, 0.005, 0.005])
         W = np.concatenate((np.zeros(19), W))
-        W = np.ones((44))
+        W = np.ones((45))
         qsdot = self.lams * np.diag(W) @ (q_goal - qd)
 
         # Combined joint velocity:
@@ -346,7 +312,7 @@ class Trajectory():
         qd += qddot * dt
         # print(f"\nqddot * dt:\n{qddot * dt}\n")
         self.qd = qd
-        print(f"\nSelf.qd\n{self.qd[19:44]}\n")
+        print(f"\nSelf.qd\n{self.qd[19:45]}\n")
         self.pdlast = pd
 
         return (qd, qddot, pd, vd)
