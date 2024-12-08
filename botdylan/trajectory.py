@@ -285,7 +285,7 @@ class Trajectory():
         vd = np.concatenate((rh_vd, lh_vd))
 
         print(f'\nprevChord:\n {prevChord}\n')
-        if nextChord != None:
+        if isinstance(nextChord):
             print(f'\nnextChord:\n {nextChord}\n')
         else:
             print('\nnextChord not defined\n')
