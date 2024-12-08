@@ -14,6 +14,7 @@ from botdylan.TrajectoryUtils    import *
 # Grab the general fkin
 from botdylan.KinematicChain     import KinematicChain
 from botdylan.GuitarChain        import GuitarChain
+from botdylan.FretPos            import *
 
 # Grab the chords
 from botdylan.chords             import *
@@ -92,13 +93,25 @@ class Trajectory():
         # Initialize GuitarChain with fixed transformations from baseframe to frets
         guitar_chain = GuitarChain(node, "world", "str_high_e")
 
-        # Get fret positions
+        # Get positions
         fret_positions = guitar_chain.get_fret_positions()
+        string_positions = guitar_chain.get_string_positions()
 
         # Print fret positions
         for fret_name, fret_position in fret_positions.items():
             print(f"{fret_name}: {fret_position}")
 
+        # Print string positions
+        for str_name, str_pos in string_positions.items():
+            print(f"{str_name}: {str_pos}")
+
+        string_fret_positions = interpolate_string_positions(fret_positions, string_positions)
+
+        # Print the interpolated positions
+        for str_name, positions in string_fret_positions.items():
+            print(f"{str_name}:")
+            for position_name, position in positions.items():
+                print(f"  {position_name}: {position}")
 
         
     # Declare the joint names.
