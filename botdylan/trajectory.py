@@ -276,15 +276,17 @@ class Trajectory():
             [nextChord, wrist_xd] = fretboard.pf_from_chord(chords[chord_ct], self.p0)
             (lh_pd, lh_vd) = self.fretting_trajectory(t, T, prevChord, nextChord)
         else:
-            (lh_pd, lh_vd) = (np.copy(p0), np.zeros(15))
+            (lh_pd, lh_vd) = (np.copy(self.p0), np.zeros(15))
             wrist_xd = np.copy(self.q0[19])
 
         (rh_pd, rh_vd) = (self.p0[0:12], np.zeros(12))
+        #(rh_pd, rh_vd) = self.strumming_trajectory(t, T, "strum", 0.4, .15)
         pd = np.concatenate((rh_pd, lh_pd))
         vd = np.concatenate((rh_vd, lh_vd))
 
         print(f'\nprevChord:\n {prevChord}\n')
-        print(f'\nnextChord:\n {nextChord}\n')
+        if chord_ct < len(chords):
+            print(f'\nnextChord:\n {nextChord}\n')
         print(f'\nwrist_xd:\n {wrist_xd}\n')
         xddot = vd
         qd = np.copy(self.qd)
