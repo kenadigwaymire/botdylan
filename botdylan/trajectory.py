@@ -341,14 +341,34 @@ class Trajectory():
         print(f'\nq0:\n {self.q0[19:45]}\n')
         print(f'\nq_goal:\n {q_goal[19:45]}\n')
         
-        W = np.array([
-            1.0,
-            0.50, 1.0, 0.050, 
-            0.75, 0.005, 0.005, 0.005, 
-            0.75, 0.005, 0.005, 0.005, 
-            0.75, 0.005, 0.005, 0.005, 
-            0.25, 0.75, 0.005, 0.005, 0.005,
-            0.005, 0.005, 0.005, 0.005, 0.005])
+        # Data as dictionaries
+        min_values = {
+            "lh_WRJ3": -1.400, "lh_WRJ2": -0.524, "lh_WRJ1": -0.698, "lh_FFJ4": -0.349, "lh_FFJ3": -0.262,
+            "lh_FFJ2": 0.000, "lh_FFJ1": 0.000, "lh_MFJ4": -0.349, "lh_MFJ3": -0.262, "lh_MFJ2": 0.000,
+            "lh_MFJ1": 0.000, "lh_RFJ4": -0.349, "lh_RFJ3": -0.262, "lh_RFJ2": 0.000, "lh_RFJ1": 0.000,
+            "lh_LFJ5": 0.000, "lh_LFJ4": -0.349, "lh_LFJ3": -0.262, "lh_LFJ2": 0.000, "lh_LFJ1": 0.000,
+            "lh_THJ5": -1.047, "lh_THJ4": 0.000, "lh_THJ3": -0.209, "lh_THJ2": -0.698, "lh_THJ1": -0.262,
+            "right_hand_to_left_hand": 0.200
+        }
+
+        max_values = {
+            "lh_WRJ3": 1.571, "lh_WRJ2": 0.175, "lh_WRJ1": 0.489, "lh_FFJ4": 0.349, "lh_FFJ3": 1.571,
+            "lh_FFJ2": 1.571, "lh_FFJ1": 1.571, "lh_MFJ4": 0.349, "lh_MFJ3": 1.571, "lh_MFJ2": 1.571,
+            "lh_MFJ1": 1.571, "lh_RFJ4": 0.349, "lh_RFJ3": 1.571, "lh_RFJ2": 1.571, "lh_RFJ1": 1.571,
+            "lh_LFJ5": 0.785, "lh_LFJ4": 0.349, "lh_LFJ3": 1.571, "lh_LFJ2": 1.571, "lh_LFJ1": 1.571,
+            "lh_THJ5": 1.047, "lh_THJ4": 1.222, "lh_THJ3": 0.209, "lh_THJ2": 0.698, "lh_THJ1": 1.571,
+            "right_hand_to_left_hand": 1.000
+        }
+
+        # Ordered list of keys
+        ordered_keys = self.jointnames[19:45]
+
+        # Magnitudes / distances between max and min for each key
+        W = np.array([abs(max_values[key] - min_values[key]) for key in ordered_keys])
+
+        # Display results
+        print("Weighted values for left hand:", W)
+
         W = np.concatenate((np.zeros(19), W))
         W = np.ones((45))
         qsdot = self.lams * np.diag(W) @ (q_goal - qd)
