@@ -206,8 +206,8 @@ class Trajectory():
         """
         Generates a strumming trajectory for the right hand based on time and strumming pattern.
         Parameters:
-            t (float): Current time.
-            T (float): Total time for a single strumming motion.
+            t (float): Current time [s].
+            T (float): Total time for a single strumming motion [s].
             strum_pattern (str): Type of strumming (e.g., "strum", "downstroke", "upstroke").
             strum_length (float): Length of strumming motion.
             strum_depth (float): Depth of strumming motion.
@@ -221,6 +221,10 @@ class Trajectory():
 
         rh_p0 = np.copy(self.p0[0:12])
         rh_pf = np.copy(self.p0[0:12])
+
+        v0 = np.zeros_like(rh_p0)
+        vf = np.zeros_like(rh_pf)
+
         if strum_pattern == "strum":
             t1 = fmod(t, T/4)
             if t1 < T/4:
@@ -228,35 +232,53 @@ class Trajectory():
                     [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] = (y_mid - strum_length/2) * np.ones(4)
                 [rh_pf[1], rh_pf[4], rh_pf[7], rh_pf[10]] = y_mid * np.ones(4)
                 [rh_pf[2], rh_pf[5], rh_pf[8], rh_pf[11]] = (z0 - strum_depth/2) * np.ones(4)
+                [vf[1], vf[4], vf[7], vf[10]] = np.ones(4) * (strum_length / (T / 4))
+                [vf[2], vf[5], vf[8], vf[11]] = -1 * np.ones(4) * (strum_length / (T / 4))
             elif t1 < T/2:
                 [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] = y_mid * np.ones(4)
                 [rh_p0[2], rh_p0[5], rh_p0[8], rh_p0[11]] = (z0 - strum_depth/2) * np.ones(4)
                 [rh_pf[1], rh_pf[4], rh_pf[7], rh_pf[10]] = (y_mid + strum_length/2) * np.ones(4)
+                [v0[1], v0[4], v0[7], v0[10]] = [vf[1], vf[4], vf[7], vf[10]]
+                [v0[2], v0[5], v0[8], v0[11]] = [vf[2], vf[5], vf[8], vf[11]]
+                [vf[1], vf[4], vf[7], vf[10]] = np.ones(4) * (strum_length / (T / 4))
+                [vf[2], vf[5], vf[8], vf[11]] = np.zeros(4)
             elif t1 < 3*T/4:
                 [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] = (y_mid + strum_length/2) * np.ones(4)
                 [rh_pf[1], rh_pf[4], rh_pf[7], rh_pf[10]] = y_mid * np.ones(4)
                 [rh_pf[2], rh_pf[5], rh_pf[8], rh_pf[11]] = (z0 - strum_depth/2) * np.ones(4)
+                [v0[1], v0[4], v0[7], v0[10]] = [vf[1], vf[4], vf[7], vf[10]]
+                [v0[2], v0[5], v0[8], v0[11]] = [vf[2], vf[5], vf[8], vf[11]]
             else:
                 [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] = y_mid * np.ones(4)
                 [rh_p0[2], rh_p0[5], rh_p0[8], rh_p0[11]] = (z0 - strum_depth/2) * np.ones(4)
                 [rh_pf[1], rh_pf[4], rh_pf[7], rh_pf[10]] = (y_mid - strum_length/2) * np.ones(4)
-            (rh_pd, rh_vd) = goto(fmod(t1,T/4), T/4, rh_p0, rh_pf)
+                [v0[1], v0[4], v0[7], v0[10]] = [vf[1], vf[4], vf[7], vf[10]]
+                [v0[2], v0[5], v0[8], v0[11]] = [vf[2], vf[5], vf[8], vf[11]]
+            #(rh_pd, rh_vd) = goto(fmod(t1,T/4), T/4, rh_p0, rh_pf)
+            (rh_pd, rh_vd) = spline(fmod(t1, T/4), T/4, rh_p0, rh_pf, v0, vf)
 
         elif strum_pattern == "downstroke":
             t1 = fmod(t, T/3)
             if t1 < T/3:
-                if t > T/3:
-                    [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] = (y_mid - strum_length/2) * np.ones(4)
-                [rh_pf[1], rh_pf[4], rh_pf[7], rh_pf[10]] = y_mid * np.ones(4)
-                [rh_pf[2], rh_pf[5], rh_pf[8], rh_pf[11]] = (z0 - strum_depth/2) * np.ones(4)
+                [rh_pf[1], rh_pf[4], rh_pf[7], rh_pf[10]] = [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] + strum_length/2 * np.ones(4)
+                [rh_pf[2], rh_pf[5], rh_pf[8], rh_pf[11]] = [rh_p0[2], rh_p0[5], rh_p0[8], rh_p0[11]] - strum_depth/2 * np.ones(4)
+                [vf[1], vf[4], vf[7], vf[10]] = np.ones(4) * (strum_length / (T / 3))
+                [vf[2], vf[5], vf[8], vf[11]] = -1 * np.ones(4) * (strum_length / (T / 3))
             elif t1 < 2*T/3:
-                [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] = y_mid * np.ones(4)
-                [rh_p0[2], rh_p0[5], rh_p0[8], rh_p0[11]] = (z0 - strum_depth/2) * np.ones(4)
-                [rh_pf[1], rh_pf[4], rh_pf[7], rh_pf[10]] = (y_mid + strum_length/2) * np.ones(4)
+                [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] = [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] + strum_length/2 * np.ones(4)
+                [rh_p0[2], rh_p0[5], rh_p0[8], rh_p0[11]] = [rh_p0[2], rh_p0[5], rh_p0[8], rh_p0[11]] - strum_depth/2 * np.ones(4)
+                [rh_pf[1], rh_pf[4], rh_pf[7], rh_pf[10]] = [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] + strum_length * np.ones(4)
+                [v0[1], v0[4], v0[7], v0[10]] = [vf[1], vf[4], vf[7], vf[10]]
+                [v0[2], v0[5], v0[8], v0[11]] = [vf[2], vf[5], vf[8], vf[11]]
+                [vf[1], vf[4], vf[7], vf[10]] = np.ones(4) * (strum_length / (T / 3))
+                [vf[2], vf[5], vf[8], vf[11]] = np.zeros(4)
             else:
                 [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] = (y_mid + strum_length/2) * np.ones(4)
                 [rh_pf[1], rh_pf[4], rh_pf[7], rh_pf[10]] = (y_mid - strum_length/2) * np.ones(4)
-            (rh_pd, rh_vd) = goto(fmod(t1,T/3), T/3, rh_p0, rh_pf)
+                [v0[1], v0[4], v0[7], v0[10]] = [vf[1], vf[4], vf[7], vf[10]]
+                [v0[2], v0[5], v0[8], v0[11]] = [v0[2], v0[5], v0[8], v0[11]]
+            #(rh_pd, rh_vd) = goto(fmod(t1,T/3), T/3, rh_p0, rh_pf)
+            (rh_pd, rh_vd) = spline(fmod(t1, T/3), T/3, rh_p0, rh_pf, v0, vf)
 
         elif strum_pattern == "upstroke":
             t1 = fmod(t, T/3)
@@ -264,14 +286,23 @@ class Trajectory():
                 if t > T/3:
                     [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] = (y_mid - strum_length/2) * np.ones(4)
                 [rh_pf[1], rh_pf[4], rh_pf[7], rh_pf[10]] = (y_mid + strum_length/2) * np.ones(4)
+                [vf[1], vf[4], vf[7], vf[10]] = np.ones(4) * (strum_length / (T / 3))
+                [vf[2], vf[5], vf[8], vf[11]] = np.zeros(4)
             elif t1 < 2*T/3:
                 [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] = (y_mid + strum_length/2) * np.ones(4)
                 [rh_pf[1], rh_pf[4], rh_pf[7], rh_pf[10]] = y_mid * np.ones(4)
                 [rh_pf[2], rh_pf[5], rh_pf[8], rh_pf[11]] = (z0 - strum_depth/2) * np.ones(4)
+                [v0[1], v0[4], v0[7], v0[10]] = [vf[1], vf[4], vf[7], vf[10]]
+                [v0[2], v0[5], v0[8], v0[11]] = [vf[2], vf[5], vf[8], vf[11]]
+                [vf[1], vf[4], vf[7], vf[10]] = np.ones(4) * (strum_length / (T / 3))
+                [vf[2], vf[5], vf[8], vf[11]] = -1 * np.ones(4) * (strum_length / (T / 3))
             else:
                 [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] = y_mid * np.ones(4)
                 [rh_p0[2], rh_p0[5], rh_p0[8], rh_p0[11]] = (z0 - strum_depth/2) * np.ones(4)
-            (rh_pd, rh_vd) = goto(fmod(t1,T/3), T/3, rh_p0, rh_pf)
+                [v0[1], v0[4], v0[7], v0[10]] = [vf[1], vf[4], vf[7], vf[10]]
+                [v0[2], v0[5], v0[8], v0[11]] = [vf[2], vf[5], vf[8], vf[11]]
+            #(rh_pd, rh_vd) = goto(fmod(t1,T/3), T/3, rh_p0, rh_pf)
+            (rh_pd, rh_vd) = spline(fmod(t1, T/3), T/3, rh_p0, rh_pf, v0, vf)
 
         else:
             raise ValueError(f"{strum_pattern} is not a valid strum pattern. "
@@ -284,8 +315,8 @@ class Trajectory():
         """
         Generates a fretting trajectory for the left hand.
         Parameters:
-            t (float): Current time.
-            T (float): Time to transition between chords.
+            t (float): Current time [s].
+            T (float): Time to transition between chords [s].
             prevchord (np.ndarray): Previous chord position.
             nextchord (np.ndarray): Next chord position.
         Returns:
@@ -314,8 +345,8 @@ class Trajectory():
         """
         Evaluates the current state of the trajectory at a given time.
         Parameters:
-            t (float): Current time.
-            dt (float): Time elapsed since last evaluation.
+            t (float): Current time [s].
+            dt (float): Time elapsed since last evaluation [s].
         Returns:
             tuple: Updated joint positions, joint velocities, desired positions, and velocities.
         """
