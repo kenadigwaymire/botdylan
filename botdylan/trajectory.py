@@ -3,9 +3,6 @@ import numpy as np
 
 from math import pi, sin, cos, acos, atan2, sqrt, fmod, exp, floor
 
-# import sys
-# print(sys.path) # To debug pathing
-
 # Grab the utilities
 from botdylan.GeneratorNode      import GeneratorNode
 from botdylan.TransformHelpers   import *
@@ -13,6 +10,8 @@ from botdylan.TrajectoryUtils    import *
 
 # Grab the general fkin
 from botdylan.KinematicChain     import KinematicChain
+
+# Grab the guitar files
 from botdylan.GuitarChain        import GuitarChain
 from botdylan.FretPos            import *
 
@@ -33,7 +32,7 @@ def song_info(song):
     
     T = 1
     chords = [G, C, E, G, E, C, G]
-    strumming_pattern = []
+    strumming_pattern = "upstroke"
     return [T, chords, strumming_pattern]
        
 #
@@ -102,28 +101,28 @@ class Trajectory():
         self.gamma = 0.075      # gamma for weighted inverse
         self.pdlast = np.copy(self.p0)
 
-        # Initialize GuitarChain with fixed transformations from baseframe to frets
-        guitar_chain = GuitarChain(node, "world", "str_high_e")
+        # # Initialize GuitarChain with fixed transformations from baseframe to frets
+        # guitar_chain = GuitarChain(node, "world", "str_high_e")
 
-        # Get positions
-        fret_positions = guitar_chain.get_fret_positions()
-        string_positions = guitar_chain.get_string_positions()
+        # # Get positions
+        # fret_positions = guitar_chain.get_fret_positions()
+        # string_positions = guitar_chain.get_string_positions()
 
-        # Print fret positions
-        for fret_name, fret_position in fret_positions.items():
-            print(f"{fret_name}: {fret_position}")
+        # # Print fret positions
+        # for fret_name, fret_position in fret_positions.items():
+        #     print(f"{fret_name}: {fret_position}")
 
-        # Print string positions
-        for str_name, str_pos in string_positions.items():
-            print(f"{str_name}: {str_pos}")
+        # # Print string positions
+        # for str_name, str_pos in string_positions.items():
+        #     print(f"{str_name}: {str_pos}")
 
-        string_fret_positions = interpolate_string_positions(fret_positions, string_positions)
+        # string_fret_positions = interpolate_string_positions(fret_positions, string_positions)
 
-        # Print the interpolated positions
-        for str_name, positions in string_fret_positions.items():
-            print(f"{str_name}:")
-            for position_name, position in positions.items():
-                print(f"  {position_name}: {position}")
+        # # Print the interpolated positions
+        # for str_name, positions in string_fret_positions.items():
+        #     print(f"{str_name}:")
+        #     for position_name, position in positions.items():
+        #         print(f"  {position_name}: {position}")
 
         
     # Declare the joint names.
@@ -203,7 +202,7 @@ class Trajectory():
         Jv[24:27, 19:23], Jv[24:27, 40:45] = lh_th_Jv[:,0:4], lh_th_Jv[:,4:9]
         return Jv
     
-    def strumming_trajectory(self, t, T, strum_pattern, strum_length, strum_depth):
+    def strumming_trajectory(self, t, T, fretboard, strum_pattern, strum_length, strum_depth):
         """
         Generates a strumming trajectory for the right hand based on time and strumming pattern.
         Parameters:
@@ -216,51 +215,62 @@ class Trajectory():
             tuple: Desired positions and velocities for the right-hand motion.
         """
         strum_pattern_list = ["strum", "downstroke", "upstroke"]
+        y_mid = fretboard.y0 + 2.5 * fretboard.dy
+        z0 = fretboard.z0
+        print(f"\ny_mid:\n {y_mid}")
 
         rh_p0 = np.copy(self.p0[0:12])
         rh_pf = np.copy(self.p0[0:12])
         if strum_pattern == "strum":
             t1 = fmod(t, T/4)
             if t1 < T/4:
-                [rh_pf[1], rh_pf[4], rh_pf[7], rh_pf[10]] = [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] + strum_length/2 * np.ones(4)
-                [rh_pf[2], rh_pf[5], rh_pf[8], rh_pf[11]] = [rh_p0[2], rh_p0[5], rh_p0[8], rh_p0[11]] - strum_depth/2 * np.ones(4)
+                if t > T/4:
+                    [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] = (y_mid - strum_length/2) * np.ones(4)
+                [rh_pf[1], rh_pf[4], rh_pf[7], rh_pf[10]] = y_mid * np.ones(4)
+                [rh_pf[2], rh_pf[5], rh_pf[8], rh_pf[11]] = (z0 - strum_depth/2) * np.ones(4)
             elif t1 < T/2:
-                [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] = [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] + strum_length/2 * np.ones(4)
-                [rh_p0[2], rh_p0[5], rh_p0[8], rh_p0[11]] = [rh_p0[2], rh_p0[5], rh_p0[8], rh_p0[11]] - strum_depth/2 * np.ones(4)
-                [rh_pf[1], rh_pf[4], rh_pf[7], rh_pf[10]] = [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] + strum_length * np.ones(4)
+                [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] = y_mid * np.ones(4)
+                [rh_p0[2], rh_p0[5], rh_p0[8], rh_p0[11]] = (z0 - strum_depth/2) * np.ones(4)
+                [rh_pf[1], rh_pf[4], rh_pf[7], rh_pf[10]] = (y_mid + strum_length/2) * np.ones(4)
             elif t1 < 3*T/4:
-                [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] = [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] + strum_length * np.ones(4)
-                [rh_pf[1], rh_pf[4], rh_pf[7], rh_pf[10]] = [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] + strum_length/2 * np.ones(4)
-                [rh_pf[2], rh_pf[5], rh_pf[8], rh_pf[11]] = [rh_p0[2], rh_p0[5], rh_p0[8], rh_p0[11]] - strum_depth/2 * np.ones(4)
+                [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] = (y_mid + strum_length/2) * np.ones(4)
+                [rh_pf[1], rh_pf[4], rh_pf[7], rh_pf[10]] = y_mid * np.ones(4)
+                [rh_pf[2], rh_pf[5], rh_pf[8], rh_pf[11]] = (z0 - strum_depth/2) * np.ones(4)
             else:
-                [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] = [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] + strum_length/2 * np.ones(4)
-                [rh_p0[2], rh_p0[5], rh_p0[8], rh_p0[11]] = [rh_p0[2], rh_p0[5], rh_p0[8], rh_p0[11]] - strum_depth/2 * np.ones(4)
+                [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] = y_mid * np.ones(4)
+                [rh_p0[2], rh_p0[5], rh_p0[8], rh_p0[11]] = (z0 - strum_depth/2) * np.ones(4)
+                [rh_pf[1], rh_pf[4], rh_pf[7], rh_pf[10]] = (y_mid - strum_length/2) * np.ones(4)
             (rh_pd, rh_vd) = goto(fmod(t1,T/4), T/4, rh_p0, rh_pf)
 
         elif strum_pattern == "downstroke":
             t1 = fmod(t, T/3)
             if t1 < T/3:
-                [rh_pf[1], rh_pf[4], rh_pf[7], rh_pf[10]] = [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] + strum_length/2 * np.ones(4)
-                [rh_pf[2], rh_pf[5], rh_pf[8], rh_pf[11]] = [rh_p0[2], rh_p0[5], rh_p0[8], rh_p0[11]] - strum_depth/2 * np.ones(4)
+                if t > T/3:
+                    [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] = (y_mid - strum_length/2) * np.ones(4)
+                [rh_pf[1], rh_pf[4], rh_pf[7], rh_pf[10]] = y_mid * np.ones(4)
+                [rh_pf[2], rh_pf[5], rh_pf[8], rh_pf[11]] = (z0 - strum_depth/2) * np.ones(4)
             elif t1 < 2*T/3:
-                [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] = [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] + strum_length/2 * np.ones(4)
-                [rh_p0[2], rh_p0[5], rh_p0[8], rh_p0[11]] = [rh_p0[2], rh_p0[5], rh_p0[8], rh_p0[11]] - strum_depth/2 * np.ones(4)
-                [rh_pf[1], rh_pf[4], rh_pf[7], rh_pf[10]] = [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] + strum_length * np.ones(4)
+                [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] = y_mid * np.ones(4)
+                [rh_p0[2], rh_p0[5], rh_p0[8], rh_p0[11]] = (z0 - strum_depth/2) * np.ones(4)
+                [rh_pf[1], rh_pf[4], rh_pf[7], rh_pf[10]] = (y_mid + strum_length/2) * np.ones(4)
             else:
-                [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] = [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] + strum_length * np.ones(4)
+                [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] = (y_mid + strum_length/2) * np.ones(4)
+                [rh_pf[1], rh_pf[4], rh_pf[7], rh_pf[10]] = (y_mid - strum_length/2) * np.ones(4)
             (rh_pd, rh_vd) = goto(fmod(t1,T/3), T/3, rh_p0, rh_pf)
 
         elif strum_pattern == "upstroke":
             t1 = fmod(t, T/3)
             if t1 < T/3:
-                [rh_pf[1], rh_pf[4], rh_pf[7], rh_pf[10]] = [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] + strum_length * np.ones(4)
+                if t > T/3:
+                    [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] = (y_mid - strum_length/2) * np.ones(4)
+                [rh_pf[1], rh_pf[4], rh_pf[7], rh_pf[10]] = (y_mid + strum_length/2) * np.ones(4)
             elif t1 < 2*T/3:
-                [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] = [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] + strum_length * np.ones(4)
-                [rh_pf[1], rh_pf[4], rh_pf[7], rh_pf[10]] = [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] + strum_length/2 * np.ones(4)
-                [rh_pf[2], rh_pf[5], rh_pf[8], rh_pf[11]] = [rh_p0[2], rh_p0[5], rh_p0[8], rh_p0[11]] - strum_depth/2 * np.ones(4)
+                [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] = (y_mid + strum_length/2) * np.ones(4)
+                [rh_pf[1], rh_pf[4], rh_pf[7], rh_pf[10]] = y_mid * np.ones(4)
+                [rh_pf[2], rh_pf[5], rh_pf[8], rh_pf[11]] = (z0 - strum_depth/2) * np.ones(4)
             else:
-                [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] = [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] + strum_length/2 * np.ones(4)
-                [rh_p0[2], rh_p0[5], rh_p0[8], rh_p0[11]] = [rh_p0[2], rh_p0[5], rh_p0[8], rh_p0[11]] - strum_depth/2 * np.ones(4)
+                [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] = y_mid * np.ones(4)
+                [rh_p0[2], rh_p0[5], rh_p0[8], rh_p0[11]] = (z0 - strum_depth/2) * np.ones(4)
             (rh_pd, rh_vd) = goto(fmod(t1,T/3), T/3, rh_p0, rh_pf)
 
         else:
@@ -341,7 +351,7 @@ class Trajectory():
             wrist_xd = np.copy(self.q0[19])
 
         #(rh_pd, rh_vd) = (self.p0[0:12], np.zeros(12))
-        (rh_pd, rh_vd) = self.strumming_trajectory(t, T, "downstroke", 0.6, .25)
+        (rh_pd, rh_vd) = self.strumming_trajectory(t, T, fretboard, strumming_pattern, 10*fretboard.dy, .0075)
         pd = np.concatenate((rh_pd, lh_pd))
         vd = np.concatenate((rh_vd, lh_vd))
 

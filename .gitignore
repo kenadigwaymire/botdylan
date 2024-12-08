@@ -1,0 +1,11 @@
+__pycache__/
+botdylan/__pycache__/__init__.cpython-310.pyc
+botdylan/__pycache__/chords.cpython-310.pyc
+botdylan/__pycache__/fretboard.cpython-310.pyc
+botdylan/__pycache__/FretPos.cpython-310.pyc
+botdylan/__pycache__/GeneratorNode.cpython-310.pyc
+botdylan/__pycache__/GuitarChain.cpython-310.pyc
+botdylan/__pycache__/KinematicChain.cpython-310.pyc
+botdylan/__pycache__/trajectory.cpython-310.pyc
+botdylan/__pycache__/TrajectoryUtils.cpython-310.pyc
+botdylan/__pycache__/TransformHelpers.cpython-310.pyc
