@@ -55,7 +55,7 @@ Visualization Manager:
     - Alpha: 1
       Class: rviz_default_plugins/RobotModel
       Collision Enabled: false
-      Description File: /home/kenadi/robotws/src/botdylan/urdf/sr_hand_bimanual.urdf
+      Description File: /home/kenadi/robotws/src/sr_description/robots/sr_hand_bimanual.urdf
       Description Source: File
       Description Topic:
         Depth: 5
@@ -391,7 +391,7 @@ Visualization Manager:
     - Alpha: 1
       Class: rviz_default_plugins/RobotModel
       Collision Enabled: false
-      Description File: /home/trey/robotws/src/botdylan/urdf/guitar.urdf
+      Description File: /home/kenadi/robotws/src/botdylan/urdf/guitar.urdf
       Description Source: File
       Description Topic:
         Depth: 5
