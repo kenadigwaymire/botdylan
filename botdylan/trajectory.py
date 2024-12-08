@@ -276,7 +276,7 @@ class Trajectory():
             [nextChord, wrist_xd] = fretboard.pf_from_chord(chords[chord_ct], self.p0)
             (lh_pd, lh_vd) = self.fretting_trajectory(t, T, prevChord, nextChord)
         else:
-            (lh_pd, lh_vd) = (np.copy(self.p0), np.zeros(15))
+            (lh_pd, lh_vd) = (np.copy(self.p0[15:27]), np.zeros(15))
             wrist_xd = np.copy(self.q0[19])
 
         (rh_pd, rh_vd) = (self.p0[0:12], np.zeros(12))
