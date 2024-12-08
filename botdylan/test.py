@@ -187,3 +187,17 @@ if __name__ == "__main__":
 # with the GeneratorNode.py
 # Rd = np.zeros((3,27))
 # wd = np.zeros(27)]
+
+# # No need to lift the fingers when the song is over.
+            # if chord_ct != len(chords):
+            #     for i in [2, 5, 8, 11]:
+            #         prevChord[i] += 0.01
+
+
+# # List of decent x and y offsets for each finger  relative to the wrist
+#         # (for the left hand) to guess a reasonable position for fingers that
+#         # aren't involved in playing the chord.
+#         finger_offset = [[-0.033, p0[13]],
+#                          [-0.011, p0[16]], 
+#                          [0.011, p0[19]], 
+#                          [0.033, p0[22] - 0.01]]

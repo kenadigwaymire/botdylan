@@ -13,6 +13,8 @@ from botdylan.TrajectoryUtils    import *
 
 # Grab the general fkin
 from botdylan.KinematicChain     import KinematicChain
+from botdylan.GuitarChain        import GuitarChain
+from botdylan.FretPos            import *
 
 # Grab the chords
 from botdylan.chords             import *
@@ -21,7 +23,14 @@ from botdylan.fretboard          import *
 # TODO: Flesh out a function to read the song that gets initialized when the tajectory
 # gets initialized.
 def song_info(song):
-    # Eventually change these to be pulled or calculated from a song file
+    """
+    Returns details of the song.
+    Parameters:
+        song (str): Name or identifier of the song (currently unused).
+    Returns:
+        list: Contains tempo (T), a list of chords, and the strumming pattern.
+    """
+    
     T = 1
     chords = [G, C, E, G, E, C, G]
     strumming_pattern = []
@@ -33,6 +42,11 @@ def song_info(song):
 class Trajectory():
     # Initialization.
     def __init__(self, node):
+        """
+        Initializes the Trajectory object with kinematic chains, joint positions, and other parameters.
+        Parameters:
+            node (rclpy.node.Node): ROS2 node for communication.
+        """
         # Set up the kinematic chain objects.
         # RIGHT HAND
         self.rh_ff = KinematicChain(node, 'world', 'rh_fftip',
@@ -87,9 +101,38 @@ class Trajectory():
         self.lams = 5           # lambda for secondary task
         self.gamma = 0.075      # gamma for weighted inverse
         self.pdlast = np.copy(self.p0)
+
+        # Initialize GuitarChain with fixed transformations from baseframe to frets
+        guitar_chain = GuitarChain(node, "world", "str_high_e")
+
+        # Get positions
+        fret_positions = guitar_chain.get_fret_positions()
+        string_positions = guitar_chain.get_string_positions()
+
+        # Print fret positions
+        for fret_name, fret_position in fret_positions.items():
+            print(f"{fret_name}: {fret_position}")
+
+        # Print string positions
+        for str_name, str_pos in string_positions.items():
+            print(f"{str_name}: {str_pos}")
+
+        string_fret_positions = interpolate_string_positions(fret_positions, string_positions)
+
+        # Print the interpolated positions
+        for str_name, positions in string_fret_positions.items():
+            print(f"{str_name}:")
+            for position_name, position in positions.items():
+                print(f"  {position_name}: {position}")
+
         
     # Declare the joint names.
     def jointnames(self):
+        """
+        Returns a list of joint names based on the robot's URDF structure.
+        Returns:
+            list: Names of joints in order.
+        """
         # Return a list of joint names FOR THE EXPECTED URDF!
         return [
             # len(jointnames) = 45
@@ -114,9 +157,9 @@ class Trajectory():
 
     def get_ptips(self):
         """
-        Returns the positions of the fingers as an array of length 27, representing
-        the x, y, and z positions of each of the 9 fingers used (in the order that
-        they appear in jointnames).
+        Computes the 3D positions of finger tips for both hands.
+        Returns:
+            np.ndarray: Concatenated array of positions for all finger tips (length: 27).
         """
         return np.concatenate([
                 self.rh_ff.fkin(self.qd[0:6])[0],
@@ -134,7 +177,9 @@ class Trajectory():
 
     def get_Jv(self):
         """
-        Returns the translational Jacobian of size 27x45 for the robot (both hands).
+        Computes the translational Jacobian for all fingers.
+        Returns:
+            np.ndarray: Jacobian matrix of size 27x45.
         """
         Jv = np.zeros((27, 45))
         Jv[0:3, 0:6] = self.rh_ff.fkin(self.qd[0:6])[2]
@@ -158,8 +203,18 @@ class Trajectory():
         Jv[24:27, 19:23], Jv[24:27, 40:45] = lh_th_Jv[:,0:4], lh_th_Jv[:,4:9]
         return Jv
     
-
     def strumming_trajectory(self, t, T, strum_pattern, strum_length, strum_depth):
+        """
+        Generates a strumming trajectory for the right hand based on time and strumming pattern.
+        Parameters:
+            t (float): Current time.
+            T (float): Total time for a single strumming motion.
+            strum_pattern (str): Type of strumming (e.g., "strum", "downstroke", "upstroke").
+            strum_length (float): Length of strumming motion.
+            strum_depth (float): Depth of strumming motion.
+        Returns:
+            tuple: Desired positions and velocities for the right-hand motion.
+        """
         strum_pattern_list = ["strum", "downstroke", "upstroke"]
 
         rh_p0 = np.copy(self.p0[0:12])
@@ -216,6 +271,16 @@ class Trajectory():
     
 
     def fretting_trajectory(self, t, T, prevchord, nextchord):
+        """
+        Generates a fretting trajectory for the left hand.
+        Parameters:
+            t (float): Current time.
+            T (float): Time to transition between chords.
+            prevchord (np.ndarray): Previous chord position.
+            nextchord (np.ndarray): Next chord position.
+        Returns:
+            tuple: Desired positions and velocities for the left-hand motion.
+        """
         t2 = fmod(t, T)
         if t2 < T/2:
             # Move to the desired chord
@@ -236,6 +301,14 @@ class Trajectory():
 
     # Evaluate at the given time. This was last called (dt) ago.
     def evaluate(self, t, dt):
+        """
+        Evaluates the current state of the trajectory at a given time.
+        Parameters:
+            t (float): Current time.
+            dt (float): Time elapsed since last evaluation.
+        Returns:
+            tuple: Updated joint positions, joint velocities, desired positions, and velocities.
+        """
         # Initialize a guitar with: 20 frets, spaced 0.125 inches apart, and 
         # 6 strings spaced 0.0625 inches apart, at  a height of 0.2
         fretboard = Fretboard(x0=-0.080, y0=0.315, z0=0.09, dx=0.050, dy=0.0143, num_frets=20)
@@ -264,15 +337,17 @@ class Trajectory():
             [nextChord, wrist_xd] = fretboard.pf_from_chord(chords[chord_ct], self.p0)
             (lh_pd, lh_vd) = self.fretting_trajectory(t, T, prevChord, nextChord)
         else:
-            (lh_pd, lh_vd) = (np.copy(p0), np.zeros(15))
+            (lh_pd, lh_vd) = (np.copy(self.p0[12:27]), np.zeros(15))
             wrist_xd = np.copy(self.q0[19])
 
-        (rh_pd, rh_vd) = (self.p0[0:12], np.zeros(12))
+        #(rh_pd, rh_vd) = (self.p0[0:12], np.zeros(12))
+        (rh_pd, rh_vd) = self.strumming_trajectory(t, T, "downstroke", 0.6, .25)
         pd = np.concatenate((rh_pd, lh_pd))
         vd = np.concatenate((rh_vd, lh_vd))
 
         print(f'\nprevChord:\n {prevChord}\n')
-        print(f'\nnextChord:\n {nextChord}\n')
+        if chord_ct < len(chords):
+            print(f'\nnextChord:\n {nextChord}\n')
         print(f'\nwrist_xd:\n {wrist_xd}\n')
         xddot = vd
         qd = np.copy(self.qd)
@@ -314,14 +389,32 @@ class Trajectory():
         print(f'\nq0:\n {self.q0[19:45]}\n')
         print(f'\nq_goal:\n {q_goal[19:45]}\n')
         
-        W = np.array([
-            1.0,
-            0.50, 1.0, 0.050, 
-            0.75, 0.005, 0.005, 0.005, 
-            0.75, 0.005, 0.005, 0.005, 
-            0.75, 0.005, 0.005, 0.005, 
-            0.25, 0.75, 0.005, 0.005, 0.005,
-            0.005, 0.005, 0.005, 0.005, 0.005])
+        # Data as dictionaries
+        min_values = {
+            "lh_WRJ3": -1.400, "lh_WRJ2": -0.524, "lh_WRJ1": -0.698, "lh_FFJ4": -0.349, "lh_FFJ3": -0.262,
+            "lh_FFJ2": 0.000, "lh_FFJ1": 0.000, "lh_MFJ4": -0.349, "lh_MFJ3": -0.262, "lh_MFJ2": 0.000,
+            "lh_MFJ1": 0.000, "lh_RFJ4": -0.349, "lh_RFJ3": -0.262, "lh_RFJ2": 0.000, "lh_RFJ1": 0.000,
+            "lh_LFJ5": 0.000, "lh_LFJ4": -0.349, "lh_LFJ3": -0.262, "lh_LFJ2": 0.000, "lh_LFJ1": 0.000,
+            "lh_THJ5": -1.047, "lh_THJ4": 0.000, "lh_THJ3": -0.209, "lh_THJ2": -0.698, "lh_THJ1": -0.262,
+            "right_hand_to_left_hand": 0.200
+        }
+
+        max_values = {
+            "lh_WRJ3": 1.571, "lh_WRJ2": 0.175, "lh_WRJ1": 0.489, "lh_FFJ4": 0.349, "lh_FFJ3": 1.571,
+            "lh_FFJ2": 1.571, "lh_FFJ1": 1.571, "lh_MFJ4": 0.349, "lh_MFJ3": 1.571, "lh_MFJ2": 1.571,
+            "lh_MFJ1": 1.571, "lh_RFJ4": 0.349, "lh_RFJ3": 1.571, "lh_RFJ2": 1.571, "lh_RFJ1": 1.571,
+            "lh_LFJ5": 0.785, "lh_LFJ4": 0.349, "lh_LFJ3": 1.571, "lh_LFJ2": 1.571, "lh_LFJ1": 1.571,
+            "lh_THJ5": 1.047, "lh_THJ4": 1.222, "lh_THJ3": 0.209, "lh_THJ2": 0.698, "lh_THJ1": 1.571,
+            "right_hand_to_left_hand": 1.000
+        }
+
+        # Ordered list of keys
+        ordered_keys = self.jointnames()[19:45]
+
+        # Magnitudes / distances between max and min for each key
+        W = np.array([abs(max_values[key] - min_values[key]) for key in ordered_keys])
+        # print("Weighted values for left hand:", W)
+
         W = np.concatenate((np.zeros(19), W))
         W = np.ones((45))
         qsdot = self.lams * np.diag(W) @ (q_goal - qd)
@@ -341,6 +434,11 @@ class Trajectory():
 #  Main Code
 #
 def main(args=None):
+    """
+    Entry point of the script. Initializes ROS, sets up the trajectory generator, and runs the trajectory.
+    Parameters:
+        args (list, optional): Command-line arguments.
+    """
     # Initialize ROS.
     rclpy.init(args=args)
 

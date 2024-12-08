@@ -54,3 +54,4 @@ class Fretboard():
         return [np.concatenate((pf)), -wrist_xd]
     def get_coord_from_pos(self, curr_pos):
         return (curr_pos[0] / self.dy, (curr_pos[1] - (self.dx / 2)) / self.dx)
+    
