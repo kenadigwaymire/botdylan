@@ -31,13 +31,21 @@ class Chords():
         """
         Remap the conventional chord & string positions to positions on the 
         strings and frets of our guitar, with its orientation.
+
+        Also, return which fingers actually play the chord
+            1: pointer
+            2: middle
+            3: ring
+            4: pinky
         """
+        playing_fingers = [] 
         placements = np.nan * np.ones((4,2))
         for i, finger_placement in enumerate(self.finger_placements):
             if not np.isnan(finger_placement[0]):
+                playing_fingers.append(i)
                 placements[i][0] = 20 - finger_placement[0]
                 placements[i][1] = 6 - STRING_NOTES.get(finger_placement[1])
-        return placements
+        return placements, playing_fingers
 
 
 G = Chords('G', [[2, 'a'], [3, 'e_low'], [3, 'e_high'], [np.nan, np.nan]])

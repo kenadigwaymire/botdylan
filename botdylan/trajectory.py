@@ -97,7 +97,8 @@ class Trajectory():
 
         # Other params
         self.lam = 30           # lambda for primary task
-        self.lams = 5           # lambda for secondary task
+        self.lam2 = 30           # lambda for secondary task
+        self.lam3 = 20           # lambda for tertiary task
         self.gamma = 0.075      # gamma for weighted inverse
         self.pdlast = np.copy(self.p0)
 
@@ -217,7 +218,7 @@ class Trajectory():
         strum_pattern_list = ["strum", "downstroke", "upstroke"]
         y_mid = fretboard.y0 + 2.5 * fretboard.dy
         z0 = fretboard.z0
-        print(f"\ny_mid:\n {y_mid}")
+        # print(f"\ny_mid:\n {y_mid}")
 
         rh_p0 = np.copy(self.p0[0:12])
         rh_pf = np.copy(self.p0[0:12])
@@ -368,69 +369,73 @@ class Trajectory():
             prevChord = np.copy(self.p0[12:27])
         else:
             prevChord = fretboard.pf_from_chord(chords[chord_ct-1], self.p0)[0]
-            # # No need to lift the fingers when the song is over.
-            # if chord_ct != len(chords):
-            #     for i in [2, 5, 8, 11]:
-            #         prevChord[i] += 0.01
 
         # Play the next chord. Return to p0 when the song is done
         if chord_ct < len(chords):
-            [nextChord, wrist_xd] = fretboard.pf_from_chord(chords[chord_ct], self.p0)
+            [nextChord, wrist_xd, p_indeces, s_indeces] = fretboard.pf_from_chord(chords[chord_ct], self.p0)
+            print(f"\np_indeces:\n{p_indeces}\n")
+            print(f"\ns_indeces:\n{s_indeces}\n")
             (lh_pd, lh_vd) = self.fretting_trajectory(t, T, prevChord, nextChord)
+            (rh_pd, rh_vd) = self.strumming_trajectory(t, T, fretboard, strumming_pattern, 10*fretboard.dy, .0075)
+            pd = np.concatenate((rh_pd, lh_pd))
+            vd = np.concatenate((rh_vd, lh_vd))
         else:
-            (lh_pd, lh_vd) = (np.copy(self.p0[12:27]), np.zeros(15))
+            (pd, vd) = (np.copy(self.p0), np.zeros(27))
             wrist_xd = np.copy(self.q0[19])
-
-        #(rh_pd, rh_vd) = (self.p0[0:12], np.zeros(12))
-        (rh_pd, rh_vd) = self.strumming_trajectory(t, T, fretboard, strumming_pattern, 10*fretboard.dy, .0075)
-        pd = np.concatenate((rh_pd, lh_pd))
-        vd = np.concatenate((rh_vd, lh_vd))
+            p_indeces = list(range(27))
+            s_indeces = []
+        
 
         print(f'\nprevChord:\n {prevChord}\n')
         if chord_ct < len(chords):
             print(f'\nnextChord:\n {nextChord}\n')
         print(f'\nwrist_xd:\n {wrist_xd}\n')
-        xddot = vd
         qd = np.copy(self.qd)
 
-        Jv = self.get_Jv()
+        J = self.get_Jv()
 
         ptips = self.get_ptips()
         print(f'\nptips:\n {ptips[12:27]}\n')
+        # print(f"size of J: {J.shape}")
+        # print(f'\nJ[0:12,:] - Right Hand:\n {J[0:12,:]}\n')
+        # print(f'\nJ[14:27,:] - Left Hand:\n {J[12:27,:]}\n')
+        # Jt = np.transpose(J)
 
-        J = Jv
-        # print(f"size of Jv: {Jv.shape}")
-        # print(f'\nJv[0:12,:] - Right Hand:\n {Jv[0:12,:]}\n')
-        # print(f'\nJv[14:27,:] - Left Hand:\n {Jv[12:27,:]}\n')
-        Jt = np.transpose(J)
-        Jwinv = Jt @ np.linalg.inv((J @ Jt + self.gamma**2 * np.eye(J.shape[0])))
-        # print(f'\nJwinv:\n {Jwinv}\n')
-        
-        err = ep(self.pdlast, ptips)
-        
-        qddot = Jwinv @ (xddot + self.lam * err)
-        #qddot = Jt @ np.linalg.inv(J @ Jt) @ (xddot + self.lam * err)
-        #print(f'\nqddot:\n {qddot}\n')
-        #print(f'\nself.qd:\n {self.qd}\n')
-        #print(f'\nxddot:\n {xddot}\n')
-        print(f'\nerror:\n {err}\n')
+        xddot_p = vd[p_indeces]
+        J_p = J[p_indeces,:]
+        Jt_p = np.transpose(J_p)
+        Jwinv_p = Jt_p @ np.linalg.inv((J_p @ Jt_p + self.gamma**2 * np.eye(J_p.shape[0])))
+        pdlast_p = self.pdlast[p_indeces]
+        err_p = ep(pdlast_p, ptips[p_indeces])
 
-        # SECONDARY TASK: Push each joint toward humanlike hand position
+        qddot = Jwinv_p @ (xddot_p + self.lam * err_p)
+        print(f'\nerr_p:\n {err_p}\n')
+
+        # SECONDARY TASK: for the left (fretting) hand, move the thumb to contact
+        # the bottom of the guitar neck and lift any fingers that aren't involved
+        # in playing the chord off of the guitar strings.
+        xddot_s = vd[s_indeces]
+        J_s = J[s_indeces,:]
+        Jt_s = np.transpose(J_s)
+        Jwinv_s = Jt_s @ np.linalg.inv((J_s @ Jt_s + self.gamma**2 * np.eye(J_s.shape[0])))
+        pdlast_s = self.pdlast[s_indeces]
+        err_s = ep(pdlast_s, ptips[s_indeces])
+        print(f'\nerr_s:\n {err_s}\n')
+
+        qsdot = Jwinv_s @ (xddot_s + self.lam2 * err_s)
+        qddot += (np.eye(J_p.shape[1]) - Jwinv_p @ J_p) @ qsdot
+
+        # TERTIARY TASK: Push each joint toward humanlike hand position
         q_goal = np.copy(self.q0)   # We already initialize the hand in a human-like position
         q_goal[19] = wrist_xd       # "Comfortable" wrist position will vary depending on the chord
-        # q_goal[20] = 0
-        # q_goal[21] = 0
-        # # q_goal[23] = qd[-26]      
-        # q_goal[26] = 0
-        # q_goal[30] = 0
-        # # q_goal[34] = qd[30]
-        # q_goal[40] = np.copy(self.q0[40])
-        # q_goal[41] = 0
 
         print(f'\nq0:\n {self.q0[19:45]}\n')
         print(f'\nq_goal:\n {q_goal[19:45]}\n')
         
-        # Data as dictionaries
+        # Find the range of motion of each joint based on their min. and max. 
+        # positions in a humanlike hand,all of which were fortunately given in 
+        # the URDF — except the prismatic "right-to-left-hand" joint and lh_WRJ3
+        # which we added in. We estimated the ranges ourselves for these 2.
         min_values = {
             "lh_WRJ3": -1.400, "lh_WRJ2": -0.524, "lh_WRJ1": -0.698, "lh_FFJ4": -0.349, "lh_FFJ3": -0.262,
             "lh_FFJ2": 0.000, "lh_FFJ1": 0.000, "lh_MFJ4": -0.349, "lh_MFJ3": -0.262, "lh_MFJ2": 0.000,
@@ -449,24 +454,21 @@ class Trajectory():
             "right_hand_to_left_hand": 1.000
         }
 
-        # Ordered list of keys
-        ordered_keys = self.jointnames()[19:45]
+        # Ordered list of left hand joints
+        lh_joints = self.jointnames()[19:45]
 
         # Magnitudes / distances between max and min for each key
-        W = np.array([abs(max_values[key] - min_values[key]) for key in ordered_keys])
+        W = np.array([abs(max_values[key] - min_values[key]) for key in lh_joints])
         # print("Weighted values for left hand:", W)
 
         W = np.concatenate((np.zeros(19), W))
-        W = np.ones((45))
-        qsdot = self.lams * np.diag(W) @ (q_goal - qd)
+        qtdot = self.lam3 * np.diag(W) @ (q_goal - qd)
 
         # Combined joint velocity:
-        qddot += (np.eye(J.shape[1]) - Jwinv @ J) @ qsdot
+        qddot += (np.eye(J_s.shape[1]) - Jwinv_s @ J_s) @ qtdot
 
         qd += qddot * dt
-        # print(f"\nqddot * dt:\n{qddot * dt}\n")
         self.qd = qd
-        print(f"\nSelf.qd\n{self.qd[19:45]}\n")
         self.pdlast = pd
 
         return (qd, qddot, pd, vd)

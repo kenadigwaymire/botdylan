@@ -20,20 +20,25 @@ class Fretboard():
         """
         Calculate the final position to move to to play a chord
         """
-        # Get the (fret, string) positions of the chord for each finger
-        pf = chord.placements()
+        # Get the (fret, string) positions of the chord for each finger, as well
+        # as the list of fingers involved in playing the chord
+        pf, playing_fingers = chord.placements()
+
+        # Distinguish between the primary and secondary task positions based on
+        # the fingers involved in playing this chord.
+        primary_task_indeces = list(range(0,12))
+        secondary_task_indeces = []
+        for i in range(4):
+            if i in playing_fingers:
+                 primary_task_indeces.extend([12+3*i, 12+3*i+1, 12+3*i+2])
+            else:
+                secondary_task_indeces.append(12+3*i+2)
+
         # Incorporate a z-position (namely the height of the strings)
         pf = np.hstack((pf, self.z0 * np.ones((4,1))))
         # Estimate a desired wrist x-position as a mean of the finger x-positions:
         wrist_xd = self.x0 - self.dx * (np.nanmean(pf[:,0]) + 0.5)
 
-        # List of decent x and y offsets for each finger  relative to the wrist
-        # (for the left hand) to guess a reasonable position for fingers that
-        # aren't involved in playing the chord.
-        finger_offset = [[-0.033, p0[13]],
-                         [-0.011, p0[16]], 
-                         [0.011, p0[19]], 
-                         [0.033, p0[22] - 0.01]]
         for i, finger_pf in enumerate(pf):
             # Identify the fingers that will be playing this chord:
             if not np.isnan(finger_pf[0]) and not np.isnan(finger_pf[1]):
@@ -42,16 +47,19 @@ class Fretboard():
                 finger_pf[1] = self.y0 + self.dy * finger_pf[1]
             # The remaining fingers are not involved in playing the chord
             else:
-                finger_pf[0] = wrist_xd + finger_offset[i][0]
-                finger_pf[1] = finger_offset[i][1]
+                # ------------------DELETE!---------------------
+                finger_pf[0] = wrist_xd + 0.033
+                finger_pf[1] = p0[22]
+
                 # Lift the finger some amount to not press the string
                 finger_pf[2] += 0.035 # We can fine-tune this amount
 
         neck_base_z = self.z0 - GUITAR_HEIGHT # the z position of the bottom of the guitar
         lh_th_postion = np.array([[wrist_xd, p0[25], neck_base_z]])
+        secondary_task_indeces.extend(list(range(24,27)))
 
         pf = np.vstack((pf, lh_th_postion))
-        return [np.concatenate((pf)), -wrist_xd]
+        return [np.concatenate((pf)), -wrist_xd, primary_task_indeces, secondary_task_indeces]
     def get_coord_from_pos(self, curr_pos):
         return (curr_pos[0] / self.dy, (curr_pos[1] - (self.dx / 2)) / self.dx)
     
