@@ -89,16 +89,17 @@ class Trajectory():
         self.gamma = 0.075      # gamma for weighted inverse
         self.pdlast = np.copy(self.p0)
 
-        # Initialize KinematicChain with fixed transformations
-        str_pos = GuitarChain(node, "world", "str_high_e")
+        # Initialize GuitarChain with fixed transformations from baseframe to frets
+        guitar_chain = GuitarChain(node, "world", "str_high_e")
 
-        # Compute the forward kinematics
-        tip_position, tip_rotation = str_pos.fkin()
+        # Get fret positions
+        fret_positions = guitar_chain.get_fret_positions()
 
-        print(tip_position)
-        # Use the tip position and rotation for further calculations or visualization
-        node.get_logger().info(f"Tip Position: {tip_position}")
-        node.get_logger().info(f"Tip Rotation: {tip_rotation}")
+        # Print fret positions
+        for fret_name, fret_position in fret_positions.items():
+            print(f"{fret_name}: {fret_position}")
+
+
         
     # Declare the joint names.
     def jointnames(self):
@@ -170,7 +171,6 @@ class Trajectory():
         Jv[24:27, 19:23], Jv[24:27, 40:45] = lh_th_Jv[:,0:4], lh_th_Jv[:,4:9]
         return Jv
     
-
     def strumming_trajectory(self, t, T, strum_pattern, strum_length, strum_depth):
         strum_pattern_list = ["strum", "downstroke", "upstroke"]
 

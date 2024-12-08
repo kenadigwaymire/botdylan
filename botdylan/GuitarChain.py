@@ -1,16 +1,18 @@
 import rclpy
 import numpy as np
-from std_msgs.msg import String  # <-- Make sure this is imported
+from std_msgs.msg import String
 from urdf_parser_py.urdf import Robot
-from botdylan.TransformHelpers   import *
+from botdylan.TransformHelpers import *
 
 class GuitarChain:
     def __init__(self, node, baseframe, tipframe):
         """
-        Initialize the kinematic chain with fixed transformations from baseframe to tipframe.
+        Initialize the kinematic chain with fixed transformations from baseframe (world) to fret and string frames.
         """
         self.node = node
         self.steps = []  # To store fixed transformation steps
+        self.fret_positions = {}  # To store global fret positions
+        self.string_positions = {}  # To store string positions
 
         # Create a temporary subscriber to receive the URDF.
         self.info("Waiting for the URDF to be published...")
@@ -27,21 +29,9 @@ class GuitarChain:
         robot = Robot.from_xml_string(self.urdf)
         self.info(f"Processing URDF for robot '{robot.name}'")
 
-        # Parse the URDF to find fixed transformations between frames.
-        frame = tipframe
-        while frame != baseframe:
-            joint = next((j for j in robot.joints if j.child == frame), None)
-            if joint is None:
-                self.error(f"Unable to find joint connecting to '{frame}'")
-            frame = joint.parent
-
-            # Store fixed transformations
-            self.steps.insert(0, {
-                'name': joint.name,
-                'Tshift': self._transform_from_urdf_origin(joint.origin)
-            })
-
-        self.info(f"URDF has {len(self.steps)} fixed transformations from {baseframe} to {tipframe}")
+        # Parse the URDF to find fixed transformations between frames (frets and strings)
+        self.extract_fret_positions(robot)
+        self.extract_string_positions(robot)
 
     def _transform_from_urdf_origin(self, origin):
         """
@@ -56,9 +46,6 @@ class GuitarChain:
         Build a 4x4 transformation matrix from translation and rotation (RPY).
         Using TransformHelpers for rotation handling instead of tf2.
         """
-        # Import necessary functions from TransformHelpers.py
-        from botdylan.TransformHelpers import R_from_RPY, T_from_Rp
-
         # Create the rotation matrix from Euler angles (roll, pitch, yaw)
         R = R_from_RPY(rotation[0], rotation[1], rotation[2])
 
@@ -75,19 +62,103 @@ class GuitarChain:
         self.node.get_logger().error(f"KinematicChain: {message}")
         raise Exception(message)
 
-    def fkin(self):
+    def extract_fret_positions(self, robot):
         """
-        Compute the forward kinematics for the kinematic chain with fixed transformations.
-        This just applies the fixed transformations sequentially.
+        Extract the positions of the frets from the URDF.
+        Assumes that the fret positions are defined by frames/links in the URDF.
         """
-        # Start with the identity matrix (base frame).
-        T = np.eye(4)
+        current_transform = np.eye(4)  # Start with identity matrix (world frame)
 
-        # Apply all fixed transformations
-        for step in self.steps:
-            T = T @ step['Tshift']
+        # Add the transformation from world to neck
+        neck_to_world_transform = None
+        for joint in robot.joints:
+            if joint.name == 'neck_to_world':
+                neck_to_world_transform = self._transform_from_urdf_origin(joint.origin)
+                current_transform = current_transform @ neck_to_world_transform  # Apply to get the neck position
+                self.info(f"World to neck transform: {current_transform}")
 
-        # Return the final tip position (translation) and rotation
-        tip_position = T[:3, 3]  # The position is the last column
-        tip_rotation = T[:3, :3]  # The rotation is the top-left 3x3 submatrix
-        return tip_position, tip_rotation
+        # Check if the neck_to_world transformation is found
+        if neck_to_world_transform is None:
+            self.error("neck_to_world transformation not found in the URDF")
+
+        # Now, accumulate the fret positions based on subsequent transformations
+        for joint in robot.joints:
+            # Filter joints related to frets (e.g., 'fret0_to_fret1', 'fret1_to_fret2', etc.)
+            if "fret" in joint.name.lower():
+                # Get the transformation matrix for this joint's origin
+                fret_transform = self._transform_from_urdf_origin(joint.origin)
+
+                # Accumulate the global position of each fret by applying the current transform
+                current_transform = current_transform @ fret_transform  # Multiply to get global position
+
+                # Store the global position of this fret (only translation part)
+                fret_name = joint.name.split("_to_")[0]  # Extract fret name (e.g., 'fret0')
+                fret_position = current_transform[:3, 3]  # Extract position (last column)
+                self.fret_positions[fret_name] = fret_position
+                self.info(f"Fret {fret_name} global position: {fret_position}")
+
+    def extract_string_positions(self, robot):
+        """
+        Extract the positions of the strings from the URDF.
+        Assumes that the string positions are defined by frames/links in the URDF.
+        """
+        current_transform = np.eye(4)  # Start with identity matrix (world frame)
+
+        # Add the transformation from world to neck
+        for joint in robot.joints:
+            if joint.name == 'neck_to_world':
+                current_transform = current_transform @ self._transform_from_urdf_origin(joint.origin)
+                self.info(f"World to neck transform: {current_transform}")
+
+        # Now, accumulate the string positions based on subsequent transformations
+        for joint in robot.joints:
+            # For each string (e.g., 'high_e_to_neck', 'high_e_to_b', etc.), apply the transformation
+            if joint.name == 'high_e_to_neck':
+                current_transform = current_transform @ self._transform_from_urdf_origin(joint.origin)
+                string_position = current_transform[:3, 3]
+                self.string_positions['str_high_e'] = string_position
+                self.info(f"High E string position: {string_position}")
+
+            elif joint.name == 'high_e_to_b':
+                current_transform = current_transform @ self._transform_from_urdf_origin(joint.origin)
+                string_position = current_transform[:3, 3]
+                self.string_positions['str_b'] = string_position
+                self.info(f"B string position: {string_position}")
+
+            elif joint.name == 'b_to_g':
+                current_transform = current_transform @ self._transform_from_urdf_origin(joint.origin)
+                string_position = current_transform[:3, 3]
+                self.string_positions['str_g'] = string_position
+                self.info(f"G string position: {string_position}")
+
+            elif joint.name == 'g_to_d':
+                current_transform = current_transform @ self._transform_from_urdf_origin(joint.origin)
+                string_position = current_transform[:3, 3]
+                self.string_positions['str_d'] = string_position
+                self.info(f"D string position: {string_position}")
+
+            elif joint.name == 'd_to_a':
+                current_transform = current_transform @ self._transform_from_urdf_origin(joint.origin)
+                string_position = current_transform[:3, 3]
+                self.string_positions['str_a'] = string_position
+                self.info(f"A string position: {string_position}")
+
+            elif joint.name == 'a_to_low_e':
+                current_transform = current_transform @ self._transform_from_urdf_origin(joint.origin)
+                string_position = current_transform[:3, 3]
+                self.string_positions['str_low_e'] = string_position
+                self.info(f"Low E string position: {string_position}")
+    
+    def get_fret_positions(self):
+        """
+        Get the global positions of all the frets from fret_0 to fret_n (based on the URDF).
+        Returns a dictionary with fret names as keys and positions as values.
+        """
+        return self.fret_positions
+    
+    def get_string_positions(self):
+        """
+        Get the global positions of all the strings.
+        Returns a dictionary with string names as keys and positions as values.
+        """
+        return self.string_positions
