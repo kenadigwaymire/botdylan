@@ -365,9 +365,7 @@ class Trajectory():
 
         # Magnitudes / distances between max and min for each key
         W = np.array([abs(max_values[key] - min_values[key]) for key in ordered_keys])
-
-        # Display results
-        print("Weighted values for left hand:", W)
+        # print("Weighted values for left hand:", W)
 
         W = np.concatenate((np.zeros(19), W))
         W = np.ones((45))
