@@ -285,10 +285,8 @@ class Trajectory():
         vd = np.concatenate((rh_vd, lh_vd))
 
         print(f'\nprevChord:\n {prevChord}\n')
-        if isinstance(nextChord):
+        if chord_ct < len(chords):
             print(f'\nnextChord:\n {nextChord}\n')
-        else:
-            print('\nnextChord not defined\n')
         print(f'\nwrist_xd:\n {wrist_xd}\n')
         xddot = vd
         qd = np.copy(self.qd)
