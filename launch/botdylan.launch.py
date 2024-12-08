@@ -71,10 +71,10 @@ def generate_launch_description():
     )
 
     # Configure the joint_state_publisher_gui node
-    node_joint_state_publisher_gui = Node(
-        name='joint_state_publisher_gui',
-        package='joint_state_publisher_gui',
-        executable='joint_state_publisher_gui',
+    node_joint_state_publisher = Node(
+        name='joint_state_publisher',
+        package='joint_state_publisher',
+        executable='joint_state_publisher',
         output='screen'
     )
 
@@ -116,16 +116,16 @@ def generate_launch_description():
     #     )
     # )
 
-    # Trajectory loads after RVIZ
-    trajectory_after_rviz = RegisterEventHandler(
-        event_handler=OnProcessStart(
-            target_action=node_rviz,
-            on_start=[node_trajectory]
-        )
-    )
+    # # Trajectory loads after RVIZ
+    # trajectory_after_rviz = RegisterEventHandler(
+    #     event_handler=OnProcessStart(
+    #         target_action=node_rviz,
+    #         on_start=[node_trajectory]
+    #     )
+    # )
 
     # Second URDF loads after a timer
-    second_urdf_timer = TimerAction(
+    timer_guitar = TimerAction(
         period=3.0,  # Delay in seconds
         actions=[node_second_robot_state_publisher]
     )
@@ -137,7 +137,7 @@ def generate_launch_description():
         rviz_arg,
         node_primary_robot_state_publisher,
         node_rviz,
-        #node_joint_state_publisher_gui,
-        trajectory_after_rviz,
-        second_urdf_timer
+        node_joint_state_publisher,
+        timer_guitar,
+        node_trajectory
     ])

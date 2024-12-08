@@ -361,7 +361,7 @@ class Trajectory():
         }
 
         # Ordered list of keys
-        ordered_keys = self.jointnames[19:45]
+        ordered_keys = self.jointnames()[19:45]
 
         # Magnitudes / distances between max and min for each key
         W = np.array([abs(max_values[key] - min_values[key]) for key in ordered_keys])
