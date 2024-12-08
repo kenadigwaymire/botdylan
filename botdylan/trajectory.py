@@ -30,7 +30,7 @@ def song_info(song):
         list: Contains tempo (T), a list of chords, and the strumming pattern.
     """
     
-    T = 1
+    T = 2
     chords = [G, C, E, G, E, C, G]
     strumming_pattern = "upstroke"
     return [T, chords, strumming_pattern]
@@ -83,7 +83,7 @@ class Trajectory():
             # Right hand thumb fixed
             # -------------------- Left Hand (FRETTING) --------------------
             0.750,                              # right_hand_to_left_hand
-            0.0, -0.300, 0.100,                 # lh_WRJ3, lh_WRJ2, lh_WRJ1
+            0.0, -0.300, 0.500,                 # lh_WRJ3, lh_WRJ2, lh_WRJ1
             -0.175, 0.600, 0.525, 0.500,        # lh_FFJ4, lh_FFJ3, lh_FFJ2, lh_FFJ1
             -0.050, 0.615, 0.650, 0.425,        # lh_MFJ4, lh_MFJ3, lh_MFJ2, lh_MFJ1
             -0.050, 0.525, 0.900, 0.415,        # lh_RFJ4, lh_RFJ3, lh_RFJ2, lh_RFJ1
@@ -96,8 +96,8 @@ class Trajectory():
         self.p0 = self.get_ptips()
 
         # Other params
-        self.lam = 30           # lambda for primary task
-        self.lam2 = 30           # lambda for secondary task
+        self.lam = 80           # lambda for primary task
+        self.lam2 = 40           # lambda for secondary task
         self.lam3 = 20           # lambda for tertiary task
         self.gamma = 0.075      # gamma for weighted inverse
         self.pdlast = np.copy(self.p0)
@@ -395,7 +395,8 @@ class Trajectory():
         J = self.get_Jv()
 
         ptips = self.get_ptips()
-        print(f'\nptips:\n {ptips[12:27]}\n')
+        print(f'\nptips:\n {ptips}\n')
+        print(f'\nself.pdlast:\n {self.pdlast}\n')
         # print(f"size of J: {J.shape}")
         # print(f'\nJ[0:12,:] - Right Hand:\n {J[0:12,:]}\n')
         # print(f'\nJ[14:27,:] - Left Hand:\n {J[12:27,:]}\n')
@@ -410,6 +411,7 @@ class Trajectory():
 
         qddot = Jwinv_p @ (xddot_p + self.lam * err_p)
         print(f'\nerr_p:\n {err_p}\n')
+        print(f'\nxddot_p:\n {xddot_p}\n')
 
         # SECONDARY TASK: for the left (fretting) hand, move the thumb to contact
         # the bottom of the guitar neck and lift any fingers that aren't involved
@@ -421,15 +423,16 @@ class Trajectory():
         pdlast_s = self.pdlast[s_indeces]
         err_s = ep(pdlast_s, ptips[s_indeces])
         print(f'\nerr_s:\n {err_s}\n')
+        print(f'\nxddot_p:\n {xddot_s}\n')
 
         qsdot = Jwinv_s @ (xddot_s + self.lam2 * err_s)
+        print(f"\n(np.eye(J_p.shape[1]) - Jwinv_p @ J_p) @ qsdot:\n{(np.eye(J_p.shape[1]) - Jwinv_p @ J_p) @ qsdot}\n")
         qddot += (np.eye(J_p.shape[1]) - Jwinv_p @ J_p) @ qsdot
 
         # TERTIARY TASK: Push each joint toward humanlike hand position
         q_goal = np.copy(self.q0)   # We already initialize the hand in a human-like position
         q_goal[19] = wrist_xd       # "Comfortable" wrist position will vary depending on the chord
 
-        print(f'\nq0:\n {self.q0[19:45]}\n')
         print(f'\nq_goal:\n {q_goal[19:45]}\n')
         
         # Find the range of motion of each joint based on their min. and max. 

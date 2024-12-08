@@ -2,7 +2,7 @@ import numpy as np
 
 NUM_STRINGS = 6
 # TODO: DETERMINE THESE:
-GUITAR_HEIGHT = 0.06 # z-distance from the bottom of the guitar neck to the strings
+GUITAR_HEIGHT = 0.045 # z-distance from the bottom of the guitar neck to the strings
 
 # TODO: draw fretboard for guitar and map positions to chords
 class Fretboard():
@@ -30,12 +30,16 @@ class Fretboard():
         secondary_task_indeces = []
         for i in range(4):
             if i in playing_fingers:
-                 primary_task_indeces.extend([12+3*i, 12+3*i+1, 12+3*i+2])
+                primary_task_indeces.extend([12+3*i, 12+3*i+1, 12+3*i+2])
             else:
-                secondary_task_indeces.append(12+3*i+2)
+                primary_task_indeces.append(12+3*i+2)
 
         # Incorporate a z-position (namely the height of the strings)
         pf = np.hstack((pf, self.z0 * np.ones((4,1))))
+        # Set a desired clearance from the strings for fingers not involved in 
+        # playing the chord
+        string_clearance = 0.030
+
         # Estimate a desired wrist x-position as a mean of the finger x-positions:
         wrist_xd = self.x0 - self.dx * (np.nanmean(pf[:,0]) + 0.5)
 
@@ -50,13 +54,13 @@ class Fretboard():
                 # ------------------DELETE!---------------------
                 finger_pf[0] = wrist_xd + 0.033
                 finger_pf[1] = p0[22]
-
                 # Lift the finger some amount to not press the string
-                finger_pf[2] += 0.035 # We can fine-tune this amount
+                finger_pf[2] += string_clearance # We can fine-tune this amount
 
         neck_base_z = self.z0 - GUITAR_HEIGHT # the z position of the bottom of the guitar
         lh_th_postion = np.array([[wrist_xd, p0[25], neck_base_z]])
-        secondary_task_indeces.extend(list(range(24,27)))
+        primary_task_indeces.append(26)
+        secondary_task_indeces.extend([24, 25])
 
         pf = np.vstack((pf, lh_th_postion))
         return [np.concatenate((pf)), -wrist_xd, primary_task_indeces, secondary_task_indeces]
