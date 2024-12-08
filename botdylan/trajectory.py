@@ -13,6 +13,7 @@ from botdylan.TrajectoryUtils    import *
 
 # Grab the general fkin
 from botdylan.KinematicChain     import KinematicChain
+from botdylan.GuitarChain        import GuitarChain
 
 # Grab the chords
 from botdylan.chords             import *
@@ -87,6 +88,17 @@ class Trajectory():
         self.lams = 5           # lambda for secondary task
         self.gamma = 0.075      # gamma for weighted inverse
         self.pdlast = np.copy(self.p0)
+
+        # Initialize KinematicChain with fixed transformations
+        str_pos = GuitarChain(node, "world", "str_high_e")
+
+        # Compute the forward kinematics
+        tip_position, tip_rotation = str_pos.fkin()
+
+        print(tip_position)
+        # Use the tip position and rotation for further calculations or visualization
+        node.get_logger().info(f"Tip Position: {tip_position}")
+        node.get_logger().info(f"Tip Rotation: {tip_rotation}")
         
     # Declare the joint names.
     def jointnames(self):
