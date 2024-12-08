@@ -23,7 +23,14 @@ from botdylan.fretboard          import *
 # TODO: Flesh out a function to read the song that gets initialized when the tajectory
 # gets initialized.
 def song_info(song):
-    # Eventually change these to be pulled or calculated from a song file
+    """
+    Returns details of the song.
+    Parameters:
+        song (str): Name or identifier of the song (currently unused).
+    Returns:
+        list: Contains tempo (T), a list of chords, and the strumming pattern.
+    """
+    
     T = 1
     chords = [G, C, E, G, E, C, G]
     strumming_pattern = []
@@ -35,6 +42,11 @@ def song_info(song):
 class Trajectory():
     # Initialization.
     def __init__(self, node):
+        """
+        Initializes the Trajectory object with kinematic chains, joint positions, and other parameters.
+        Parameters:
+            node (rclpy.node.Node): ROS2 node for communication.
+        """
         # Set up the kinematic chain objects.
         # RIGHT HAND
         self.rh_ff = KinematicChain(node, 'world', 'rh_fftip',
@@ -116,6 +128,11 @@ class Trajectory():
         
     # Declare the joint names.
     def jointnames(self):
+        """
+        Returns a list of joint names based on the robot's URDF structure.
+        Returns:
+            list: Names of joints in order.
+        """
         # Return a list of joint names FOR THE EXPECTED URDF!
         return [
             # len(jointnames) = 45
@@ -140,9 +157,9 @@ class Trajectory():
 
     def get_ptips(self):
         """
-        Returns the positions of the fingers as an array of length 27, representing
-        the x, y, and z positions of each of the 9 fingers used (in the order that
-        they appear in jointnames).
+        Computes the 3D positions of finger tips for both hands.
+        Returns:
+            np.ndarray: Concatenated array of positions for all finger tips (length: 27).
         """
         return np.concatenate([
                 self.rh_ff.fkin(self.qd[0:6])[0],
@@ -160,7 +177,9 @@ class Trajectory():
 
     def get_Jv(self):
         """
-        Returns the translational Jacobian of size 27x45 for the robot (both hands).
+        Computes the translational Jacobian for all fingers.
+        Returns:
+            np.ndarray: Jacobian matrix of size 27x45.
         """
         Jv = np.zeros((27, 45))
         Jv[0:3, 0:6] = self.rh_ff.fkin(self.qd[0:6])[2]
@@ -185,6 +204,17 @@ class Trajectory():
         return Jv
     
     def strumming_trajectory(self, t, T, strum_pattern, strum_length, strum_depth):
+        """
+        Generates a strumming trajectory for the right hand based on time and strumming pattern.
+        Parameters:
+            t (float): Current time.
+            T (float): Total time for a single strumming motion.
+            strum_pattern (str): Type of strumming (e.g., "strum", "downstroke", "upstroke").
+            strum_length (float): Length of strumming motion.
+            strum_depth (float): Depth of strumming motion.
+        Returns:
+            tuple: Desired positions and velocities for the right-hand motion.
+        """
         strum_pattern_list = ["strum", "downstroke", "upstroke"]
 
         rh_p0 = np.copy(self.p0[0:12])
@@ -241,6 +271,16 @@ class Trajectory():
     
 
     def fretting_trajectory(self, t, T, prevchord, nextchord):
+        """
+        Generates a fretting trajectory for the left hand.
+        Parameters:
+            t (float): Current time.
+            T (float): Time to transition between chords.
+            prevchord (np.ndarray): Previous chord position.
+            nextchord (np.ndarray): Next chord position.
+        Returns:
+            tuple: Desired positions and velocities for the left-hand motion.
+        """
         t2 = fmod(t, T)
         if t2 < T/2:
             # Move to the desired chord
@@ -261,6 +301,14 @@ class Trajectory():
 
     # Evaluate at the given time. This was last called (dt) ago.
     def evaluate(self, t, dt):
+        """
+        Evaluates the current state of the trajectory at a given time.
+        Parameters:
+            t (float): Current time.
+            dt (float): Time elapsed since last evaluation.
+        Returns:
+            tuple: Updated joint positions, joint velocities, desired positions, and velocities.
+        """
         # Initialize a guitar with: 20 frets, spaced 0.125 inches apart, and 
         # 6 strings spaced 0.0625 inches apart, at  a height of 0.2
         fretboard = Fretboard(x0=-0.080, y0=0.315, z0=0.09, dx=0.050, dy=0.0143, num_frets=20)
@@ -293,7 +341,7 @@ class Trajectory():
             wrist_xd = np.copy(self.q0[19])
 
         #(rh_pd, rh_vd) = (self.p0[0:12], np.zeros(12))
-        (rh_pd, rh_vd) = self.strumming_trajectory(t, T, "strum", 0.4, .15)
+        (rh_pd, rh_vd) = self.strumming_trajectory(t, T, "downstroke", 0.6, .25)
         pd = np.concatenate((rh_pd, lh_pd))
         vd = np.concatenate((rh_vd, lh_vd))
 
@@ -386,6 +434,11 @@ class Trajectory():
 #  Main Code
 #
 def main(args=None):
+    """
+    Entry point of the script. Initializes ROS, sets up the trajectory generator, and runs the trajectory.
+    Parameters:
+        args (list, optional): Command-line arguments.
+    """
     # Initialize ROS.
     rclpy.init(args=args)
 
