@@ -60,7 +60,7 @@ class Fretboard():
         neck_base_z = self.z0 - GUITAR_HEIGHT # the z position of the bottom of the guitar
         lh_th_postion = np.array([[wrist_xd, p0[25], neck_base_z]])
         primary_task_indeces.append(26)
-        secondary_task_indeces.extend([24, 25])
+        # secondary_task_indeces.extend([24, 25])
 
         pf = np.vstack((pf, lh_th_postion))
         return [np.concatenate((pf)), -wrist_xd, primary_task_indeces, secondary_task_indeces]
