@@ -440,28 +440,40 @@ class Trajectory():
         # the URDF — except the prismatic "right-to-left-hand" joint and lh_WRJ3
         # which we added in. We estimated the ranges ourselves for these 2.
         min_values = {
-            "lh_WRJ3": -1.400, "lh_WRJ2": -0.524, "lh_WRJ1": -0.698, "lh_FFJ4": -0.349, "lh_FFJ3": -0.262,
-            "lh_FFJ2": 0.000, "lh_FFJ1": 0.000, "lh_MFJ4": -0.349, "lh_MFJ3": -0.262, "lh_MFJ2": 0.000,
-            "lh_MFJ1": 0.000, "lh_RFJ4": -0.349, "lh_RFJ3": -0.262, "lh_RFJ2": 0.000, "lh_RFJ1": 0.000,
+            "rh_WRJ2": -0.524, "rh_WRJ1": -0.698, 
+            "rh_FFJ4": -0.349, "rh_FFJ3": -0.262, "rh_FFJ2": 0.000, "rh_FFJ1": 0.000,
+            "rh_MFJ4": -0.349, "rh_MFJ3": -0.262, "rh_MFJ2": 0.000, "rh_MFJ1": 0.000,
+            "rh_RFJ4": -0.349, "rh_RFJ3": -0.262, "rh_RFJ2": 0.000, "rh_RFJ1": 0.000,
+            "rh_LFJ5": 0.000, "rh_LFJ4": -0.349, "rh_LFJ3": -0.262, "rh_LFJ2": 0.000, "rh_LFJ1": 0.000,
+            "right_hand_to_left_hand": 0.200,
+            "lh_WRJ3": -1.400, "lh_WRJ2": -0.524, "lh_WRJ1": -0.698, 
+            "lh_FFJ4": -0.349, "lh_FFJ3": -0.262, "lh_FFJ2": 0.000, "lh_FFJ1": 0.000,
+            "lh_MFJ4": -0.349, "lh_MFJ3": -0.262, "lh_MFJ2": 0.000, "lh_MFJ1": 0.000,
+            "lh_RFJ4": -0.349, "lh_RFJ3": -0.262, "lh_RFJ2": 0.000, "lh_RFJ1": 0.000,
             "lh_LFJ5": 0.000, "lh_LFJ4": -0.349, "lh_LFJ3": -0.262, "lh_LFJ2": 0.000, "lh_LFJ1": 0.000,
-            "lh_THJ5": -1.047, "lh_THJ4": 0.000, "lh_THJ3": -0.209, "lh_THJ2": -0.698, "lh_THJ1": -0.262,
-            "right_hand_to_left_hand": 0.200
+            "lh_THJ5": -1.047, "lh_THJ4": 0.000, "lh_THJ3": -0.209, "lh_THJ2": -0.698, "lh_THJ1": -0.262
         }
 
         max_values = {
-            "lh_WRJ3": 1.571, "lh_WRJ2": 0.175, "lh_WRJ1": 0.489, "lh_FFJ4": 0.349, "lh_FFJ3": 1.571,
-            "lh_FFJ2": 1.571, "lh_FFJ1": 1.571, "lh_MFJ4": 0.349, "lh_MFJ3": 1.571, "lh_MFJ2": 1.571,
-            "lh_MFJ1": 1.571, "lh_RFJ4": 0.349, "lh_RFJ3": 1.571, "lh_RFJ2": 1.571, "lh_RFJ1": 1.571,
+            "rh_WRJ2": 0.175, "rh_WRJ1": 0.489, 
+            "rh_FFJ4": 0.349, "rh_FFJ3": 1.571, "rh_FFJ2": 1.571, "rh_FFJ1": 1.571,
+            "rh_MFJ4": 0.349, "rh_MFJ3": 1.571, "rh_MFJ2": 1.571, "rh_MFJ1": 1.571,
+            "rh_RFJ4": 0.349, "rh_RFJ3": 1.571, "rh_RFJ2": 1.571, "rh_RFJ1": 1.571,
+            "rh_LFJ5": 0.785, "rh_LFJ4": 0.349, "rh_LFJ3": 1.571, "rh_LFJ2": 1.571, "rh_LFJ1": 1.571,
+            "right_hand_to_left_hand": 1.000,
+            "lh_WRJ3": 1.571, "lh_WRJ2": 0.175, "lh_WRJ1": 0.489, 
+            "lh_FFJ4": 0.349, "lh_FFJ3": 1.571, "lh_FFJ2": 1.571, "lh_FFJ1": 1.571,
+            "lh_MFJ4": 0.349, "lh_MFJ3": 1.571, "lh_MFJ2": 1.571, "lh_MFJ1": 1.571,
+            "lh_RFJ4": 0.349, "lh_RFJ3": 1.571, "lh_RFJ2": 1.571, "lh_RFJ1": 1.571,
             "lh_LFJ5": 0.785, "lh_LFJ4": 0.349, "lh_LFJ3": 1.571, "lh_LFJ2": 1.571, "lh_LFJ1": 1.571,
-            "lh_THJ5": 1.047, "lh_THJ4": 1.222, "lh_THJ3": 0.209, "lh_THJ2": 0.698, "lh_THJ1": 1.571,
-            "right_hand_to_left_hand": 1.000
+            "lh_THJ5": 1.047, "lh_THJ4": 1.222, "lh_THJ3": 0.209, "lh_THJ2": 0.698, "lh_THJ1": 1.571
         }
 
-        # Ordered list of left hand joints
-        lh_joints = self.jointnames()[19:45]
+        # Ordered list of keys (entire jointnames list)
+        ordered_keys = self.jointnames()
 
         # Magnitudes / distances between max and min for each key
-        W = np.array([abs(max_values[key] - min_values[key]) for key in lh_joints])
+        W = np.array([abs(max_values[key] - min_values[key]) for key in ordered_keys])
         # print("Weighted values for left hand:", W)
 
         W = np.concatenate((np.zeros(19), W))
