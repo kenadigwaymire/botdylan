@@ -370,18 +370,18 @@ class Trajectory():
         else:
             prevChord = fretboard.pf_from_chord(chords[chord_ct-1], self.p0)[0]
 
-        # Play the next chord. Return to p0 when the song is done
+        # Play the next chord until done
         if chord_ct < len(chords):
             [nextChord, wrist_xd, p_indeces, s_indeces] = fretboard.pf_from_chord(chords[chord_ct], self.p0)
             print(f"\np_indeces:\n{p_indeces}\n")
             print(f"\ns_indeces:\n{s_indeces}\n")
-            (lh_pd, lh_vd) = self.fretting_trajectory(t, T, prevChord, nextChord)
             (rh_pd, rh_vd) = self.strumming_trajectory(t, T, fretboard, strumming_pattern, 10*fretboard.dy, .0075)
+            (lh_pd, lh_vd) = self.fretting_trajectory(t, T, prevChord, nextChord)
             pd = np.concatenate((rh_pd, lh_pd))
             vd = np.concatenate((rh_vd, lh_vd))
         else:
-            (pd, vd) = (np.copy(self.p0), np.zeros(27))
-            wrist_xd = np.copy(self.q0[19])
+            (pd, vd) = (np.copy(self.pdlast), np.zeros(27))
+            wrist_xd = np.copy(self.qd[19])
             p_indeces = list(range(27))
             s_indeces = []
         
