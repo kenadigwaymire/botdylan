@@ -6,6 +6,8 @@ from launch.actions import DeclareLaunchArgument, RegisterEventHandler, Shutdown
 from launch_ros.actions import Node
 from launch.event_handlers import OnProcessStart
 from launch.substitutions import LaunchConfiguration
+from launch.actions import ExecuteProcess
+
 
 
 def generate_launch_description():
@@ -130,6 +132,24 @@ def generate_launch_description():
         actions=[node_second_robot_state_publisher]
     )
 
+    # Full path to the output bag file
+    output_bag_path = os.path.expanduser('~/robotws/data/botdylan')
+
+    record_bag = ExecuteProcess(
+        cmd=['ros2', 'bag', 'record', '-o', output_bag_path, 
+            '/joint_states', '/tf', '/robot_description'],
+        output='screen'
+    )
+
+    # Second URDF loads after a timer and triggers recording
+    timer_guitar_and_record = TimerAction(
+        period=3.0,  # Delay in seconds
+        actions=[
+            node_second_robot_state_publisher,
+            TimerAction(period=3.0,
+                        actions=[record_bag])  # Starts recording .5s after guitar loads
+        ]
+    )
     ######################################################################
     # RETURN THE ELEMENTS IN ONE LIST
 
@@ -138,6 +158,6 @@ def generate_launch_description():
         node_primary_robot_state_publisher,
         node_rviz,
         node_joint_state_publisher,
-        timer_guitar,
+        timer_guitar_and_record,
         node_trajectory
     ])
