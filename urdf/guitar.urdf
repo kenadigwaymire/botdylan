@@ -10,7 +10,7 @@
   <joint name="neck_to_world" type="fixed">
     <parent link="world"/>
     <child link="neck"/>
-    <origin xyz="0.00 0.2 0.1" rpy="0 0 1.57"/>
+    <origin xyz="-0.5 0.3 0.1" rpy="0 0 1.57"/>
   </joint>
 
   <link name="neck">
