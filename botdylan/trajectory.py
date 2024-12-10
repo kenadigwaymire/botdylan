@@ -98,7 +98,7 @@ class Trajectory():
         # Other params
         self.lam = 25               # lambda for primary task
         self.lam2 = 5               # lambda for secondary task
-        self.lam3 = 0.5             # lambda for tertiary task
+        self.lam3 = 1             # lambda for tertiary task
         self.gamma = 0.000001       # gamma for weighted inverse
         self.pdlast = np.copy(self.p0)
 
@@ -376,7 +376,7 @@ class Trajectory():
         # Play the next chord until done
         if chord_ct < len(chords):
             [nextChord, wrist_xd, p_indeces, s_indeces] = fretboard.pf_from_chord(chords[chord_ct], self.p0)
-            (rh_pd, rh_vd) = self.strumming_trajectory(t, T, fretboard, strumming_pattern, 16*fretboard.dy, .0025)
+            (rh_pd, rh_vd) = self.strumming_trajectory(t, T, fretboard, strumming_pattern, 12*fretboard.dy, .0025)
             (lh_pd, lh_vd) = self.fretting_trajectory(t, T, prevChord, nextChord)
             pd = np.concatenate((rh_pd, lh_pd))
             vd = np.concatenate((rh_vd, lh_vd))
