@@ -75,11 +75,11 @@ class Trajectory():
         # Initial joint positions:
         self.q0 = np.array([
             # -------------------- Right Hand (STRUMMING) --------------------
-            0.0, 0.0,                           # rh_WRJ2, rh_WRJ1
+            0.0, -0.30,                           # rh_WRJ2, rh_WRJ1
             0.157, 0.907, 0.968, 1.036,         # rh_FFJ4, rh_FFJ3, rh_FFJ2, rh_FFJ1
             0.017, 0.709, 0.620, 0.959,         # rh_MFJ4, rh_MFJ3, rh_MFJ2, rh_MFJ1
             0.032, 0.759, 0.747, 0.951,         # rh_RFJ4, rh_RFJ3, rh_RFJ2, rh_RFJ1
-            0.075, 0.015, 0.630, 0.781, 0.594,  # rh_LFJ5, rh_LFJ4, rh_LFJ3, rh_LFJ2, rh_LFJ1
+            0.075, 0.710, 0.630, 0.781, 0.594,  # rh_LFJ5, rh_LFJ4, rh_LFJ3, rh_LFJ2, rh_LFJ1
             # Right hand thumb fixed
             # -------------------- Left Hand (FRETTING) --------------------
             0.750,                              # right_hand_to_left_hand
@@ -96,10 +96,10 @@ class Trajectory():
         self.p0 = self.get_ptips()
 
         # Other params
-        self.lam = 0           # lambda for primary task
-        self.lam2 = 0          # lambda for secondary task
-        self.lam3 = 0           # lambda for tertiary task
-        self.gamma = 0.00005      # gamma for weighted inverse
+        self.lam = 25               # lambda for primary task
+        self.lam2 = 5               # lambda for secondary task
+        self.lam3 = 0.5             # lambda for tertiary task
+        self.gamma = 0.000001       # gamma for weighted inverse
         self.pdlast = np.copy(self.p0)
 
         # # Initialize GuitarChain with fixed transformations from baseframe to frets
@@ -218,7 +218,6 @@ class Trajectory():
         strum_pattern_list = ["strum", "downstroke", "upstroke"]
         y_mid = fretboard.y0 + 2.5 * fretboard.dy
         z0 = fretboard.z0
-        print(f"\z0:\n {z0-strum_depth}")
 
         rh_p0 = np.copy(self.p0[0:12])
         rh_pf = np.copy(self.p0[0:12])
@@ -227,7 +226,7 @@ class Trajectory():
         vf = np.zeros_like(rh_pf)
 
         if strum_pattern == "strum":
-            t1 = fmod(t, T/4)
+            t1 = fmod(t, T)
             if t1 < T/4:
                 if t > T/4:
                     [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] = (y_mid - strum_length/2) * np.ones(4)
@@ -257,16 +256,16 @@ class Trajectory():
             (rh_pd, rh_vd) = spline(fmod(t1, T/4), T/4, rh_p0, rh_pf, v0, vf)
 
         elif strum_pattern == "downstroke":
-            t1 = fmod(t, T/3)
+            t1 = fmod(t, T)
             if t1 < T/3:
                 if t > T/3:
                     [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] = (y_mid - strum_length/2) * np.ones(4)
                 [rh_pf[1], rh_pf[4], rh_pf[7], rh_pf[10]] = y_mid * np.ones(4)
-                [rh_pf[2], rh_pf[5], rh_pf[8], rh_pf[11]] = (z0 - strum_depth/2) * np.ones(4)
+                [rh_pf[2], rh_pf[5], rh_pf[8], rh_pf[11]] = (z0 - strum_depth) * np.ones(4)
                 [vf[1], vf[4], vf[7], vf[10]] = np.ones(4) * (strum_length / (T / 3))
             elif t1 < 2*T/3:
                 [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] = y_mid * np.ones(4)
-                [rh_p0[2], rh_p0[5], rh_p0[8], rh_p0[11]] = (z0 - strum_depth/2) * np.ones(4)
+                [rh_p0[2], rh_p0[5], rh_p0[8], rh_p0[11]] = (z0 - strum_depth) * np.ones(4)
                 [rh_pf[1], rh_pf[4], rh_pf[7], rh_pf[10]] = (y_mid + strum_length/2) * np.ones(4)
                 [v0[1], v0[4], v0[7], v0[10]] = np.ones(4) * (strum_length / (T / 3))
             else:
@@ -276,7 +275,7 @@ class Trajectory():
             (rh_pd, rh_vd) = spline(fmod(t1, T/3), T/3, rh_p0, rh_pf, v0, vf)
 
         elif strum_pattern == "upstroke":
-            t1 = fmod(t, T/3)
+            t1 = fmod(t, T)
             if t1 < T/3:
                 if t > T/3:
                     [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] = (y_mid - strum_length/2) * np.ones(4)
@@ -284,11 +283,11 @@ class Trajectory():
             elif t1 < 2*T/3:
                 [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] = (y_mid + strum_length/2) * np.ones(4)
                 [rh_pf[1], rh_pf[4], rh_pf[7], rh_pf[10]] = y_mid * np.ones(4)
-                [rh_pf[2], rh_pf[5], rh_pf[8], rh_pf[11]] = (z0 - strum_depth/2) * np.ones(4)
+                [rh_pf[2], rh_pf[5], rh_pf[8], rh_pf[11]] = (z0 - strum_depth) * np.ones(4)
                 [vf[1], vf[4], vf[7], vf[10]] = -np.ones(4) * (strum_length / (T / 3))
             else:
                 [rh_p0[1], rh_p0[4], rh_p0[7], rh_p0[10]] = y_mid * np.ones(4)
-                [rh_p0[2], rh_p0[5], rh_p0[8], rh_p0[11]] = (z0 - strum_depth/2) * np.ones(4)
+                [rh_p0[2], rh_p0[5], rh_p0[8], rh_p0[11]] = (z0 - strum_depth) * np.ones(4)
                 [v0[1], v0[4], v0[7], v0[10]] = np.ones(4) * (strum_length / (T / 3))
             #(rh_pd, rh_vd) = goto(fmod(t1,T/3), T/3, rh_p0, rh_pf)
             (rh_pd, rh_vd) = spline(fmod(t1, T/3), T/3, rh_p0, rh_pf, v0, vf)
@@ -377,7 +376,7 @@ class Trajectory():
         # Play the next chord until done
         if chord_ct < len(chords):
             [nextChord, wrist_xd, p_indeces, s_indeces] = fretboard.pf_from_chord(chords[chord_ct], self.p0)
-            (rh_pd, rh_vd) = self.strumming_trajectory(t, T, fretboard, strumming_pattern, 5*fretboard.dy, .0025)
+            (rh_pd, rh_vd) = self.strumming_trajectory(t, T, fretboard, strumming_pattern, 16*fretboard.dy, .0025)
             (lh_pd, lh_vd) = self.fretting_trajectory(t, T, prevChord, nextChord)
             pd = np.concatenate((rh_pd, lh_pd))
             vd = np.concatenate((rh_vd, lh_vd))
@@ -417,23 +416,23 @@ class Trajectory():
         err_s = ep(pdlast_s, ptips[s_indeces])
 
         # Debugging
-        if chord_ct < len(chords):
+        # if chord_ct < len(chords):
             # print(f'\nprevChord:\n {prevChord}\n')
             # print(f'\nnextChord:\n {nextChord}\n')
-            print(f'\nptips:\n {ptips[p_indeces]}\n')
-            print(f'\nself.pdlast:\n {pdlast_p}\n')
-            print(f'\nerr_p:\n {err_p}\n')
-            print(f'\nvd:\n {vd[p_indeces]}\n')
+            # print(f'\nptips:\n {ptips[p_indeces]}\n')
+            # print(f'\nself.pdlast:\n {pdlast_p}\n')
+            # print(f'\nerr_p:\n {err_p}\n')
+            # print(f'\nvd:\n {vd[p_indeces]}\n')
             # print(f'\nJ_p @ qddot:\n {J_p @ qddot}\n')
             # print(f'\nJ:\n {J}\n')
             # print(f'\nJ_p:\n {J_p}\n')
             # print(f'\nqddot:\n {qddot}\n')
             # print(f'\nerr_s:\n {err_s}\n')
             # print(f'\nwrist_xd:\n {wrist_xd}\n')
-            pdims = self.task_dims(p_indeces)
-            sdims = self.task_dims(s_indeces)
-            print(f'\npdims:\n {pdims}\n')
-            print(f'\nsdims:\n {sdims}\n')
+            # pdims = self.task_dims(p_indeces)
+            # sdims = self.task_dims(s_indeces)
+            # print(f'\npdims:\n {pdims}\n')
+            # print(f'\nsdims:\n {sdims}\n')
             # print(f'\nxddot_p:\n {xddot_s}\n')
 
         qsdot = Jwinv_s @ (xddot_s + self.lam2 * err_s)
