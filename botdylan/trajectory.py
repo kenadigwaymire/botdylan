@@ -337,7 +337,7 @@ class Trajectory():
         """
         # Initialize a guitar with: 20 frets, spaced 0.125 inches apart, and 
         # 6 strings spaced 0.0625 inches apart, at  a height of 0.2
-        fretboard = Fretboard(x0=-0.080, y0=0.315, z0=0.09, dx=0.050, dy=0.0143, num_frets=20)
+        fretboard = Fretboard(x0=-0.080, y0=0.315, z0=0.09, dx=0.040, dy=0.005, num_frets=20)
 
         # Get the beat (T seconds), chords, and strumming pattern
         [T, chords, strumming_pattern] = song_info('some_song')
