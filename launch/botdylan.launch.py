@@ -126,7 +126,7 @@ def generate_launch_description():
 
     # Second URDF loads after a timer
     timer_guitar = TimerAction(
-        period=50.0,  # Delay in seconds
+        period=3.0,  # Delay in seconds
         actions=[node_second_robot_state_publisher]
     )
 

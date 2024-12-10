@@ -31,7 +31,7 @@ def song_info(song):
     """
     
     T = 3
-    chords = [G, C, E, G, E, C, G]
+    chords = [G] #, C, E, G, E, C, G]
     strumming_pattern = "upstroke"
     return [T, chords, strumming_pattern]
        
