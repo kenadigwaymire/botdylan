@@ -26,14 +26,14 @@ class Fretboard():
 
         # Distinguish between the primary and secondary task positions based on
         # the fingers involved in playing this chord.
-        primary_task_indeces = list(range(0,12))
-        secondary_task_indeces = []
+        primary_task_indeces = list(range(12))  # [d for d in range(12) if d % 3 == 2]
+        secondary_task_indeces = []             # [d for d in range(12) if d % 3 < 2]
         for i in range(4):
             if i in playing_fingers:
                 primary_task_indeces.extend([12+3*i+1, 12+3*i+2])
                 secondary_task_indeces.append(12+3*i)
             else:
-                primary_task_indeces.append(12+3*i+2)
+                secondary_task_indeces.append(12+3*i+2)
 
         # Incorporate a z-position (namely the height of the strings)
         pf = np.hstack((pf, self.z0 * np.ones((4,1))))
