@@ -2,7 +2,7 @@ import numpy as np
 
 NUM_STRINGS = 6
 # TODO: DETERMINE THESE:
-GUITAR_HEIGHT = 0.045 # z-distance from the bottom of the guitar neck to the strings
+GUITAR_HEIGHT = 0.020 # z-distance from the bottom of the guitar neck to the strings
 
 # TODO: draw fretboard for guitar and map positions to chords
 class Fretboard():
@@ -30,7 +30,8 @@ class Fretboard():
         secondary_task_indeces = []
         for i in range(4):
             if i in playing_fingers:
-                primary_task_indeces.extend([12+3*i, 12+3*i+1, 12+3*i+2])
+                primary_task_indeces.extend([12+3*i+1, 12+3*i+2])
+                secondary_task_indeces.append(12+3*i)
             else:
                 primary_task_indeces.append(12+3*i+2)
 
