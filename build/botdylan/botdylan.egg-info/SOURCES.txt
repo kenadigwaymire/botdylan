@@ -1,11 +1,15 @@
 package.xml
 setup.cfg
 setup.py
+botdylan/FretPos.py
 botdylan/GeneratorNode.py
+botdylan/GuitarChain.py
 botdylan/KinematicChain.py
 botdylan/TrajectoryUtils.py
 botdylan/TransformHelpers.py
 botdylan/__init__.py
+botdylan/chords.py
+botdylan/fretboard.py
 botdylan/test.py
 botdylan/trajectory.py
 botdylan.egg-info/PKG-INFO
@@ -17,6 +21,8 @@ botdylan.egg-info/top_level.txt
 botdylan.egg-info/zip-safe
 launch/botdylan.launch.py
 resource/botdylan
+rviz/camilo.rviz
+rviz/kenadi.rviz
 rviz/trey.rviz
 rviz/viewurdfplus.rviz
 urdf/guitar.urdf
