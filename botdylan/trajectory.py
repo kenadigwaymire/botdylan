@@ -75,11 +75,11 @@ class Trajectory():
         # Initial joint positions:
         self.q0 = np.array([
             # -------------------- Right Hand (STRUMMING) --------------------
-            0.0, -0.30,                           # rh_WRJ2, rh_WRJ1
-            0.157, 0.907, 0.968, 1.036,         # rh_FFJ4, rh_FFJ3, rh_FFJ2, rh_FFJ1
-            0.017, 0.709, 0.620, 0.959,         # rh_MFJ4, rh_MFJ3, rh_MFJ2, rh_MFJ1
-            0.032, 0.759, 0.747, 0.951,         # rh_RFJ4, rh_RFJ3, rh_RFJ2, rh_RFJ1
-            0.075, 0.710, 0.630, 0.781, 0.594,  # rh_LFJ5, rh_LFJ4, rh_LFJ3, rh_LFJ2, rh_LFJ1
+            0.0, -0.30,                         # rh_WRJ2, rh_WRJ1
+            0.157, 0.907, 0.323, 0.262,         # rh_FFJ4, rh_FFJ3, rh_FFJ2, rh_FFJ1
+            0.017, 0.709, 0.206, 0.281,         # rh_MFJ4, rh_MFJ3, rh_MFJ2, rh_MFJ1
+            0.032, 0.759, 0.249, 0.290,         # rh_RFJ4, rh_RFJ3, rh_RFJ2, rh_RFJ1
+            0.075, 0.710, 0.630, 0.260, 0.330,  # rh_LFJ5, rh_LFJ4, rh_LFJ3, rh_LFJ2, rh_LFJ1
             # Right hand thumb fixed
             # -------------------- Left Hand (FRETTING) --------------------
             0.750,                              # right_hand_to_left_hand
@@ -416,12 +416,12 @@ class Trajectory():
         err_s = ep(pdlast_s, ptips[s_indeces])
 
         # Debugging
-        # if chord_ct < len(chords):
+        if chord_ct < len(chords):
             # print(f'\nprevChord:\n {prevChord}\n')
             # print(f'\nnextChord:\n {nextChord}\n')
             # print(f'\nptips:\n {ptips[p_indeces]}\n')
             # print(f'\nself.pdlast:\n {pdlast_p}\n')
-            # print(f'\nerr_p:\n {err_p}\n')
+            print(f'\nerr_p:\n {err_p}\n')
             # print(f'\nvd:\n {vd[p_indeces]}\n')
             # print(f'\nJ_p @ qddot:\n {J_p @ qddot}\n')
             # print(f'\nJ:\n {J}\n')
