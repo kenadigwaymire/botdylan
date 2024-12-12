@@ -10,18 +10,18 @@
   <joint name="neck_to_world" type="fixed">
     <parent link="world"/>
     <child link="neck"/>
-    <origin xyz="-.8 0.375 0.095" rpy="0 0 1.57"/>
+    <origin xyz="-.75 0.245 0.115" rpy="0 0 1.57"/>
   </joint>
 
   <link name="neck">
     <visual>
-      <origin xyz="0.00 0.00 0.00" rpy="0 0 0"/>
-      <geometry> <box size="0.10 1.5 0.02"/> </geometry>
+      <origin xyz="0.025 0.00 0.00" rpy="0 0 0"/>
+      <geometry> <box size="0.05 1.5 0.015"/> </geometry>
       <material name="brown"/>
     </visual>
     <collision>
-      <origin          xyz="0.00 0.00 0.00" rpy="0 0 0"/>
-      <geometry> <box size="0.10 1.5 0.02"/> </geometry>
+      <origin          xyz="0.025 0.00 0.00" rpy="0 0 0"/>
+      <geometry> <box size="0.05 1.5 0.015"/> </geometry>
     </collision>
   </link>
 
@@ -40,7 +40,7 @@
         <material name="brown"/> 
     </visual>
     <collision>
-        <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+        <origin xyz="0.025 0.0 0.0" rpy="0 0 0"/>
         <geometry> 
             <cylinder radius="0.1" length="0.02"/> 
         </geometry>
@@ -158,18 +158,18 @@
   <joint name="neck_to_fret0" type="fixed">
     <parent link="neck"/>
     <child link="fret0"/>
-    <origin xyz="0.0 0.75 0.01" rpy="0 0 0"/>
+    <origin xyz="0.025 0.75 0.01" rpy="0 0 0"/>
   </joint>
 
   <link name="fret0">
     <visual>
         <origin xyz="0.00 0.00 0.00" rpy="0 1.57 0"/>
-        <geometry> <cylinder radius="0.002" length=".1"/> </geometry>
+        <geometry> <cylinder radius="0.002" length=".05"/> </geometry>
         <material name="silver"/>
     </visual>
     <collision>
         <origin xyz="0.00 0.00 0.00" rpy="0 1.57 0"/>
-        <geometry> <cylinder radius="0.002" length=".1"/> </geometry>
+        <geometry> <cylinder radius="0.002" length=".05"/> </geometry>
     </collision>
   </link>
 
@@ -182,12 +182,12 @@
   <link name="fret1">
     <visual>
         <origin xyz="0.00 0.00 0.00" rpy="0 1.57 0"/>
-        <geometry> <cylinder radius="0.002" length=".1"/> </geometry>
+        <geometry> <cylinder radius="0.002" length=".05"/> </geometry>
         <material name="silver"/>
     </visual>
     <collision>
         <origin xyz="0.00 0.00 0.00" rpy="0 1.57 0"/>
-        <geometry> <cylinder radius="0.002" length=".1"/> </geometry>
+        <geometry> <cylinder radius="0.002" length=".05"/> </geometry>
     </collision>
   </link>
 
@@ -200,12 +200,12 @@
   <link name="fret2">
     <visual>
         <origin xyz="0.00 0.00 0.00" rpy="0 1.57 0"/>
-        <geometry> <cylinder radius="0.002" length=".1"/> </geometry>
+        <geometry> <cylinder radius="0.002" length=".05"/> </geometry>
         <material name="silver"/>
     </visual>
     <collision>
         <origin xyz="0.00 0.00 0.00" rpy="0 1.57 0"/>
-        <geometry> <cylinder radius="0.002" length=".1"/> </geometry>
+        <geometry> <cylinder radius="0.002" length=".05"/> </geometry>
     </collision>
   </link>
 
@@ -218,12 +218,12 @@
   <link name="fret3">
     <visual>
         <origin xyz="0.00 0.00 0.00" rpy="0 1.57 0"/>
-        <geometry> <cylinder radius="0.002" length=".1"/> </geometry>
+        <geometry> <cylinder radius="0.002" length=".05"/> </geometry>
         <material name="silver"/>
     </visual>
     <collision>
         <origin xyz="0.00 0.00 0.00" rpy="0 1.57 0"/>
-        <geometry> <cylinder radius="0.002" length=".1"/> </geometry>
+        <geometry> <cylinder radius="0.002" length=".05"/> </geometry>
     </collision>
   </link>
 
@@ -236,12 +236,12 @@
   <link name="fret4">
     <visual>
         <origin xyz="0.00 0.00 0.00" rpy="0 1.57 0"/>
-        <geometry> <cylinder radius="0.002" length=".1"/> </geometry>
+        <geometry> <cylinder radius="0.002" length=".05"/> </geometry>
         <material name="silver"/>
     </visual>
     <collision>
         <origin xyz="0.00 0.00 0.00" rpy="0 1.57 0"/>
-        <geometry> <cylinder radius="0.002" length=".1"/> </geometry>
+        <geometry> <cylinder radius="0.002" length=".05"/> </geometry>
     </collision>
   </link>
 
@@ -254,12 +254,12 @@
   <link name="fret5">
     <visual>
         <origin xyz="0.00 0.00 0.00" rpy="0 1.57 0"/>
-        <geometry> <cylinder radius="0.002" length=".1"/> </geometry>
+        <geometry> <cylinder radius="0.002" length=".05"/> </geometry>
         <material name="silver"/>
     </visual>
     <collision>
         <origin xyz="0.00 0.00 0.00" rpy="0 1.57 0"/>
-        <geometry> <cylinder radius="0.002" length=".1"/> </geometry>
+        <geometry> <cylinder radius="0.002" length=".05"/> </geometry>
     </collision>
   </link>
 
@@ -272,12 +272,12 @@
   <link name="fret6">
     <visual>
         <origin xyz="0.00 0.00 0.00" rpy="0 1.57 0"/>
-        <geometry> <cylinder radius="0.002" length=".1"/> </geometry>
+        <geometry> <cylinder radius="0.002" length=".05"/> </geometry>
         <material name="silver"/>
     </visual>
     <collision>
         <origin xyz="0.00 0.00 0.00" rpy="0 1.57 0"/>
-        <geometry> <cylinder radius="0.002" length=".1"/> </geometry>
+        <geometry> <cylinder radius="0.002" length=".05"/> </geometry>
     </collision>
   </link>
 
@@ -290,12 +290,12 @@
   <link name="fret7">
     <visual>
         <origin xyz="0.00 0.00 0.00" rpy="0 1.57 0"/>
-        <geometry> <cylinder radius="0.002" length=".1"/> </geometry>
+        <geometry> <cylinder radius="0.002" length=".05"/> </geometry>
         <material name="silver"/>
     </visual>
     <collision>
         <origin xyz="0.00 0.00 0.00" rpy="0 1.57 0"/>
-        <geometry> <cylinder radius="0.002" length=".1"/> </geometry>
+        <geometry> <cylinder radius="0.002" length=".05"/> </geometry>
     </collision>
   </link>
 
@@ -308,12 +308,12 @@
   <link name="fret8">
     <visual>
         <origin xyz="0.00 0.00 0.00" rpy="0 1.57 0"/>
-        <geometry> <cylinder radius="0.002" length=".1"/> </geometry>
+        <geometry> <cylinder radius="0.002" length=".05"/> </geometry>
         <material name="silver"/>
     </visual>
     <collision>
         <origin xyz="0.00 0.00 0.00" rpy="0 1.57 0"/>
-        <geometry> <cylinder radius="0.002" length=".1"/> </geometry>
+        <geometry> <cylinder radius="0.002" length=".05"/> </geometry>
     </collision>
   </link>
 
@@ -326,12 +326,12 @@
   <link name="fret9">
     <visual>
         <origin xyz="0.00 0.00 0.00" rpy="0 1.57 0"/>
-        <geometry> <cylinder radius="0.002" length=".1"/> </geometry>
+        <geometry> <cylinder radius="0.002" length=".05"/> </geometry>
         <material name="silver"/>
     </visual>
     <collision>
         <origin xyz="0.00 0.00 0.00" rpy="0 1.57 0"/>
-        <geometry> <cylinder radius="0.002" length=".1"/> </geometry>
+        <geometry> <cylinder radius="0.002" length=".05"/> </geometry>
     </collision>
   </link>
 
@@ -344,12 +344,12 @@
   <link name="fret10">
     <visual>
         <origin xyz="0.00 0.00 0.00" rpy="0 1.57 0"/>
-        <geometry> <cylinder radius="0.002" length=".1"/> </geometry>
+        <geometry> <cylinder radius="0.002" length=".05"/> </geometry>
         <material name="silver"/>
     </visual>
     <collision>
         <origin xyz="0.00 0.00 0.00" rpy="0 1.57 0"/>
-        <geometry> <cylinder radius="0.002" length=".1"/> </geometry>
+        <geometry> <cylinder radius="0.002" length=".05"/> </geometry>
     </collision>
   </link>
 
@@ -362,12 +362,12 @@
   <link name="fret11">
     <visual>
         <origin xyz="0.00 0.00 0.00" rpy="0 1.57 0"/>
-        <geometry> <cylinder radius="0.002" length=".1"/> </geometry>
+        <geometry> <cylinder radius="0.002" length=".05"/> </geometry>
         <material name="silver"/>
     </visual>
     <collision>
         <origin xyz="0.00 0.00 0.00" rpy="0 1.57 0"/>
-        <geometry> <cylinder radius="0.002" length=".1"/> </geometry>
+        <geometry> <cylinder radius="0.002" length=".05"/> </geometry>
     </collision>
   </link>
 
@@ -380,12 +380,12 @@
   <link name="fret12">
     <visual>
         <origin xyz="0.00 0.00 0.00" rpy="0 1.57 0"/>
-        <geometry> <cylinder radius="0.002" length=".1"/> </geometry>
+        <geometry> <cylinder radius="0.002" length=".05"/> </geometry>
         <material name="silver"/>
     </visual>
     <collision>
         <origin xyz="0.00 0.00 0.00" rpy="0 1.57 0"/>
-        <geometry> <cylinder radius="0.002" length=".1"/> </geometry>
+        <geometry> <cylinder radius="0.002" length=".05"/> </geometry>
     </collision>
   </link>
 
@@ -398,12 +398,12 @@
   <link name="fret13">
     <visual>
         <origin xyz="0.00 0.00 0.00" rpy="0 1.57 0"/>
-        <geometry> <cylinder radius="0.002" length=".1"/> </geometry>
+        <geometry> <cylinder radius="0.002" length=".05"/> </geometry>
         <material name="silver"/>
     </visual>
     <collision>
         <origin xyz="0.00 0.00 0.00" rpy="0 1.57 0"/>
-        <geometry> <cylinder radius="0.002" length=".1"/> </geometry>
+        <geometry> <cylinder radius="0.002" length=".05"/> </geometry>
     </collision>
   </link>
 
@@ -416,12 +416,12 @@
   <link name="fret14">
     <visual>
         <origin xyz="0.00 0.00 0.00" rpy="0 1.57 0"/>
-        <geometry> <cylinder radius="0.002" length=".1"/> </geometry>
+        <geometry> <cylinder radius="0.002" length=".05"/> </geometry>
         <material name="silver"/>
     </visual>
     <collision>
         <origin xyz="0.00 0.00 0.00" rpy="0 1.57 0"/>
-        <geometry> <cylinder radius="0.002" length=".1"/> </geometry>
+        <geometry> <cylinder radius="0.002" length=".05"/> </geometry>
     </collision>
   </link>
 
@@ -434,12 +434,12 @@
   <link name="fret15">
     <visual>
         <origin xyz="0.00 0.00 0.00" rpy="0 1.57 0"/>
-        <geometry> <cylinder radius="0.002" length=".1"/> </geometry>
+        <geometry> <cylinder radius="0.002" length=".05"/> </geometry>
         <material name="silver"/>
     </visual>
     <collision>
         <origin xyz="0.00 0.00 0.00" rpy="0 1.57 0"/>
-        <geometry> <cylinder radius="0.002" length=".1"/> </geometry>
+        <geometry> <cylinder radius="0.002" length=".05"/> </geometry>
     </collision>
   </link>
 
@@ -452,12 +452,12 @@
   <link name="fret16">
     <visual>
         <origin xyz="0.00 0.00 0.00" rpy="0 1.57 0"/>
-        <geometry> <cylinder radius="0.002" length=".1"/> </geometry>
+        <geometry> <cylinder radius="0.002" length=".05"/> </geometry>
         <material name="silver"/>
     </visual>
     <collision>
         <origin xyz="0.00 0.00 0.00" rpy="0 1.57 0"/>
-        <geometry> <cylinder radius="0.002" length=".1"/> </geometry>
+        <geometry> <cylinder radius="0.002" length=".05"/> </geometry>
     </collision>
   </link>
 
@@ -470,12 +470,12 @@
   <link name="fret17">
     <visual>
         <origin xyz="0.00 0.00 0.00" rpy="0 1.57 0"/>
-        <geometry> <cylinder radius="0.002" length=".1"/> </geometry>
+        <geometry> <cylinder radius="0.002" length=".05"/> </geometry>
         <material name="silver"/>
     </visual>
     <collision>
         <origin xyz="0.00 0.00 0.00" rpy="0 1.57 0"/>
-        <geometry> <cylinder radius="0.002" length=".1"/> </geometry>
+        <geometry> <cylinder radius="0.002" length=".05"/> </geometry>
     </collision>
   </link>
 
@@ -488,12 +488,12 @@
   <link name="fret18">
     <visual>
         <origin xyz="0.00 0.00 0.00" rpy="0 1.57 0"/>
-        <geometry> <cylinder radius="0.002" length=".1"/> </geometry>
+        <geometry> <cylinder radius="0.002" length=".05"/> </geometry>
         <material name="silver"/>
     </visual>
     <collision>
         <origin xyz="0.00 0.00 0.00" rpy="0 1.57 0"/>
-        <geometry> <cylinder radius="0.002" length=".1"/> </geometry>
+        <geometry> <cylinder radius="0.002" length=".05"/> </geometry>
     </collision>
   </link>
 
@@ -506,12 +506,12 @@
   <link name="fret19">
     <visual>
         <origin xyz="0.00 0.00 0.00" rpy="0 1.57 0"/>
-        <geometry> <cylinder radius="0.002" length=".1"/> </geometry>
+        <geometry> <cylinder radius="0.002" length=".05"/> </geometry>
         <material name="silver"/>
     </visual>
     <collision>
         <origin xyz="0.00 0.00 0.00" rpy="0 1.57 0"/>
-        <geometry> <cylinder radius="0.002" length=".1"/> </geometry>
+        <geometry> <cylinder radius="0.002" length=".05"/> </geometry>
     </collision>
   </link>
 
@@ -524,12 +524,12 @@
   <link name="fret20">
     <visual>
         <origin xyz="0.00 0.00 0.00" rpy="0 1.57 0"/>
-        <geometry> <cylinder radius="0.002" length=".1"/> </geometry>
+        <geometry> <cylinder radius="0.002" length=".05"/> </geometry>
         <material name="silver"/>
     </visual>
     <collision>
         <origin xyz="0.00 0.00 0.00" rpy="0 1.57 0"/>
-        <geometry> <cylinder radius="0.002" length=".1"/> </geometry>
+        <geometry> <cylinder radius="0.002" length=".05"/> </geometry>
     </collision>
   </link>
 

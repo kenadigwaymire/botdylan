@@ -343,7 +343,7 @@ class Trajectory():
             dims.append(dims_dict.get(i))
         return dims
 
-
+        
     # Evaluate at the given time. This was last called (dt) ago.
     def evaluate(self, t, dt):
         """
