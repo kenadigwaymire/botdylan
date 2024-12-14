@@ -24,7 +24,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'trajectory = botdylan.trajectory:main'
+            'trajectory = botdylan.trajectory:main',
+            'plotdata = botdylan.plotdata:main'
         ],
     },
 )
