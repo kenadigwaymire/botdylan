@@ -146,7 +146,7 @@ def generate_launch_description():
         period=25.0,  # Delay in seconds
         actions=[
             node_second_robot_state_publisher,
-            TimerAction(period=25.0,
+            TimerAction(period=3.0,
                         actions=[record_bag])  # Starts recording .5s after guitar loads
         ]
     )

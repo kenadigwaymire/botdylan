@@ -31,7 +31,7 @@ def song_info(song):
     """
     
     T = 1
-    chords = [C] # G, C, E, G, E, C, G, C, E, G, E, C, G, C, E, G, E, C, G
+    chords = [C, G, F, Am, C, G, F, Am, C, G, F, Am, C, G, F, Am, C, G, F, Am] # G, C, E, G, E, C, G, C, E, G, E, C, G, C, E, G, E, C, G
     strumming_pattern = "strum"
     return [T, chords, strumming_pattern]
        
@@ -354,7 +354,7 @@ class Trajectory():
         if t2 < T/4:
             # Move to the desired chord
             (lh_pd, lh_vd) = goto(t2, T/2, prevchord, nextchord)
-        elif t2 < 3*T/4:
+        elif t2 < T:
             # Briefly hold the chord
             (lh_pd, lh_vd) = (nextchord, np.zeros(15))
         else:
