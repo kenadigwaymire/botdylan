@@ -97,7 +97,7 @@ class Trajectory():
 
         # Other params
         self.lam = 25               # lambda for primary task
-        self.lam2 = 5               # lambda for secondary task
+        self.lam2 = 10               # lambda for secondary task
         self.lam3 = 1             # lambda for tertiary task
         self.gamma = 0.000001       # gamma for weighted inverse
         self.pdlast = np.copy(self.p0)
@@ -356,7 +356,7 @@ class Trajectory():
         """
         # Initialize a guitar with: 20 frets, spaced 0.125 inches apart, and 
         # 6 strings spaced 0.0625 inches apart, at  a height of 0.2
-        fretboard = Fretboard(x0=-0.490, y0=0.250, z0=0.125, dx=0.050, dy=0.0075, num_frets=20)
+        fretboard = Fretboard(x0=-0.4875, y0=0.250, z0=0.125, dx=0.050, dy=0.0075, num_frets=20)
 
         # Get the beat (T seconds), chords, and strumming pattern
         [T, chords, strumming_pattern] = song_info('some_song')
