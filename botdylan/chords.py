@@ -51,3 +51,9 @@ class Chords():
 G = Chords('G', [[2, 'a'], [3, 'e_low'], [3, 'e_high'], [np.nan, np.nan]])
 C = Chords('C', [[1, 'b'], [2, 'd'], [3, 'a'], [np.nan, np.nan]])
 E = Chords('E', [[1, 'g'], [2, 'a'], [2, 'd'], [np.nan, np.nan]])
+D = Chords('D', [[2, 'e_high'], [3, 'b'], [2, 'g'], [np.nan, np.nan]])
+A = Chords('A', [[2, 'g'], [2, 'b'], [2, 'e_high'], [np.nan, np.nan]])
+Am = Chords('Am', [[1, 'b'], [2, 'd'], [2, 'g'], [np.nan, np.nan]])
+Em = Chords('Em', [[2, 'a'], [2, 'd'], [np.nan, np.nan]])
+F = Chords('F', [[1, 'e_high'], [1, 'b'], [2, 'g'], [3, 'd']])
+

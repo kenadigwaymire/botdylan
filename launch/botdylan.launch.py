@@ -143,10 +143,10 @@ def generate_launch_description():
 
     # Second URDF loads after a timer and triggers recording
     timer_guitar_and_record = TimerAction(
-        period=3.0,  # Delay in seconds
+        period=25.0,  # Delay in seconds
         actions=[
             node_second_robot_state_publisher,
-            TimerAction(period=3.0,
+            TimerAction(period=25.0,
                         actions=[record_bag])  # Starts recording .5s after guitar loads
         ]
     )

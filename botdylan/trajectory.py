@@ -31,7 +31,7 @@ def song_info(song):
     """
     
     T = 1
-    chords = [G, C, E, G, E, C, G, C, E, G, E, C, G, C, E, G, E, C, G]
+    chords = [C] # G, C, E, G, E, C, G, C, E, G, E, C, G, C, E, G, E, C, G
     strumming_pattern = "strum"
     return [T, chords, strumming_pattern]
        
@@ -99,8 +99,48 @@ class Trajectory():
         self.lam = 25               # lambda for primary task
         self.lam2 = 10               # lambda for secondary task
         self.lam3 = 1             # lambda for tertiary task
-        self.gamma = 0.000001       # gamma for weighted inverse
+        self.gamma = 0.00005       # gamma for weighted inverse
         self.pdlast = np.copy(self.p0)
+
+        # Find the range of motion of each joint based on their min. and max. 
+        # positions in a humanlike hand,all of which were fortunately given in 
+        # the URDF — except the prismatic "right-to-left-hand" joint and lh_WRJ3
+        # which we added in. We estimated the ranges ourselves for these 2.
+        min_values = {
+            "rh_WRJ2": -0.524, "rh_WRJ1": -0.698, 
+            "rh_FFJ4": -0.349, "rh_FFJ3": -0.262, "rh_FFJ2": 0.000, "rh_FFJ1": 0.000,
+            "rh_MFJ4": -0.349, "rh_MFJ3": -0.262, "rh_MFJ2": 0.000, "rh_MFJ1": 0.000,
+            "rh_RFJ4": -0.349, "rh_RFJ3": -0.262, "rh_RFJ2": 0.000, "rh_RFJ1": 0.000,
+            "rh_LFJ5": 0.000, "rh_LFJ4": -0.349, "rh_LFJ3": -0.262, "rh_LFJ2": 0.000, "rh_LFJ1": 0.000,
+            "right_hand_to_left_hand": 0.200,
+            "lh_WRJ3": -1.400, "lh_WRJ2": -0.524, "lh_WRJ1": -0.698, 
+            "lh_FFJ4": -0.349, "lh_FFJ3": -0.262, "lh_FFJ2": 0.000, "lh_FFJ1": 0.000,
+            "lh_MFJ4": -0.349, "lh_MFJ3": -0.262, "lh_MFJ2": 0.000, "lh_MFJ1": 0.000,
+            "lh_RFJ4": -0.349, "lh_RFJ3": -0.262, "lh_RFJ2": 0.000, "lh_RFJ1": 0.000,
+            "lh_LFJ5": 0.000, "lh_LFJ4": -0.349, "lh_LFJ3": -0.262, "lh_LFJ2": 0.000, "lh_LFJ1": 0.000,
+            "lh_THJ5": -1.047, "lh_THJ4": 0.000, "lh_THJ3": -0.209, "lh_THJ2": -0.698, "lh_THJ1": -0.262
+        }
+
+        max_values = {
+            "rh_WRJ2": 0.175, "rh_WRJ1": 0.489, 
+            "rh_FFJ4": 0.349, "rh_FFJ3": 1.571, "rh_FFJ2": 1.571, "rh_FFJ1": 1.571,
+            "rh_MFJ4": 0.349, "rh_MFJ3": 1.571, "rh_MFJ2": 1.571, "rh_MFJ1": 1.571,
+            "rh_RFJ4": 0.349, "rh_RFJ3": 1.571, "rh_RFJ2": 1.571, "rh_RFJ1": 1.571,
+            "rh_LFJ5": 0.785, "rh_LFJ4": 0.349, "rh_LFJ3": 1.571, "rh_LFJ2": 1.571, "rh_LFJ1": 1.571,
+            "right_hand_to_left_hand": 1.000,
+            "lh_WRJ3": 1.571, "lh_WRJ2": 0.175, "lh_WRJ1": 0.489, 
+            "lh_FFJ4": 0.349, "lh_FFJ3": 1.571, "lh_FFJ2": 1.571, "lh_FFJ1": 1.571,
+            "lh_MFJ4": 0.349, "lh_MFJ3": 1.571, "lh_MFJ2": 1.571, "lh_MFJ1": 1.571,
+            "lh_RFJ4": 0.349, "lh_RFJ3": 1.571, "lh_RFJ2": 1.571, "lh_RFJ1": 1.571,
+            "lh_LFJ5": 0.785, "lh_LFJ4": 0.349, "lh_LFJ3": 1.571, "lh_LFJ2": 1.571, "lh_LFJ1": 1.571,
+            "lh_THJ5": 1.047, "lh_THJ4": 1.222, "lh_THJ3": 0.209, "lh_THJ2": 0.698, "lh_THJ1": 1.571
+        }
+
+        # Ordered list of keys (entire jointnames list)
+        ordered_keys = self.jointnames()
+
+        # Magnitudes / distances between max and min for each key
+        self.W = np.array([abs(max_values[key] - min_values[key]) for key in ordered_keys])
 
         # # Initialize GuitarChain with fixed transformations from baseframe to frets
         # guitar_chain = GuitarChain(node, "world", "str_high_e")
@@ -311,17 +351,17 @@ class Trajectory():
             tuple: Desired positions and velocities for the left-hand motion.
         """
         t2 = fmod(t, T)
-        if t2 < T/2:
+        if t2 < T/4:
             # Move to the desired chord
             (lh_pd, lh_vd) = goto(t2, T/2, prevchord, nextchord)
-        elif t2 < T:
+        elif t2 < 3*T/4:
             # Briefly hold the chord
             (lh_pd, lh_vd) = (nextchord, np.zeros(15))
         else:
             # Lift fingers off of the strings a bit before moving to next chord
             lifted_pos = np.copy(nextchord)
             for i in [2, 5, 8, 11]:
-                lifted_pos[i] += 0.01
+                lifted_pos[i] += 0.005
             # print(f"\nlifted_pos:\n{lifted_pos}\n")
             (lh_pd, lh_vd) = goto(fmod(t2, T/4), T/4, nextchord, lifted_pos)
         return lh_pd, lh_vd
@@ -444,45 +484,7 @@ class Trajectory():
 
         # print(f'\nq_goal:\n {q_goal}\n')
         
-        # Find the range of motion of each joint based on their min. and max. 
-        # positions in a humanlike hand,all of which were fortunately given in 
-        # the URDF — except the prismatic "right-to-left-hand" joint and lh_WRJ3
-        # which we added in. We estimated the ranges ourselves for these 2.
-        min_values = {
-            "rh_WRJ2": -0.524, "rh_WRJ1": -0.698, 
-            "rh_FFJ4": -0.349, "rh_FFJ3": -0.262, "rh_FFJ2": 0.000, "rh_FFJ1": 0.000,
-            "rh_MFJ4": -0.349, "rh_MFJ3": -0.262, "rh_MFJ2": 0.000, "rh_MFJ1": 0.000,
-            "rh_RFJ4": -0.349, "rh_RFJ3": -0.262, "rh_RFJ2": 0.000, "rh_RFJ1": 0.000,
-            "rh_LFJ5": 0.000, "rh_LFJ4": -0.349, "rh_LFJ3": -0.262, "rh_LFJ2": 0.000, "rh_LFJ1": 0.000,
-            "right_hand_to_left_hand": 0.200,
-            "lh_WRJ3": -1.400, "lh_WRJ2": -0.524, "lh_WRJ1": -0.698, 
-            "lh_FFJ4": -0.349, "lh_FFJ3": -0.262, "lh_FFJ2": 0.000, "lh_FFJ1": 0.000,
-            "lh_MFJ4": -0.349, "lh_MFJ3": -0.262, "lh_MFJ2": 0.000, "lh_MFJ1": 0.000,
-            "lh_RFJ4": -0.349, "lh_RFJ3": -0.262, "lh_RFJ2": 0.000, "lh_RFJ1": 0.000,
-            "lh_LFJ5": 0.000, "lh_LFJ4": -0.349, "lh_LFJ3": -0.262, "lh_LFJ2": 0.000, "lh_LFJ1": 0.000,
-            "lh_THJ5": -1.047, "lh_THJ4": 0.000, "lh_THJ3": -0.209, "lh_THJ2": -0.698, "lh_THJ1": -0.262
-        }
-
-        max_values = {
-            "rh_WRJ2": 0.175, "rh_WRJ1": 0.489, 
-            "rh_FFJ4": 0.349, "rh_FFJ3": 1.571, "rh_FFJ2": 1.571, "rh_FFJ1": 1.571,
-            "rh_MFJ4": 0.349, "rh_MFJ3": 1.571, "rh_MFJ2": 1.571, "rh_MFJ1": 1.571,
-            "rh_RFJ4": 0.349, "rh_RFJ3": 1.571, "rh_RFJ2": 1.571, "rh_RFJ1": 1.571,
-            "rh_LFJ5": 0.785, "rh_LFJ4": 0.349, "rh_LFJ3": 1.571, "rh_LFJ2": 1.571, "rh_LFJ1": 1.571,
-            "right_hand_to_left_hand": 1.000,
-            "lh_WRJ3": 1.571, "lh_WRJ2": 0.175, "lh_WRJ1": 0.489, 
-            "lh_FFJ4": 0.349, "lh_FFJ3": 1.571, "lh_FFJ2": 1.571, "lh_FFJ1": 1.571,
-            "lh_MFJ4": 0.349, "lh_MFJ3": 1.571, "lh_MFJ2": 1.571, "lh_MFJ1": 1.571,
-            "lh_RFJ4": 0.349, "lh_RFJ3": 1.571, "lh_RFJ2": 1.571, "lh_RFJ1": 1.571,
-            "lh_LFJ5": 0.785, "lh_LFJ4": 0.349, "lh_LFJ3": 1.571, "lh_LFJ2": 1.571, "lh_LFJ1": 1.571,
-            "lh_THJ5": 1.047, "lh_THJ4": 1.222, "lh_THJ3": 0.209, "lh_THJ2": 0.698, "lh_THJ1": 1.571
-        }
-
-        # Ordered list of keys (entire jointnames list)
-        ordered_keys = self.jointnames()
-
-        # Magnitudes / distances between max and min for each key
-        W = np.array([abs(max_values[key] - min_values[key]) for key in ordered_keys])
+        W = np.copy(self.W)
         W[0:2] = np.zeros(2)
         # print("Weighted values for left hand:", W)
 
