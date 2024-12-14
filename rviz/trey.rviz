@@ -628,25 +628,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/ThirdPersonFollower
-      Distance: 0.9829608201980591
+      Distance: 0.6885415315628052
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: -0.25972700119018555
-        Y: 0.45995259284973145
-        Z: 0
-      Focal Shape Fixed Size: true
+        X: 0.05181854963302612
+        Y: -0.7504932880401611
+        Z: 4.76837158203125e-07
+      Focal Shape Fixed Size: false
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.6153981685638428
+      Pitch: 0.15039831399917603
       Target Frame: neck
       Value: ThirdPersonFollower (rviz_default_plugins)
-      Yaw: 2.15539813041687
+      Yaw: 2.080399513244629
     Saved:
       - Class: rviz_default_plugins/ThirdPersonFollower
         Distance: 0.9829608201980591
@@ -668,6 +668,26 @@ Visualization Manager:
         Target Frame: neck
         Value: ThirdPersonFollower (rviz_default_plugins)
         Yaw: 2.15539813041687
+      - Class: rviz_default_plugins/ThirdPersonFollower
+        Distance: 0.6885415315628052
+        Enable Stereo Rendering:
+          Stereo Eye Separation: 0.05999999865889549
+          Stereo Focal Distance: 1
+          Swap Stereo Eyes: false
+          Value: false
+        Focal Point:
+          X: 0.05181854963302612
+          Y: -0.7504932880401611
+          Z: 4.76837158203125e-07
+        Focal Shape Fixed Size: false
+        Focal Shape Size: 0.05000000074505806
+        Invert Z Axis: false
+        Name: ThirdPersonFollower
+        Near Clip Distance: 0.009999999776482582
+        Pitch: 0.15039831399917603
+        Target Frame: neck
+        Value: ThirdPersonFollower (rviz_default_plugins)
+        Yaw: 2.080399513244629
 Window Geometry:
   Displays:
     collapsed: false
@@ -684,5 +704,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 2548
-  X: 0
-  Y: 0
+  X: -32
+  Y: -32

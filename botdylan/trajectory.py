@@ -376,7 +376,7 @@ class Trajectory():
         # Play the next chord until done
         if chord_ct < len(chords):
             [nextChord, wrist_xd, p_indeces, s_indeces] = fretboard.pf_from_chord(chords[chord_ct], self.p0)
-            (rh_pd, rh_vd) = self.strumming_trajectory(t, T, fretboard, strumming_pattern, 12*fretboard.dy, .0025)
+            (rh_pd, rh_vd) = self.strumming_trajectory(t, T, fretboard, strumming_pattern, 12*fretboard.dy, .0)
             (lh_pd, lh_vd) = self.fretting_trajectory(t, T, prevChord, nextChord)
             pd = np.concatenate((rh_pd, lh_pd))
             vd = np.concatenate((rh_vd, lh_vd))
